@@ -1,0 +1,24 @@
+# Ignore compiled files
+*.out
+*.o
+*.a
+*.exe
+*.dll
+
+# Ignore VS Code configuration files
+.vscode/
+
+# Ignore IDE specific files
+.idea/
+
+# Ignore temporary or backup files
+*~
+*.swp
+.DS_Store
+
+# Ignore build directories
+build/
+bin/
+
+# Ignore dependency directories
+node_modules/
