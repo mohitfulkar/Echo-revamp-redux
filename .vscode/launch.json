@@ -2,6 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "Factorial",
+      "request": "launch",
+      "mainClass": "JAVA.Factorial",
+      "projectName": "DSA-Practice-allLang-_4584acd6"
+    },
+    {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
