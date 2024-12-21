@@ -6,13 +6,14 @@
    - The main method should only serve as an entry point to your application.
    - Delegate all processing logic to other methods or classes.
    - Keep the main method clean and minimal, such as:
-     java
+     ```java
      public class Main {
          public static void main(String[] args) {
              Application.run(args);
          }
      }
-     
+     ```
+
 ### 2. *Modular Code*
    - Break down functionality into smaller, reusable methods or classes.
    - Follow the Single Responsibility Principle (SRP).
@@ -37,32 +38,24 @@
    - Use proper exception handling to avoid unexpected crashes.
    - Always log errors with meaningful messages to aid debugging.
 
-### 8. *Minimize I/O Operations*
-   - Batch I/O operations where possible to reduce latency.
-   - Use buffered streams for file or network operations.
-
-### 9. *Use Constants and Enums*
+### 8. *Use Constants and Enums*
    - Replace magic numbers and string literals with constants or enums for better readability and maintainability.
 
-### 10. *Code Reviews and Testing*
+### 9. *Code Reviews and Testing*
    - Perform regular code reviews to identify inefficiencies.
    - Write unit tests to ensure functionality and performance.
 
-### 11. *Adopt Design Patterns*
+### 10. *Adopt Design Patterns*
    - Use design patterns (e.g., Singleton, Factory, Observer) where applicable to improve code scalability and readability.
 
-### 12. *Avoid Premature Optimization*
+### 11. *Avoid Premature Optimization*
    - Focus on writing clean, maintainable code first; optimize only when necessary.
    - Use profiling tools to identify bottlenecks.
 
-### 13. *Use Logging, Not Printing*
+### 12. *Use Logging, Not Printing*
    - Use logging frameworks (e.g., Log4j, SLF4J) instead of System.out.println for better control over log levels and outputs.
 
-### 14. *Documentation*
-   - Document your code with meaningful comments and README files to make it understandable for others.
-   - Include Javadoc for public APIs.
-
-### 15. *Follow Coding Standards*
+### 13. *Follow Coding Standards*
    - Adhere to language-specific best practices and style guides.
    - Use tools like Checkstyle or ESLint to enforce consistency.
 
