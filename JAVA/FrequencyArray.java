@@ -1,5 +1,5 @@
+package JAVA ;
 import java.util.*;
-
 public class FrequencyArray{
     public static void main(String args[]) {
         System.out.println("Enter the number of digit in Array:");
@@ -12,9 +12,11 @@ public class FrequencyArray{
             arr[i] = sc.nextInt();
             }
             System.out.println("Given Array:");
-            for(int num:arr){
-                System.out.print(num+" ");
-            }
+
+            System.out.println(Arrays.toString(arr));
+
+            Arrays.sort(arr);
+            
             System.out.println();
         Frequency(arr);
     }
