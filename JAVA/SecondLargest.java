@@ -3,19 +3,22 @@ import java.util.*;
 public class SecondLargest {
   
     public static void largestNum(){
-      
       Scanner sc = new Scanner(System.in);
-      System.out.print("Enter the Array Size : ");
-      int n= sc.nextInt();
+      int n;
+      do{
+         System.out.print("Enter the Array Size : ");
+         n= sc.nextInt();
+         if(n<=1){
+         System.out.println("Please Enter array size more than 1"); 
+         }
+      }while(n<=1);
       System.out.print("Enter the elements : ");
       int[] arr = new int[n];
       for(int i=0;i<n;i++){
         arr[i]=sc.nextInt();
       }
-      
       int max=arr[0];
       int smax=arr[0];
-      
       for(int i=0;i<n;i++){
         if(arr[i]>max){
           smax= max;
