@@ -12,6 +12,6 @@ def palindromeSubarray():
     for i in range(len(S)):
         for j in range(i + 1, len(S) + 1): 
             if palindrome(S[i:j]) and len(S[i:j]) > 1:
-                print(S[i:j], i, j)
+                print(S[i:j])
 
 palindromeSubarray()
