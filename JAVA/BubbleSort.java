@@ -1,4 +1,4 @@
-package JAVA;
+
 public class BubbleSort {
     public static void bubbleSort() {
         int nums[] = {9, 3, 7, 2, 6, 1}; 

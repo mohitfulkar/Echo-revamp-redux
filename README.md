@@ -100,7 +100,7 @@ Follow these steps to contribute changes to the project:
    - Follow the project's coding standards and conventions.
 
    ```bash
-   git add .
+   git add . 
    git commit -m "Descriptive message about the changes"
    ```
 
@@ -137,6 +137,3 @@ In case of emergencies, such as production-critical hotfixes:
 2. Document all changes made directly to `main`.
 
 ---
-
-
-readme
