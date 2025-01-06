@@ -100,7 +100,7 @@ Follow these steps to contribute changes to the project:
    - Follow the project's coding standards and conventions.
 
    ```bash
-   git a.dd 
+   git add . 
    git commit -m "Descriptive message about the changes"
    ```
 
