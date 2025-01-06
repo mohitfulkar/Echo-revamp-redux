@@ -19,12 +19,20 @@ public class OneTimeLeftRotate {
         Scanner sc = new Scanner(System.in);
         int a = sc.nextInt();
         int[] arr = new int[a];
+        System.out.println("Enter " + a + " elements:");
         for(int i=0; i<a; i++){
             arr[i] = sc.nextInt();
         }
+        
 
         int n = arr.length;
         leftRotate(arr, n);
 
     }
 }
+
+// Enter the number of element you want:
+// 5
+// Enter 5 elements:
+// 1 2 3 4 5
+// 2 3 4 5 1 
