@@ -1,13 +1,14 @@
-package ArrayProblem;
+package JAVA;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveDupList {
-    public List<Integer> remove_dup(int[] arr){
+    public List<Integer> remove_dup(int[] arr) {
         int n = arr.length;
         List<Integer> list = new ArrayList<>();
-        for(int i =0;i<n;i++){
-            if(!list.contains(arr[i])){
+        for (int i = 0; i < n; i++) {
+            if (!list.contains(arr[i])) {
                 list.add(arr[i]);
             }
         }
@@ -16,7 +17,7 @@ public class RemoveDupList {
 
     public static void main(String[] args) {
         RemoveDupList rsl = new RemoveDupList();
-        int[] arr = {1,4,3,2,2,2,};
+        int[] arr = { 1, 4, 3, 2, 2, 2, };
         List<Integer> newlist = rsl.remove_dup(arr);
         System.out.println(newlist);
 
