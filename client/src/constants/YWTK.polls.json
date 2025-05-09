@@ -1,0 +1,262 @@
+[
+  {
+    "subject": "Favorite Emoji Poll",
+    "desc": "Vote for your favorite emoji!",
+    "pollQuestion": "Which emoji do you use the most?",
+    "options": [
+      {
+        "name": "😂",
+        "voteCount": 5
+      },
+      {
+        "name": "🔥",
+        "voteCount": 3
+      },
+      {
+        "name": "💯",
+        "voteCount": 2
+      },
+      {
+        "name": "🤔",
+        "voteCount": 1
+      }
+    ],
+    "status": "pending",
+    "createdBy": "67bc81fd68f0ab7c799d1b0f",
+    "created_by_name": "John Doe"
+  },
+  {
+    "subject": "Best Programming Language",
+    "desc": "Which language do you love the most?",
+    "pollQuestion": "What's your favorite programming language?",
+    "options": [
+      {
+        "name": "JavaScript",
+        "voteCount": 10
+      },
+      {
+        "name": "Python",
+        "voteCount": 7
+      },
+      {
+        "name": "Java",
+        "voteCount": 5
+      },
+      {
+        "name": "C++",
+        "voteCount": 3
+      }
+    ],
+    "status": "accepted",
+    "createdBy": "67bc70d8bbf1ad41e3030667",
+    "created_by_name": "Alice Smith"
+  },
+  {
+    "subject": "Best Streaming Service",
+    "desc": "Pick your go-to streaming platform.",
+    "pollQuestion": "Which streaming service do you use the most?",
+    "options": [
+      {
+        "name": "Netflix",
+        "voteCount": 8
+      },
+      {
+        "name": "Amazon Prime",
+        "voteCount": 6
+      },
+      {
+        "name": "Disney+",
+        "voteCount": 4
+      },
+      {
+        "name": "HBO Max",
+        "voteCount": 2
+      }
+    ],
+    "status": "pending",
+    "createdBy": "67bc70d8bbf1ad41e3030668",
+    "created_by_name": "Michael Johnson"
+  },
+  {
+    "subject": "Best Fast Food",
+    "desc": "Choose your favorite fast food!",
+    "pollQuestion": "Which fast food brand do you prefer?",
+    "options": [
+      {
+        "name": "McDonald's",
+        "voteCount": 12
+      },
+      {
+        "name": "KFC",
+        "voteCount": 8
+      },
+      {
+        "name": "Burger King",
+        "voteCount": 6
+      },
+      {
+        "name": "Subway",
+        "voteCount": 4
+      }
+    ],
+    "status": "accepted",
+    "createdBy": "67bc81fd68f0ab7c799d1b0f",
+    "created_by_name": "Sophia Brown"
+  },
+  {
+    "subject": "Best Social Media Platform",
+    "desc": "Vote for your favorite social media app!",
+    "pollQuestion": "Which social media app do you use the most?",
+    "options": [
+      {
+        "name": "Instagram",
+        "voteCount": 9
+      },
+      {
+        "name": "Twitter",
+        "voteCount": 7
+      },
+      {
+        "name": "Facebook",
+        "voteCount": 5
+      },
+      {
+        "name": "Snapchat",
+        "voteCount": 2
+      }
+    ],
+    "status": "pending",
+    "createdBy": "67bc70d8bbf1ad41e3030667",
+    "created_by_name": "Daniel Lee"
+  },
+  {
+    "subject": "Favorite Sport",
+    "desc": "Pick the sport you enjoy the most.",
+    "pollQuestion": "What is your favorite sport?",
+    "options": [
+      {
+        "name": "Soccer",
+        "voteCount": 10
+      },
+      {
+        "name": "Basketball",
+        "voteCount": 6
+      },
+      {
+        "name": "Cricket",
+        "voteCount": 4
+      },
+      {
+        "name": "Tennis",
+        "voteCount": 2
+      }
+    ],
+    "status": "rejected",
+    "createdBy": "67bc70d8bbf1ad41e3030668",
+    "created_by_name": "Emma Wilson"
+  },
+  {
+    "subject": "Best Movie Genre",
+    "desc": "Choose your favorite movie genre!",
+    "pollQuestion": "Which movie genre do you love the most?",
+    "options": [
+      {
+        "name": "Action",
+        "voteCount": 11
+      },
+      {
+        "name": "Comedy",
+        "voteCount": 7
+      },
+      {
+        "name": "Horror",
+        "voteCount": 5
+      },
+      {
+        "name": "Sci-Fi",
+        "voteCount": 3
+      }
+    ],
+    "status": "pending",
+    "createdBy": "67bc81fd68f0ab7c799d1b0f",
+    "created_by_name": "Liam Martinez"
+  },
+  {
+    "subject": "Favorite Ice Cream Flavor",
+    "desc": "Vote for the best ice cream flavor!",
+    "pollQuestion": "Which ice cream flavor do you prefer?",
+    "options": [
+      {
+        "name": "Chocolate",
+        "voteCount": 13
+      },
+      {
+        "name": "Vanilla",
+        "voteCount": 9
+      },
+      {
+        "name": "Strawberry",
+        "voteCount": 6
+      },
+      {
+        "name": "Mango",
+        "voteCount": 4
+      }
+    ],
+    "status": "accepted",
+    "createdBy": "67bc70d8bbf1ad41e3030667",
+    "created_by_name": "Olivia Clark"
+  },
+  {
+    "subject": "Best Music Genre",
+    "desc": "Pick your favorite music genre!",
+    "pollQuestion": "Which music genre do you enjoy the most?",
+    "options": [
+      {
+        "name": "Rock",
+        "voteCount": 8
+      },
+      {
+        "name": "Pop",
+        "voteCount": 7
+      },
+      {
+        "name": "Hip-Hop",
+        "voteCount": 5
+      },
+      {
+        "name": "Classical",
+        "voteCount": 3
+      }
+    ],
+    "status": "pending",
+    "createdBy": "67bc70d8bbf1ad41e3030668",
+    "created_by_name": "Ethan Anderson"
+  },
+  {
+    "subject": "Best Vacation Destination",
+    "desc": "Vote for your dream vacation spot!",
+    "pollQuestion": "Where would you like to travel?",
+    "options": [
+      {
+        "name": "Paris",
+        "voteCount": 15
+      },
+      {
+        "name": "Bali",
+        "voteCount": 10
+      },
+      {
+        "name": "New York",
+        "voteCount": 7
+      },
+      {
+        "name": "Tokyo",
+        "voteCount": 5
+      }
+    ],
+    "status": "accepted",
+    "createdBy": "67bc81fd68f0ab7c799d1b0f",
+    "created_by_name": "Charlotte Thomas"
+  }
+]
