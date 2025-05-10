@@ -1,4 +1,3 @@
-package JAVA ;
 import java.util.*;
 public class FrequencyArray{
     public static void main(String args[]) {
