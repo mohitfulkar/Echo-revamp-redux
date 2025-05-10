@@ -1,1 +1,77 @@
 @import "tailwindcss";
+
+/* index.css - Global Styling for React Vite TSX Project */
+
+/* Import Poppins font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Font Sizes */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-md: 1.125rem; /* 18px */
+  --font-size-lg: 1.25rem; /* 20px */
+  --font-size-xl: 1.5rem; /* 24px */
+  --font-size-2xl: 1.875rem; /* 30px */
+  --font-size-3xl: 2.25rem; /* 36px */
+  --font-size-4xl: 3rem; /* 48px */
+  --font-size-5xl: 3.75rem; /* 60px */
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Colors (customize as needed) */
+  --color-primary: #3b82f6;
+  --color-secondary: #64748b;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #0ea5e9;
+    --color-light: #f9fafb;
+  --color-dark: #1f2937;
+
+  /* Text colors */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-disabled: #9ca3af;
+
+  /* Icon sizes */
+  --icon-size-xs: 1rem; /* 16px */
+  --icon-size-sm: 1.25rem; /* 20px */
+  --icon-size-md: 1.5rem; /* 24px */
+  --icon-size-lg: 2rem; /* 32px */
+  --icon-size-xl: 2.5rem; /* 40px */
+
+  /* Form field variables */
+  --input-height: 2.5rem;
+  --input-padding: 0.75rem;
+  --input-radius: 0.375rem;
+  --input-border-color: #d1d5db;
+  --input-focus-color: var(--color-primary);
+}
+
+/* Body and Typography Base */
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--color-light);
+}
