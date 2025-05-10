@@ -9,12 +9,26 @@ const { Title } = Typography;
 const SignUp: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState<string>("");
+
+  const onChange = (text: string) => {
+    console.log("OTP onChange:", text);
+    setOtp(text);
+  };
+
+  const onInput = (value: string[]) => {
+    console.log("OTP onInput:", value.join(""));
+  };
+
+  const sharedProps = {
+    onChange,
+    onInput,
+  };
 
   const handleSubmit = () => {
     onSubmit(
       form,
       (data) => {
-        console.log("Form submitted successfully:", data);
         // resetFields(form);
       },
       setLoading
@@ -73,7 +87,6 @@ const SignUp: React.FC = () => {
               <Form.Item>
                 <Button
                   type="primary"
-                  // ⬅️ Use onClick instead of htmlType="submit"
                   onClick={handleSubmit}
                   size="large"
                   block
@@ -84,6 +97,37 @@ const SignUp: React.FC = () => {
                 </Button>
               </Form.Item>
             </Form>
+
+            {/* OTP Verification Section */}
+            <div className="text-center mt-8">
+              <Title level={3} className="mb-4">
+                OTP Verification
+              </Title>
+              <p className="mb-4">Please enter the OTP sent to your email.</p>
+
+              {/* OTP Input */}
+              <Title level={5}>OTP Input</Title>
+              <Input.OTP
+                formatter={(str) => str.toUpperCase()}
+                length={6}
+                separator={<span>-</span>}
+                mask="🔒"
+                {...sharedProps}
+                style={{ width: "100%", marginBottom: "16px" }}
+              />
+
+              <Form.Item>
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  className="rounded-lg"
+                >
+                  Verify OTP
+                </Button>
+              </Form.Item>
+            </div>
+
             <p className="text-center mt-4">
               Already have an account?{" "}
               <Link to="/login" className="text-blue-500 hover:underline">
