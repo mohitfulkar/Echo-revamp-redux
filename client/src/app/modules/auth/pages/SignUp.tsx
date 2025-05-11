@@ -1,38 +1,65 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Typography } from "antd";
-import { formFields } from "../config/signupForm.model";
-import { onSubmit } from "../service/FormService"; // adjust the path as needed
+import { formFields } from "../models/signupForm.model";
+import { resetFields } from "../service/FormService"; // adjust the path as needed
 import { Link } from "react-router-dom";
-
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUser, verifyOtp } from "../features/authSlices"; // Adjust verifyOtp import
+import type { AppDispatch } from "../../../store";
 const { Title } = Typography;
+import { showToast } from "../../../core/service/ToastService";
 
 const SignUp: React.FC = () => {
-  const [form] = Form.useForm();
+  const [registerForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = useState<string>("");
+  const [showOtp, setShowOtp] = useState(false);
+  const [otp, setOtp] = useState<string>(""); // Track OTP input
+  const [email, setEmail] = useState<string>(""); // Track OTP input
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const onChange = (text: string) => {
-    console.log("OTP onChange:", text);
-    setOtp(text);
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    try {
+      const payload = await registerForm.validateFields(); // ✅ This is your payload
+      const response = await dispatch(registerUser(payload));
+      if (registerUser.fulfilled.match(response)) {
+        setEmail(payload.email);
+        setShowOtp(true); // Show OTP input
+        showToast.success(response.payload.message);
+        resetFields(registerForm); // Reset form fields
+      }
+    } catch (error) {
+      message.error("OTP generation failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const onInput = (value: string[]) => {
-    console.log("OTP onInput:", value.join(""));
-  };
+  const verifyOtpHandler = async () => {
+    try {
+      if (!otp) {
+        showToast.error("Please enter the OTP.");
+        return;
+      }
 
-  const sharedProps = {
-    onChange,
-    onInput,
-  };
+      const payload = { otp, email: email };
+      const response = await dispatch(verifyOtp(payload));
 
-  const handleSubmit = () => {
-    onSubmit(
-      form,
-      (data) => {
-        // resetFields(form);
-      },
-      setLoading
-    );
+      if (verifyOtp.fulfilled.match(response)) {
+        showToast.success("OTP Verified!");
+        showToast.success("Registration Sucessfull!");
+        setShowOtp(false); // Hide OTP form
+        navigate("/login"); // Redirect to login page
+      } else {
+        showToast.error("OTP verification failed. Please try again.");
+      }
+    } catch (error) {
+      showToast.error("OTP verification failed. Please try again.");
+    }
   };
 
   return (
@@ -48,88 +75,90 @@ const SignUp: React.FC = () => {
         {/* Right Side - Form */}
         <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-8">
           <div className="w-full max-w-md">
-            <Title level={2} className="!mb-6 !text-center">
-              Create Account
-            </Title>
-            <Form
-              form={form}
-              name="register"
-              layout="vertical"
-              autoComplete="off"
-              requiredMark={false}
-            >
-              {formFields.map((field) => (
-                <Form.Item
-                  key={field.name}
-                  name={field.name}
-                  dependencies={field.dependencies}
-                  rules={field.rules}
-                  className="mb-4"
+            {!showOtp ? (
+              <div>
+                <Title level={2} className="!mb-6 !text-center">
+                  Create Account
+                </Title>
+                <Form
+                  form={registerForm}
+                  name="register"
+                  layout="vertical"
+                  autoComplete="off"
+                  requiredMark={false}
                 >
-                  {field.type === "password" ? (
-                    <Input.Password
-                      prefix={field.prefix}
+                  {formFields.map((field) => (
+                    <Form.Item
+                      key={field.name}
+                      name={field.name}
+                      dependencies={field.dependencies}
+                      rules={field.rules}
+                      className="mb-4"
+                    >
+                      {field.type === "password" ? (
+                        <Input.Password
+                          prefix={field.prefix}
+                          size="large"
+                          placeholder={field.placeholder}
+                          className="rounded-lg"
+                        />
+                      ) : (
+                        <Input
+                          prefix={field.prefix}
+                          size="large"
+                          placeholder={field.placeholder}
+                          className="rounded-lg"
+                        />
+                      )}
+                    </Form.Item>
+                  ))}
+
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      onClick={handleSubmit}
                       size="large"
-                      placeholder={field.placeholder}
+                      block
+                      loading={loading}
                       className="rounded-lg"
-                    />
-                  ) : (
-                    <Input
-                      prefix={field.prefix}
-                      size="large"
-                      placeholder={field.placeholder}
-                      className="rounded-lg"
-                    />
-                  )}
+                    >
+                      Register
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            ) : (
+              <div className="text-center mt-8">
+                <Title level={3} className="mb-4">
+                  OTP Verification
+                </Title>
+                <p className="mb-4">Please enter the OTP sent to your email.</p>
+
+                <Title level={5}>OTP Input</Title>
+                <Input
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  maxLength={6}
+                  placeholder="Enter OTP"
+                  style={{ width: "100%", marginBottom: "16px" }}
+                />
+
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    size="large"
+                    block
+                    className="rounded-lg"
+                    onClick={verifyOtpHandler}
+                  >
+                    Verify OTP
+                  </Button>
                 </Form.Item>
-              ))}
-
-              <Form.Item>
-                <Button
-                  type="primary"
-                  onClick={handleSubmit}
-                  size="large"
-                  block
-                  loading={loading}
-                  className="rounded-lg"
-                >
-                  Register
-                </Button>
-              </Form.Item>
-            </Form>
-
-            {/* OTP Verification Section */}
-            <div className="text-center mt-8">
-              <Title level={3} className="mb-4">
-                OTP Verification
-              </Title>
-              <p className="mb-4">Please enter the OTP sent to your email.</p>
-
-              {/* OTP Input */}
-              <Title level={5}>OTP Input</Title>
-              <Input.OTP
-                formatter={(str) => str.toUpperCase()}
-                length={6}
-                separator={<span>-</span>}
-                mask="🔒"
-                {...sharedProps}
-                style={{ width: "100%", marginBottom: "16px" }}
-              />
-
-              <Form.Item>
-                <Button
-                  type="primary"
-                  size="large"
-                  block
-                  className="rounded-lg"
-                >
-                  Verify OTP
-                </Button>
-              </Form.Item>
-            </div>
+              </div>
+            )}
 
             <p className="text-center mt-4">
-              Already have an account?{" "}
+              Already have an account?
               <Link to="/login" className="text-blue-500 hover:underline">
                 Login here
               </Link>
