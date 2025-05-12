@@ -23,3 +23,7 @@ export interface OtpPayload {
   email: string;
   otp: string;
 }
+export interface UserLogin {
+  email: string;
+  password: string;
+}
