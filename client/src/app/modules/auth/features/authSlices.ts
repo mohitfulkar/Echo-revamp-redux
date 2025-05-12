@@ -1,16 +1,17 @@
 import {
   createSlice,
   createAsyncThunk,
-  type PayloadAction,
   type ActionReducerMapBuilder,
 } from "@reduxjs/toolkit";
 import { authService } from "../service/authService";
 import type {
   AuthState,
   OtpPayload,
+  UserLogin,
   UserRegistration,
 } from "../models/auth.interface";
-import { REGISTER, VERIFY_OTP } from "../config/auth.constants";
+import { LOGIN, REGISTER, VERIFY_OTP } from "../config/auth.constants";
+import { addAsyncCaseHandlers } from "../../../core/utils/storeUtil";
 
 const initialState: AuthState = {
   loading: false,
@@ -49,6 +50,19 @@ export const verifyOtp = createAsyncThunk<
   }
 });
 
+export const loginUser = createAsyncThunk<
+  any,
+  UserLogin,
+  { rejectValue: string }
+>("auth/loginUser", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await authService.create(LOGIN, payload);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Login failed");
+  }
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -61,28 +75,8 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
-    builder
-      .addCase(registerUser.pending, (state: AuthState) => {
-        state.loading = true;
-        state.error = null;
-        state.success = false;
-      })
-      .addCase(
-        registerUser.fulfilled,
-        (state: AuthState, action: PayloadAction<any>) => {
-          state.loading = false;
-          state.user = action.payload;
-          state.success = true;
-        }
-      )
-      .addCase(
-        registerUser.rejected,
-        (state: AuthState, action: PayloadAction<any>) => {
-          state.loading = false;
-          state.error = action.payload;
-          state.success = false;
-        }
-      );
+    addAsyncCaseHandlers(builder, registerUser);
+    addAsyncCaseHandlers(builder, loginUser);
   },
 });
 
