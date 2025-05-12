@@ -14,11 +14,6 @@ const OTP_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
  */
 export const register = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { fullName, email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
@@ -51,8 +46,7 @@ export const register = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message:
-        "Registration initiated. Please check your email for OTP verification.",
+      message: "OTP sent. Please check your email for OTP verification.",
       data: { email },
     });
   } catch (error) {
@@ -67,11 +61,6 @@ export const register = async (req, res) => {
  */
 export const verifyOTP = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { email, otp } = req.body;
     const otpRecord = await Otp.findOne({ email });
 
