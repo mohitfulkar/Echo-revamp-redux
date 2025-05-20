@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Typography, message } from "antd";
+import { Form, Input, Button, Typography } from "antd";
 import { loginFields } from "../models/signupForm.model";
 import { resetFields } from "../service/FormService";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { loginUser, resetAuthState } from "../features/authSlices";
 import type { AppDispatch } from "../../../store";
 import { showToast } from "../../../core/service/ToastService";
-import { tokenService } from "../../../core/service/tokenService";
+import { setActiveModule } from "../../../core/features/navigationSlices";
 
 const { Title } = Typography;
 
@@ -16,27 +16,29 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
   const handleSubmit = async () => {
     setLoading(true);
-
     try {
       const payload = await loginForm.validateFields();
       const response = await dispatch(loginUser(payload));
-
       if (loginUser.fulfilled.match(response)) {
         const { token, user } = response.payload.data;
-
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         showToast.success(response.payload.message);
         resetFields(loginForm);
+        dispatch(setActiveModule("voter"));
+        localStorage.setItem("activeModule", "voter");
         navigate("/dashboard");
         dispatch(resetAuthState());
       } else {
-        showToast.error(response.payload);
+        showToast.error(
+          response.payload || "An error occurred. Please try again."
+        );
       }
     } catch (error) {
-      message.error("Login failed. Please try again.");
+      showToast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
