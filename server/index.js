@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { config } from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import pollRoutes from "./routes/pollRoutes.js";
 
 // Initialize express app
 const app = express();
@@ -19,6 +21,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api", dashboardRoutes);
+app.use("/api/poll", pollRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
