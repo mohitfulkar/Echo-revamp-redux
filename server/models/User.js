@@ -29,6 +29,11 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  role: {
+    type: String,
+    default: "user", // Always "user"
+    immutable: true, // Prevent role from being changed
+  },
 });
 
 const User = model("User", UserSchema);

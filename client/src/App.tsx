@@ -1,43 +1,52 @@
-import React from "react";
+// App.tsx
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import "./App.css";
-import SignUp from "./app/modules/auth/pages/SignUp";
-import "antd/dist/reset.css";
+import { ConfigProvider } from "antd";
 import Login from "./app/modules/auth/pages/Login";
+import SignUp from "./app/modules/auth/pages/SignUp";
+import VoterDashboard from "./app/modules/dashboard/pages/VoterDashboard";
 import AppLayout from "./app/core/layouts/AppLayout";
-import { useAuth } from "./app/core/hooks/useAuth";
-import UserDashboard from "./app/modules/auth/pages/UserDashboard";
+import { useDispatch } from "react-redux";
+import { setActiveModule } from "./app/core/features/navigationSlices";
 
 const App: React.FC = () => {
-  const { isAuthenticated } = useAuth(); // Custom hook to check auth status
-  console.log("isAuthenticated", isAuthenticated);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const savedModule = localStorage.getItem("activeModule");
+    if (savedModule) {
+      dispatch(setActiveModule(savedModule));
+    }
+  }, [dispatch]);
+
   return (
-    <Router>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#1890ff",
+        },
+      }}
+    >
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<SignUp />} />
 
-        {/* Protected routes with layout */}
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? <AppLayout /> : <Navigate to="/login" replace />
-          }
-        >
-          <Route index element={<UserDashboard />} />
-          {/* Add other protected routes here */}
-        </Route>
+          {/* All protected or main app routes go inside AppLayout */}
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<VoterDashboard />} />
+            {/* More role/feature-based routes can go here */}
+          </Route>
 
-        {/* Catch-all route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Router>
+    </ConfigProvider>
   );
 };
 
