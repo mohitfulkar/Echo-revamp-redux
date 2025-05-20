@@ -1,6 +1,5 @@
 // controllers/authController.js
 import bcrypt from "bcryptjs";
-import { validationResult } from "express-validator";
 import User from "../models/User.js";
 import Otp from "../models/Otp.js";
 import { sendOTPEmail } from "../services/emailService.js";

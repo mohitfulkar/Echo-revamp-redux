@@ -13,3 +13,10 @@ export const sendResponse = (
     ...extraData,
   });
 };
+
+export const sendServerError = (res, error = "Internal server error") => {
+  return res.status(500).json({
+    success: false,
+    message: error,
+  });
+};
