@@ -1,6 +1,5 @@
-import User from "../models/User.js";
 
-export const calculateMonthlyUserGrowth = async () => {
+export const calculateMonthlyGrowth = async (model) => {
   const now = new Date();
 
   const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -11,21 +10,21 @@ export const calculateMonthlyUserGrowth = async () => {
   );
   const endOfPreviousMonth = new Date(startOfCurrentMonth);
 
-  const currentMonthUsers = await User.countDocuments({
+  const currentMonthItems = await model.countDocuments({
     createdAt: { $gte: startOfCurrentMonth, $lt: now },
   });
 
-  const previousMonthUsers = await User.countDocuments({
+  const previousMonthItems = await model.countDocuments({
     createdAt: { $gte: startOfPreviousMonth, $lt: endOfPreviousMonth },
   });
 
   let changePercentage = 0;
 
-  if (previousMonthUsers === 0 && currentMonthUsers > 0) {
+  if (previousMonthItems === 0 && currentMonthItems > 0) {
     changePercentage = 100;
-  } else if (previousMonthUsers > 0) {
+  } else if (previousMonthItems > 0) {
     changePercentage =
-      ((currentMonthUsers - previousMonthUsers) / previousMonthUsers) * 100;
+      ((currentMonthItems - previousMonthItems) / previousMonthItems) * 100;
   }
 
   const change_percentage = parseFloat(changePercentage.toFixed(2));

@@ -9,8 +9,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   NAVIGATION_ITEMS,
-  AVAILABLE_MODULES,
-  type ModuleItem,
   type NavigationItem,
 } from "../constants/navigationItems";
 import type { RootState } from "../../store";
@@ -26,14 +24,12 @@ const SidebarNavigation: React.FC = () => {
   const activeModule: string | null = useSelector(
     (state: RootState) => state.navigation?.activeModule
   );
-  console.log("activeModule", activeModule);
   // 👇 Return null if activeModule is null or undefined
   if (!activeModule || !NAVIGATION_ITEMS[activeModule]) {
     return null;
   }
 
   const currentNavItems: NavigationItem[] = NAVIGATION_ITEMS[activeModule];
-  console.log("currentNavItems", currentNavItems);
   const toggleCollapsed = (): void => {
     setCollapsed(!collapsed);
   };
@@ -53,19 +49,6 @@ const SidebarNavigation: React.FC = () => {
       collapsedWidth={80}
       width={240}
     >
-      {/* Logo / Title */}
-      <div className="h-16 flex items-center justify-center bg-blue-600 text-white">
-        <h1
-          className={`text-xl font-bold transition-opacity duration-300 ${
-            collapsed ? "opacity-0 w-0" : "opacity-100"
-          }`}
-        >
-          ECHO
-        </h1>
-        {collapsed && <span className="text-2xl font-bold">E</span>}
-      </div>
-
-      {/* Toggle Button */}
       <div
         className="p-4 flex justify-end cursor-pointer text-blue-600 hover:text-blue-800 transition-colors"
         onClick={toggleCollapsed}
