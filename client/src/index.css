@@ -2,7 +2,6 @@
 
 /* index.css - Global Styling for React Vite TSX Project */
 
-
 /* Reset and Base Styles */
 * {
   margin: 0;
@@ -69,7 +68,82 @@
 body {
   font-family: "Poppins", sans-serif;
   font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
   color: var(--text-primary);
   background-color: var(--color-light);
+}
+
+h1,
+.h1 {
+  font-size: var(--font-size-4xl); /* 48px */
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* H2 - Section Headers */
+h2,
+.h2 {
+  font-size: var(--font-size-3xl); /* 36px */
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+/* H3 - Subsection Headers */
+h3,
+.h3 {
+  font-size: var(--font-size-2xl); /* 30px */
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+/* H4 - Sub-subsection Headers */
+h4,
+.h4 {
+  font-size: var(--font-size-xl); /* 24px */
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+/* H5 - Minor Headers */
+h5,
+.h5 {
+  font-size: var(--font-size-lg); /* 20px */
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* H6 - Small Headers */
+h6,
+.h6 {
+  font-size: var(--font-size-md); /* 18px */
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.p {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+@media (max-width: 768px) {
+  h1,
+  .h1 {
+    font-size: var(--font-size-3xl); /* 36px on mobile */
+  }
+
+  h2,
+  .h2 {
+    font-size: var(--font-size-2xl); /* 30px on mobile */
+  }
+
+  h3,
+  .h3 {
+    font-size: var(--font-size-xl); /* 24px on mobile */
+  }
 }

@@ -27,3 +27,8 @@ export interface UserLogin {
   email: string;
   password: string;
 }
+
+
+export interface AdminLogin{
+ password: string;
+}
