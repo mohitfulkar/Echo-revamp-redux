@@ -2,6 +2,7 @@
 import React from "react";
 import { Layout } from "antd";
 import SidebarNavigation from "../components/CoreSideNav";
+import CoreNavbar from "../components/CoreNavbar";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
@@ -15,11 +16,15 @@ const AppLayout: React.FC = () => {
 
   return (
     <Layout className="min-h-screen">
-      {activeModule && <SidebarNavigation />}
+      <CoreNavbar />
 
       <Layout className="transition-all duration-300">
-        <Content className="p-6 bg-gray-50">
-          <Outlet />
+        {activeModule && <SidebarNavigation />}
+
+        <Content className="bg-gray-50 w-full">
+          <div className="p-12">
+            <Outlet />
+          </div>
         </Content>
       </Layout>
     </Layout>
