@@ -27,7 +27,7 @@ export interface ModuleItem {
 export type ModuleNavigationMap = Record<string, NavigationItem[]>;
 
 export const NAVIGATION_ITEMS: ModuleNavigationMap = {
-  administrator: [
+  admin: [
     { key: "/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
     { key: "/manage-users", icon: <UserOutlined />, label: "Manage Users" },
     { key: "/polls", icon: <FormOutlined />, label: "Polls" },

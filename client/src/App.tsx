@@ -13,6 +13,8 @@ import VoterDashboard from "./app/modules/dashboard/pages/VoterDashboard";
 import AppLayout from "./app/core/layouts/AppLayout";
 import { useDispatch } from "react-redux";
 import { setActiveModule } from "./app/core/features/navigationSlices";
+import AdminLogin from "./app/modules/auth/pages/AdminLogin";
+import AdminDashboard from "./app/modules/dashboard/pages/AdminDashboard";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -36,10 +38,15 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
 
-          {/* All protected or main app routes go inside AppLayout */}
+
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<VoterDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+
             {/* More role/feature-based routes can go here */}
           </Route>
 

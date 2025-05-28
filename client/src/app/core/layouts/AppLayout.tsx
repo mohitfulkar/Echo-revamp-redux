@@ -18,16 +18,17 @@ const AppLayout: React.FC = () => {
     <Layout className="min-h-screen">
       <CoreNavbar />
 
-      <Layout className="transition-all duration-300">
+      <Layout className="flex flex-row transition-all duration-300">
         {activeModule && <SidebarNavigation />}
 
         <Content className="bg-gray-50 w-full">
-          <div className="p-12">
+          <div style={{ margin: "1rem" }}>
             <Outlet />
           </div>
         </Content>
       </Layout>
     </Layout>
+
   );
 };
 

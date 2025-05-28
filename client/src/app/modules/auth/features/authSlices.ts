@@ -63,6 +63,23 @@ export const loginUser = createAsyncThunk<
   }
 });
 
+export const adminLogin = createAsyncThunk<
+  { message: string; user: string }, // ✅ updated return type
+  { password: string },
+  { rejectValue: string }
+>("auth/adminLogin", async (payload, { rejectWithValue }) => {
+  const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+
+  if (!adminPassword) {
+    return rejectWithValue("Admin password not set");
+  }
+  if (payload.password === adminPassword) {
+    return { message: "Login successful", user: "admin" };
+  } else {
+    return rejectWithValue("Incorrect password");
+  }
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -77,6 +94,7 @@ const authSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
     addAsyncCaseHandlers(builder, registerUser);
     addAsyncCaseHandlers(builder, loginUser);
+    addAsyncCaseHandlers(builder, adminLogin);
   },
 });
 
