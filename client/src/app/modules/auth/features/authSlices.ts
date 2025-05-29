@@ -10,7 +10,7 @@ import type {
   UserLogin,
   UserRegistration,
 } from "../models/auth.interface";
-import { LOGIN, REGISTER, VERIFY_OTP } from "../config/auth.constants";
+import { LOGIN, REGISTER, VERIFY_OTP } from "../constants/auth.constants";
 import { addAsyncCaseHandlersAuth } from "../../../core/utils/storeUtil";
 
 const initialState: AuthState = {
