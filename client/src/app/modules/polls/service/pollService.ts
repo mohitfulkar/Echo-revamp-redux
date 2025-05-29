@@ -1,7 +1,8 @@
 // services/authService.ts
 import axios from "axios";
 import { BASE_URL } from "../../../core/environment/environment.local";
-const POLL_URL = `${BASE_URL}/poll`;
+import { POLL } from "../constants/dashboard.constants";
+const POLL_URL = `${BASE_URL}/${POLL}`;
 
 export const pollService = {
   create: async (parentKey: string, payload: any) => {

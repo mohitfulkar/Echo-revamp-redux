@@ -4,10 +4,7 @@ import {
   type ActionReducerMapBuilder,
 } from "@reduxjs/toolkit";
 import { pollService } from "../../polls/service/pollService";
-import {
-  addAsyncCaseHandlersDashboard,
-  addAsyncCaseHandlersPoll,
-} from "../../../core/utils/storeUtil";
+import { addAsyncCaseHandlersDashboard } from "../../../core/utils/storeUtil";
 
 export interface DashboardState {
   items: any; // Or use Record<string, Poll[]> for stronger typing
@@ -29,7 +26,6 @@ export const getAdminDashboard = createAsyncThunk<
 >("auth/getAdminDashboard", async (params, { rejectWithValue }) => {
   try {
     const response = await pollService.getAll("", params);
-    console.log("response", response);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Login failed");
