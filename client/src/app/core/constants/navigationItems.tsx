@@ -28,12 +28,12 @@ export type ModuleNavigationMap = Record<string, NavigationItem[]>;
 
 export const NAVIGATION_ITEMS: ModuleNavigationMap = {
   admin: [
-    { key: "/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
-    { key: "/manage-users", icon: <UserOutlined />, label: "Manage Users" },
-    { key: "/polls", icon: <FormOutlined />, label: "Polls" },
-    { key: "/audit-logs", icon: <AuditOutlined />, label: "Audit Logs" },
-    { key: "/analytics", icon: <BarChartOutlined />, label: "Analytics" },
-    { key: "/settings", icon: <SettingOutlined />, label: "Settings" },
+    { key: "/admin/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
+    { key: "/admin/manage-users", icon: <UserOutlined />, label: "Manage Users" },
+    { key: "/admin/polls", icon: <FormOutlined />, label: "Polls" },
+    { key: "/admin/audit-logs", icon: <AuditOutlined />, label: "Audit Logs" },
+    { key: "/admin/analytics", icon: <BarChartOutlined />, label: "Analytics" },
+    { key: "/admin/settings", icon: <SettingOutlined />, label: "Settings" },
     {
       key: "/notifications",
       icon: <NotificationOutlined />,

@@ -6,9 +6,11 @@ import {
     LikeOutlined,
     ClockCircleOutlined,
 } from "@ant-design/icons";
+import type { DataPanelProps } from "../../../core/models/sharedComponent";
 
 // Panel data
-const panels = [
+
+const panels: DataPanelProps[] = [
     {
         title: "Total Users",
         count: "1,284",
@@ -36,6 +38,9 @@ const panels = [
 ];
 
 const AdminDashboard: React.FC = () => {
+
+
+
     return (
         <div className="space-y-6">
             {/* Header */}

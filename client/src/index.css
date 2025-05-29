@@ -3,11 +3,11 @@
 /* index.css - Global Styling for React Vite TSX Project */
 
 /* Reset and Base Styles */
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+} */
 
 :root {
   /* Font Sizes */
@@ -71,6 +71,10 @@ body {
   color: var(--text-primary);
   background-color: var(--color-light);
 }
+div {
+  font-family: "Poppins", sans-serif;
+  font-size: var(--font-size-base);
+}
 
 h1,
 .h1 {
@@ -127,6 +131,16 @@ h6,
 
 .p {
   font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+.value {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+.label {
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   font-weight: var(--font-weight-regular);
 }

@@ -29,7 +29,7 @@ const AdminLogin: React.FC = () => {
                 localStorage.setItem("user", JSON.stringify(user));
                 showToast.success("Admin login successful!");
                 resetFields(loginForm);
-                navigate("/admin");
+                navigate("/admin/dashboard");
                 localStorage.setItem("activeModule", "admin");
                 dispatch(setActiveModule("admin"))
                 dispatch(resetAuthState())

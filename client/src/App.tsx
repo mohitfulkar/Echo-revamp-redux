@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { setActiveModule } from "./app/core/features/navigationSlices";
 import AdminLogin from "./app/modules/auth/pages/AdminLogin";
 import AdminDashboard from "./app/modules/dashboard/pages/AdminDashboard";
+import PollLanding from "./app/modules/polls/pages/PollLanding";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,8 +44,8 @@ const App: React.FC = () => {
 
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<VoterDashboard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/polls" element={< PollLanding />} />
             <Route path="/admin" element={<AdminDashboard />} />
 
             {/* More role/feature-based routes can go here */}
