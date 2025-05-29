@@ -11,10 +11,10 @@ export const getDasboardItems = async (req, res) => {
     const monthlyPollGrowth = await calculateMonthlyGrowth(Poll);
     sendResponse(res, true, "Counts fetched Successfully", 200, {
       data: {
-        total_users: totalUsers,
-        monthly_user_growth: monthlyUserGrowth,
-        active_polls: totalActivePolls,
-        monthly_poll_growth: monthlyPollGrowth,
+        totalUsers: totalUsers,
+        monthlyUserGrowth: monthlyUserGrowth,
+        totalActivePolls: totalActivePolls,
+        monthlyPollGrowth: monthlyPollGrowth,
       },
     });
   } catch (error) {
