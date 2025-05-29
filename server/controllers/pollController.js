@@ -1,6 +1,8 @@
+import { query } from "express-validator";
 import Poll from "../models/Poll.js";
 import Question from "../models/Questions.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
+import { buildMeta, getPaginationOptions } from "../utils/pagination.js";
 
 export const createPoll = async (req, res) => {
   try {
@@ -39,17 +41,57 @@ export const createPoll = async (req, res) => {
     await savedPoll.save();
 
     // Step 4: Send response with poll and questions
-   sendResponse(res, true, "Poll created successfully", 201, {
-  data: {
-    pollData: {
-      ...savedPoll.toObject(),
-      questions: savedQuestions,
-    },
-  },
-});
-
+    sendResponse(res, true, "Poll created successfully", 201, {
+      data: {
+        pollData: {
+          ...savedPoll.toObject(),
+          questions: savedQuestions,
+        },
+      },
+    });
   } catch (error) {
     console.error("Error creating poll:", error);
     sendServerError(res, "Failed to create poll");
+  }
+};
+
+export const getAll = async (req, res) => {
+  try {
+    const { page, limit, skip } = getPaginationOptions(req.query);
+    const { searchValue } = req.query;
+    const filter = {};
+    if (searchValue) {
+      const regex = new RegExp(searchValue, "i"); // case-insensitive
+      filter.$or = [
+        { title: { $regex: regex } },
+        { status: { $regex: regex } },
+      ];
+    }
+    if (req.query.title) {
+      filter.title = { $regex: req.query.title, $options: "i" };
+    }
+    if (req.query.status) {
+      filter.status = { $regex: req.query.status };
+    }
+    const total = await Poll.countDocuments(filter);
+    const polls = await Poll.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: "questions",
+        select: "-__v",
+      })
+      .select("-__v");
+
+    sendResponse(res, true, "Poll Data Fetched Successfully", 200, {
+      data: {
+        pagination: buildMeta({ total, page, limit }),
+        polls,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching polls:", error);
+    sendServerError(res);
   }
 };
