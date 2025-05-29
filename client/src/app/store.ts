@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./modules/auth/features/authSlices";
 import navigationReducer from "./core/features/navigationSlices";
+import pollReducer from "./modules/polls/features/pollSlices";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     navigation: navigationReducer,
+    poll: pollReducer,
     // Add other reducers here
   },
   middleware: (getDefaultMiddleware) =>

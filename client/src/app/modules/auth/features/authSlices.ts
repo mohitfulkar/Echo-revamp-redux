@@ -11,7 +11,7 @@ import type {
   UserRegistration,
 } from "../models/auth.interface";
 import { LOGIN, REGISTER, VERIFY_OTP } from "../config/auth.constants";
-import { addAsyncCaseHandlers } from "../../../core/utils/storeUtil";
+import { addAsyncCaseHandlersAuth } from "../../../core/utils/storeUtil";
 
 const initialState: AuthState = {
   loading: false,
@@ -64,7 +64,7 @@ export const loginUser = createAsyncThunk<
 });
 
 export const adminLogin = createAsyncThunk<
-  { message: string; user: string }, // ✅ updated return type
+  { message: string; user: string },
   { password: string },
   { rejectValue: string }
 >("auth/adminLogin", async (payload, { rejectWithValue }) => {
@@ -92,9 +92,9 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
-    addAsyncCaseHandlers(builder, registerUser);
-    addAsyncCaseHandlers(builder, loginUser);
-    addAsyncCaseHandlers(builder, adminLogin);
+    addAsyncCaseHandlersAuth(builder, registerUser);
+    addAsyncCaseHandlersAuth(builder, loginUser);
+    addAsyncCaseHandlersAuth(builder, adminLogin);
   },
 });
 
