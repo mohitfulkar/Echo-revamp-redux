@@ -2,7 +2,7 @@
 
 import { check, body } from "express-validator";
 import { validationResult } from "express-validator";
-import { HttpStatus } from "../constants/statusCode";
+import { HttpStatus } from "../constants/statusCode.js";
 
 /**
  * Generic validate wrapper (already defined by you)

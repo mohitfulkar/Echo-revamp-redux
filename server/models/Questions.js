@@ -1,16 +1,5 @@
 import mongoose from "mongoose";
 
-const optionSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-  voteCount: {
-    type: Number,
-    default: 0,
-  },
-});
-
 const questionSchema = new mongoose.Schema(
   {
     pollId: {
@@ -31,18 +20,19 @@ const questionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    options: {
-      type: [optionSchema],
-      validate: {
-        validator: function (v) {
-          return v.length >= 2;
-        },
-        message: "Each question must have at least two options.",
-      },
-    },
+    // Removed embedded `options`
   },
   { timestamps: true }
 );
+
+questionSchema.virtual("options", {
+  ref: "Option",
+  localField: "_id",
+  foreignField: "questionId",
+});
+
+questionSchema.set("toObject", { virtuals: true });
+questionSchema.set("toJSON", { virtuals: true });
 
 const Question = mongoose.model("Question", questionSchema);
 export default Question;

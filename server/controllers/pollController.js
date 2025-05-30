@@ -1,9 +1,9 @@
-import { query } from "express-validator";
 import Poll from "../models/Poll.js";
 import Question from "../models/Questions.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
 import { buildMeta, getPaginationOptions } from "../utils/pagination.js";
 import { HttpStatus } from "../constants/statusCode.js";
+import Option from "../models/Options.js";
 
 export const createPoll = async (req, res) => {
   try {
@@ -36,6 +36,19 @@ export const createPoll = async (req, res) => {
     }));
 
     const savedQuestions = await Question.insertMany(questionDocs);
+    const allOptions = [];
+    questions.forEach((question, index) => {
+      const questionId = savedQuestions[index]._id;
+
+      const optionsWithRefs = question.options.map((opt) => ({
+        ...opt,
+        pollId: savedPoll._id,
+        questionId,
+      }));
+
+      allOptions.push(...optionsWithRefs);
+    });
+    const savedOptions = await Option.insertMany(allOptions);
 
     // Step 3: Update poll's questions array with the new question IDs
     savedPoll.questions = savedQuestions.map((q) => q._id);
@@ -46,7 +59,12 @@ export const createPoll = async (req, res) => {
       data: {
         pollData: {
           ...savedPoll.toObject(),
-          questions: savedQuestions,
+          questions: savedQuestions.map((q, idx) => ({
+            ...q.toObject(),
+            options: savedOptions.filter(
+              (opt) => opt.questionId.toString() === q._id.toString()
+            ),
+          })),
         },
       },
     });
