@@ -15,7 +15,6 @@ export interface SearchBarProps {
 export interface TabConfig {
   label: string;
   key: string;
-  content: React.ReactNode;
 }
 
 export interface SharedTabsProps {

@@ -21,11 +21,11 @@ const initialState: DashboardState = {
 };
 export const getAdminDashboard = createAsyncThunk<
   any,
-  any,
+  void,
   { rejectValue: string }
->("auth/getAdminDashboard", async (params, { rejectWithValue }) => {
+>("auth/getAdminDashboard", async (_ButtonColorTypes, { rejectWithValue }) => {
   try {
-    const response = await pollService.getAll("", params);
+    const response = await pollService.getStats("admin-dashboard");
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Login failed");

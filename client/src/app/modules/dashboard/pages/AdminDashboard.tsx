@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DataPanel from "../../../core/components/DataPanel";
 import {
     UserOutlined,
@@ -6,39 +6,52 @@ import {
     LikeOutlined,
     ClockCircleOutlined,
 } from "@ant-design/icons";
-import type { DataPanelProps } from "../../../core/models/sharedComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { getAdminDashboard } from "../features/dashboardSlices";
+import type { AppDispatch, RootState } from "../../../store";
 
-// Panel data
-
-const panels: DataPanelProps[] = [
+// Panel configuration
+const panelConfig = [
     {
         title: "Total Users",
-        count: "1,284",
+        key: "totalUsers",
+        growthKey: "monthlyUserGrowth",
         icon: <UserOutlined />,
-        percentage: "12%",
     },
     {
         title: "Active Polls",
-        count: "24",
+        key: "totalActivePolls",
+        growthKey: "monthlyPollGrowth",
         icon: <PieChartOutlined />,
-        percentage: "8%",
     },
     {
         title: "Total Votes",
-        count: "24,521",
+        key: "totalVotes",
+        growthKey: "voteGrowth",
         icon: <LikeOutlined />,
-        percentage: "23%",
     },
     {
         title: "Avg. Response Time",
-        count: "3m 45s",
+        key: "avgResponseTime",
+        growthKey: "responseTimeGrowth", // not provided in API, fallback below
         icon: <ClockCircleOutlined />,
-        percentage: "-5%",
+        staticValue: "3m 45s",
+        staticGrowth: "-5%",
     },
 ];
 
 const AdminDashboard: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const stats = useSelector((state: RootState) => state.dashboard.items);
+    console.log('stats', stats
 
+    );
+
+    useEffect(() => {
+        if (!stats || Object.keys(stats).length === 0) {
+            dispatch(getAdminDashboard());
+        }
+    }, [dispatch, stats]);
 
 
     return (
@@ -53,15 +66,20 @@ const AdminDashboard: React.FC = () => {
 
             {/* Data Panels */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {panels.map((panel, index) => (
-                    <DataPanel
-                        key={index}
-                        title={panel.title}
-                        count={panel.count}
-                        icon={panel.icon}
-                        percentage={panel.percentage}
-                    />
-                ))}
+                {panelConfig.map((panel, index) => {
+                    const count = panel.staticValue ?? stats?.[panel.key]?.toLocaleString?.() ?? "0";
+                    const percentage = panel.staticGrowth ?? `${stats?.[panel.growthKey] ?? 0}%`;
+
+                    return (
+                        <DataPanel
+                            key={index}
+                            title={panel.title}
+                            count={count}
+                            icon={panel.icon}
+                            percentage={percentage}
+                        />
+                    );
+                })}
             </div>
         </div>
     );
