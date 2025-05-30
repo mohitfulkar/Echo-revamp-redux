@@ -2,8 +2,8 @@ import React, { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import type { RootState, AppDispatch } from '../../../store'; // adjust path as needed
-import { getPolls } from '../features/pollSlices'; // adjust path
+import type { RootState, AppDispatch } from '../../../store';
+import { getPolls } from '../features/pollSlices';
 import StatusTag from '../../../core/components/StatusTag';
 
 interface PollProps {
@@ -13,12 +13,16 @@ interface PollProps {
 const Poll: React.FC<PollProps> = ({ searchValue }) => {
     const location = useLocation();
     const dispatch = useDispatch<AppDispatch>();
-    const { itemsByKey } = useSelector((state: RootState) => state.poll);
+    const { itemsByKey, loading } = useSelector((state: RootState) => state.poll);
     const tab = useMemo(() => new URLSearchParams(location.search).get('tab') || 'polls', [location.search]);
+
     const items = itemsByKey[tab] || [];
 
     useEffect(() => {
-        if (!itemsByKey[tab]) {
+        console.log('itemsByKey[tab]', itemsByKey[tab], tab)
+        const tabData = itemsByKey[tab];
+
+        if (!tabData && !loading) {
             const status = tab === 'polls' ? undefined : tab;
             const params = {
                 ...(status && { status }),
@@ -26,18 +30,19 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
             };
             dispatch(getPolls(params));
         }
-    }, [tab, itemsByKey, dispatch, searchValue]);
+    }, [tab, itemsByKey, dispatch, searchValue, loading]);
 
-    // Re-fetch data when searchValue changes
+
     useEffect(() => {
-        const status = tab === 'polls' ? undefined : tab;
-        const params = {
-            ...(status && { status }),
-            ...(searchValue && { searchValue })
-        };
-        dispatch(getPolls(params));
+        if (searchValue) {
+            const status = tab === 'polls' ? undefined : tab;
+            const params = {
+                ...(status && { status }),
+                searchValue
+            };
+            dispatch(getPolls(params));
+        }
     }, [searchValue, tab, dispatch]);
-
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -52,7 +57,7 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
 
                     <div className="grid grid-cols-3 gap-2 text-sm text-gray-700">
                         <PollField label="Status">
-                             <StatusTag status={poll.status} />
+                            <StatusTag status={poll.status} />
                         </PollField>
                         <PollField label="Expiry Date">
                             {dayjs(poll.expiryDate).format('DD MMM YYYY')}
@@ -73,11 +78,11 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
     );
 };
 
-const PollField: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
+const PollField: React.FC<{ label: string; children: React.ReactNode }> = React.memo(({ label, children }) => (
     <span>
         <label className="label">{label}</label>
         <p className="value">{children}</p>
     </span>
-);
+));
 
-export default Poll;
+export default React.memo(Poll);

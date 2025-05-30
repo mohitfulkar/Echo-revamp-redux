@@ -9,48 +9,24 @@ const PollLanding: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState<string>('');
 
-    // Read active tab from URL
     const tabFromUrl = searchParams.get('tab') || 'polls';
     const [activeTab, setActiveTab] = useState<string>(tabFromUrl);
 
-    // Update URL when tab changes
     const handleTabChange = (key: string) => {
         setActiveTab(key);
         setSearchParams({ tab: key });
     };
 
     const handleSearch = (value: string) => {
-        console.log('Search triggered with:', value);
         setSearchValue(value);
-        // The Poll component will automatically re-fetch data with the new searchValue
     };
 
     const pollTabItems: TabConfig[] = [
-        {
-            label: 'All Polls',
-            key: 'polls',
-            content: <Poll searchValue={searchValue} />,
-        },
-        {
-            label: 'Active Polls',
-            key: 'active',
-            content: <Poll searchValue={searchValue} />,
-        },
-        {
-            label: 'Completed Polls',
-            key: 'completed',
-            content: <Poll searchValue={searchValue} />,
-        },
-        {
-            label: 'Draft Polls',
-            key: 'draft',
-            content: <Poll searchValue={searchValue} />,
-        },
-        {
-            label: 'Expired Polls',
-            key: 'expired',
-            content: <Poll searchValue={searchValue} />,
-        },
+        { label: 'All Polls', key: 'polls' },
+        { label: 'Active Polls', key: 'active' },
+        { label: 'Completed Polls', key: 'completed' },
+        { label: 'Draft Polls', key: 'draft' },
+        { label: 'Expired Polls', key: 'expired' },
     ];
 
     return (
@@ -72,11 +48,17 @@ const PollLanding: React.FC = () => {
                         />
                     </div>
                 </div>
+
                 <SharedTabs
                     tabs={pollTabItems}
                     defaultActiveKey={activeTab}
                     onChange={handleTabChange}
                 />
+
+                {/* ✅ Render only the active tab's content */}
+                <div className="mt-6">
+                    <Poll searchValue={searchValue} />
+                </div>
             </div>
         </div>
     );

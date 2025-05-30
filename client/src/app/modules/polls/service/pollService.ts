@@ -14,4 +14,10 @@ export const pollService = {
     });
     return response.data;
   },
+  getStats: async (parentKey: string, params?: {}) => {
+    const response = await axios.get(`${BASE_URL}/${parentKey}`, {
+      params: params || {},
+    });
+    return response.data;
+  },
 };
