@@ -3,6 +3,7 @@ import Poll from "../models/Poll.js";
 import Question from "../models/Questions.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
 import { buildMeta, getPaginationOptions } from "../utils/pagination.js";
+import { HttpStatus } from "../constants/statusCode.js";
 
 export const createPoll = async (req, res) => {
   try {
@@ -41,7 +42,7 @@ export const createPoll = async (req, res) => {
     await savedPoll.save();
 
     // Step 4: Send response with poll and questions
-    sendResponse(res, true, "Poll created successfully", 201, {
+    sendResponse(res, true, "Poll created successfully", HttpStatus.CREATED, {
       data: {
         pollData: {
           ...savedPoll.toObject(),
@@ -84,7 +85,7 @@ export const getAll = async (req, res) => {
       })
       .select("-__v");
 
-    sendResponse(res, true, "Poll Data Fetched Successfully", 200, {
+    sendResponse(res, true, "Poll Data Fetched Successfully", HttpStatus.OK, {
       data: {
         pagination: buildMeta({ total, page, limit }),
         polls,

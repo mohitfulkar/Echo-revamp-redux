@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import type { RootState, AppDispatch } from '../../../store'; // adjust path as needed
 import { getPolls } from '../features/pollSlices'; // adjust path
+import StatusTag from '../../../core/components/StatusTag';
 
 interface PollProps {
     searchValue: string;
@@ -51,9 +52,7 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
 
                     <div className="grid grid-cols-3 gap-2 text-sm text-gray-700">
                         <PollField label="Status">
-                            <span className={poll.status === 'active' ? 'text-green-600' : 'text-red-600'}>
-                                {poll.status}
-                            </span>
+                             <StatusTag status={poll.status} />
                         </PollField>
                         <PollField label="Expiry Date">
                             {dayjs(poll.expiryDate).format('DD MMM YYYY')}
