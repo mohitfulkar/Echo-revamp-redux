@@ -3,8 +3,9 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import Otp from "../models/Otp.js";
 import { sendOTPEmail } from "../services/emailService.js";
-import { sendResponse } from "../utils/response.js";
+import { sendResponse, sendServerError } from "../utils/response.js";
 import jwt from "jsonwebtoken";
+import { HttpStatus } from "../constants/statusCode.js";
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 const OTP_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
@@ -17,7 +18,13 @@ export const register = async (req, res) => {
     const { fullName, email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
-      return sendResponse(res, false, "Passwords do not match", 400, false);
+      return sendResponse(
+        res,
+        false,
+        "Passwords do not match",
+        HttpStatus.BAD_REQUEST,
+        false
+      );
     }
 
     const existingUser = await User.findOne({ email });
@@ -26,7 +33,7 @@ export const register = async (req, res) => {
         res,
         false,
         "User already exists with this email",
-        400,
+        HttpStatus.BAD_REQUEST,
         false
       );
     }
@@ -48,18 +55,12 @@ export const register = async (req, res) => {
       res,
       true,
       "OTP sent. Please check your email for OTP verification.",
-      200,
+      HttpStatus.OK,
       true,
       { data: { email } }
     );
   } catch (error) {
-    return sendResponse(
-      res,
-      false,
-      "Server error during registration",
-      500,
-      false
-    );
+    sendServerError(res, "Server error during registration");
   }
 };
 
@@ -76,7 +77,7 @@ export const verifyOTP = async (req, res) => {
         res,
         false,
         "OTP expired or invalid. Please register again.",
-        400,
+        HttpStatus.BAD_REQUEST,
         false
       );
     }
@@ -86,7 +87,7 @@ export const verifyOTP = async (req, res) => {
         res,
         false,
         "Invalid OTP. Please try again.",
-        400,
+        HttpStatus.BAD_REQUEST,
         false
       );
     }
@@ -97,7 +98,7 @@ export const verifyOTP = async (req, res) => {
         res,
         false,
         "OTP has expired. Please register again.",
-        400,
+        HttpStatus.BAD_REQUEST,
         false
       );
     }
@@ -109,7 +110,7 @@ export const verifyOTP = async (req, res) => {
         res,
         false,
         "Email already registered and verified",
-        400,
+        HttpStatus.BAD_REQUEST,
         false
       );
     }
@@ -135,20 +136,14 @@ export const verifyOTP = async (req, res) => {
       res,
       true,
       "Email verified successfully. You can now login.",
-      200,
+      HttpStatus.OK,
       true,
       {
         data: { email },
       }
     );
   } catch (error) {
-    return sendResponse(
-      res,
-      false,
-      "Server error during verification",
-      500,
-      false
-    );
+    sendServerError(res, "Server error during verification");
   }
 };
 
@@ -169,7 +164,7 @@ export const loginUser = async (req, res) => {
         res,
         false,
         "Invalid credentials or user not verified",
-        401,
+        HttpStatus.UNAUTHORIZED,
         false
       );
     }
@@ -180,7 +175,7 @@ export const loginUser = async (req, res) => {
         res,
         false,
         "Invalid credentials or user not verified",
-        401,
+        HttpStatus.UNAUTHORIZED,
         false
       );
     }
@@ -191,7 +186,13 @@ export const loginUser = async (req, res) => {
 
     if (!isMatch) {
       console.warn(`[Login] Incorrect password for email: ${email}`);
-      return sendResponse(res, false, "Invalid email or password", 400, false);
+      return sendResponse(
+        res,
+        false,
+        "Invalid email or password",
+        HttpStatus.BAD_REQUEST,
+        false
+      );
     }
 
     // 3. Generate token
@@ -201,9 +202,7 @@ export const loginUser = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    console.log(`[Login] Login successful for ${email}. Token generated.`);
-
-    return sendResponse(res, true, "Login successful", 200, {
+    return sendResponse(res, true, "Login successful", HttpStatus.OK, {
       data: {
         token,
         user: {
@@ -215,7 +214,7 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("[Login] Error during login:", error);
-    return sendResponse(res, false, "Server error during login", 500, false);
+    console.error(" Error during login:", error);
+    sendServerError(res);
   }
 };

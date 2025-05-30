@@ -1,4 +1,3 @@
-// services/authService.ts
 import axios from "axios";
 import { BASE_URL } from "../../../core/environment/environment.local";
 import { POLL } from "../constants/dashboard.constants";
@@ -11,7 +10,7 @@ export const pollService = {
   },
   getAll: async (parentKey: string, params?: {}) => {
     const response = await axios.get(`${POLL_URL}/${parentKey}`, {
-      params: params || {}, // wrap `params` inside an object
+      params: params || {},
     });
     return response.data;
   },

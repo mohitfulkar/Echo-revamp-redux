@@ -2,6 +2,7 @@
 
 import { check, body } from "express-validator";
 import { validationResult } from "express-validator";
+import { HttpStatus } from "../constants/statusCode";
 
 /**
  * Generic validate wrapper (already defined by you)
@@ -12,7 +13,7 @@ const validate = (validationRules) => {
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({
+        return res.status(HttpStatus.BAD_REQUEST).json({
           success: false,
           errors: errors.array(),
         });

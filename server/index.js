@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import pollRoutes from "./routes/pollRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import { HttpStatus } from "./constants/statusCode.js";
 
 // Initialize express app
 const app = express();
@@ -29,7 +30,7 @@ app.use("/api/poll", pollRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
+  res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
     success: false,
     message: "Server error",
   });

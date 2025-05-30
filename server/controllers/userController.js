@@ -1,4 +1,4 @@
-import Poll from "../models/Poll.js";
+import { HttpStatus } from "../constants/statusCode.js";
 import User from "../models/User.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
 
@@ -14,13 +14,11 @@ export const fetchAllUsers = async (req, res) => {
     };
     const users = await User.find(filter);
 
-    sendResponse(res, true, "Voters Fetched Successfully", 200, {
+    sendResponse(res, true, "Voters Fetched Successfully", HttpStatus.OK, {
       data: users,
     });
   } catch (error) {
-    sendResponse(res, false, "Failed to fetch users", 500, {
-      error: error.message,
-    });
+    sendServerError(res, "Unable to fetch Voters");
   }
 };
 
@@ -34,13 +32,11 @@ export const getRecentUsers = async (req, res) => {
     const users = await User.find({
       createdAt: { $gte: startDate },
     });
-    sendResponse(res, true, "Voters Fetched successfully", 200, {
+    sendResponse(res, true, "Voters Fetched successfully", HttpStatus.OK, {
       data: users,
     });
   } catch (error) {
-    console.error("Error fetching recent users:", error);
-    sendResponse(res, false, "Failed to fetch users", 500, {
-      error: error.message,
-    });
+    console.error("Error fetching recent voters:", error);
+    sendServerError(res, "Unable to fetch voters");
   }
 };

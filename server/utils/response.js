@@ -1,10 +1,12 @@
 // utils/responseUtils.ts
 
+import { HttpStatus } from "../constants/statusCode";
+
 export const sendResponse = (
   response,
   success = false,
   message = "Action Failed",
-  statusCode = 400,
+  statusCode = HttpStatus.BAD_REQUEST,
   extraData = {}
 ) => {
   return response.status(statusCode).json({
@@ -15,7 +17,7 @@ export const sendResponse = (
 };
 
 export const sendServerError = (res, error = "Internal server error") => {
-  return res.status(500).json({
+  return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
     success: false,
     message: error,
   });
