@@ -1,6 +1,7 @@
 // middleware/validators.js
 
 import { check, validationResult } from "express-validator";
+import { HttpStatus } from "../constants/statusCode";
 
 /**
  * Function to validate request and return errors if any
@@ -15,7 +16,7 @@ const validate = (validationRules) => {
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({
+        return res.status(HttpStatus.BAD_REQUEST).json({
           success: false,
           errors: errors.array(),
         });
@@ -33,8 +34,9 @@ const registerRules = [
 
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 
-  check("password", "Password must be at least 6 characters")
-    .isLength({ min: 6 }),
+  check("password", "Password must be at least 6 characters").isLength({
+    min: 6,
+  }),
 
   check("confirmPassword", "Confirm password is required")
     .not()
