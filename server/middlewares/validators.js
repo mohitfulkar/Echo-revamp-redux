@@ -1,7 +1,7 @@
 // middleware/validators.js
 
 import { check, validationResult } from "express-validator";
-import { HttpStatus } from "../constants/statusCode";
+import { HttpStatus } from "../constants/statusCode.js";
 
 /**
  * Function to validate request and return errors if any

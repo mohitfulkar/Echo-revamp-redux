@@ -1,6 +1,6 @@
 // utils/responseUtils.ts
 
-import { HttpStatus } from "../constants/statusCode";
+import { HttpStatus } from "../constants/statusCode.js";
 
 export const sendResponse = (
   response,
