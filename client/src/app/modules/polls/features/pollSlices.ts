@@ -22,7 +22,7 @@ const initialState: PollState = {
 
 
 export const getPolls = createAsyncThunk<any, any, { rejectValue: string }>(
-  "auth/getPolls",
+  "poll/getPolls",
   async (params, { rejectWithValue }) => {
     try {
       const response = await pollService.getAll(POLLS, params);

@@ -3,12 +3,14 @@ import authReducer from "./modules/auth/features/authSlices";
 import navigationReducer from "./core/features/navigationSlices";
 import pollReducer from "./modules/polls/features/pollSlices";
 import dashboardReducer from "./modules/dashboard/features/dashboardSlices";
+import usersReducer from "./modules/voter/features/userSlices";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     navigation: navigationReducer,
     poll: pollReducer,
+    users: usersReducer,
     dashboard: dashboardReducer,
     // Add other reducers here
   },

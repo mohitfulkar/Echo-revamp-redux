@@ -56,16 +56,16 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
     },
   ],
   voter: [
-    { key: "/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
+    { key: "/user", icon: <DashboardOutlined />, label: "Dashboard" },
     {
-      key: "/available-polls",
+      key: "/user/available-polls",
       icon: <FormOutlined />,
       label: "Available Polls",
     },
-    { key: "/my-votes", icon: <CheckCircleOutlined />, label: "My Votes" },
-    { key: "/results", icon: <BarChartOutlined />, label: "Results" },
-    { key: "/profile", icon: <UserOutlined />, label: "Profile" },
-    { key: "/help", icon: <QuestionCircleOutlined />, label: "Help / FAQ" },
+    { key: "/user/my-votes", icon: <CheckCircleOutlined />, label: "My Votes" },
+    { key: "/user/results", icon: <BarChartOutlined />, label: "Results" },
+    { key: "/user/profile", icon: <UserOutlined />, label: "Profile" },
+    { key: "/user/help", icon: <QuestionCircleOutlined />, label: "Help / FAQ" },
   ],
 };
 

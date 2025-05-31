@@ -30,13 +30,13 @@ const PollLanding: React.FC = () => {
     ];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-2">
             <div>
                 <h3 className="h3">Polls Management</h3>
                 <p className="p">Create, edit, and manage all system polls.</p>
             </div>
 
-            <div className="rounded-lg bg-white p-5">
+            <div className="rounded-lg bg-white p-4">
                 <div className="flex justify-between items-center">
                     <h3 className="h4">All Polls</h3>
                     <div className="p-4 bg-white rounded-lg">
