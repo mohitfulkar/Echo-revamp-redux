@@ -16,6 +16,7 @@ import { setActiveModule } from "./app/core/features/navigationSlices";
 import AdminLogin from "./app/modules/auth/pages/AdminLogin";
 import AdminDashboard from "./app/modules/dashboard/pages/AdminDashboard";
 import PollLanding from "./app/modules/polls/pages/PollLanding";
+import VoterLanding from "./app/modules/voter/pages/UserLanding";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const App: React.FC = () => {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/polls" element={< PollLanding />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/manage-users" element={<VoterLanding />} />
 
             {/* More role/feature-based routes can go here */}
           </Route>

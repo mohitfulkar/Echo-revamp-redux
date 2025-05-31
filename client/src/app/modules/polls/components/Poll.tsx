@@ -19,9 +19,7 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
     const items = itemsByKey[tab] || [];
 
     useEffect(() => {
-        console.log('itemsByKey[tab]', itemsByKey[tab], tab)
         const tabData = itemsByKey[tab];
-
         if (!tabData && !loading) {
             const status = tab === 'polls' ? undefined : tab;
             const params = {
