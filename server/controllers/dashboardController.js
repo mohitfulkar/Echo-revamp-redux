@@ -31,7 +31,7 @@ export const getDasboardItems = async (req, res) => {
         totalActivePolls: totalActivePolls,
         monthlyPollGrowth: monthlyPollGrowth,
         totalVotes: totalVotes,
-        voteGrowth: voteGrowth,
+        monthlyVoteGrowth: voteGrowth,
       },
     });
   } catch (error) {

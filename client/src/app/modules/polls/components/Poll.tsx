@@ -32,7 +32,7 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
 
 
     useEffect(() => {
-        if (searchValue) {
+        if (searchValue.length >= 0) {
             const status = tab === 'polls' ? undefined : tab;
             const params = {
                 ...(status && { status }),

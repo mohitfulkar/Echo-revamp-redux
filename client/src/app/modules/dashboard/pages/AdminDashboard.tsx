@@ -27,7 +27,7 @@ const panelConfig = [
     {
         title: "Total Votes",
         key: "totalVotes",
-        growthKey: "voteGrowth",
+        growthKey: "monthlyVoteGrowth",
         icon: <LikeOutlined />,
     },
     {
