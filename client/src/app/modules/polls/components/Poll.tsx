@@ -40,10 +40,10 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
             };
             dispatch(getPolls(params));
         }
-    }, [searchValue, tab, dispatch]);
+    }, [searchValue, dispatch]);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {items?.polls?.map((poll: any) => (
                 <div
                     key={poll._id}

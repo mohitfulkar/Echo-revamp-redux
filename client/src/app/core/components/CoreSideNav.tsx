@@ -15,7 +15,7 @@ import type { RootState } from "../../store";
 const { Sider } = Layout;
 
 const SidebarNavigation: React.FC = () => {
-  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,8 +45,8 @@ const SidebarNavigation: React.FC = () => {
       collapsible
       collapsed={collapsed}
       breakpoint="lg"
-      collapsedWidth={80}
-      width={240}
+      collapsedWidth={60}
+      width={200}
     >
       <div
         className="p-4 flex justify-end cursor-pointer text-blue-600 hover:text-blue-800 transition-colors"
