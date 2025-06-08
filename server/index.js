@@ -7,6 +7,7 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import pollRoutes from "./routes/pollRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { HttpStatus } from "./constants/statusCode.js";
+import { logger } from "./middlewares/logger.js";
 
 // Initialize express app
 const app = express();
@@ -20,6 +21,7 @@ mongoose
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(logger);
 
 // Routes
 app.use("/api/auth", authRoutes);

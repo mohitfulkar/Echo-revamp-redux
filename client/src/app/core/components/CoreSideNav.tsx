@@ -3,7 +3,6 @@ import { Layout, Menu, type MenuProps } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
