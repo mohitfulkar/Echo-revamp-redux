@@ -49,13 +49,13 @@ export const getUsersByTab = createAsyncThunk<
   }
 });
 
-export const getAllPanelists = createAsyncThunk<
+export const getPanelists = createAsyncThunk<
   any[],
   any,
   { rejectValue: string }
 >("panelists/getAll", async (params, { rejectWithValue }) => {
   try {
-    const response = await userService.getAll(params); // assumes axios response
+    const response = await userService.getAll("", params); // assumes axios response
     return response.data; // make sure service returns `{ data: [...] }`
   } catch (error: any) {
     return rejectWithValue(
@@ -69,7 +69,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
     addAsyncCaseHandlersUser(builder, getUsersByTab);
-    // addAsyncCaseHandlersUser(builder, getAllPanelists);
+    addAsyncCaseHandlersUser(builder, getPanelists);
   },
 });
 

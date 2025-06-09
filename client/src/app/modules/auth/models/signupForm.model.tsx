@@ -108,3 +108,15 @@ export const superPLoginFields: FieldConfig[] = [
     ],
   },
 ];
+export const panelistLoginFields: FieldConfig[] = [
+  {
+    name: "password",
+    placeholder: "Password",
+    prefix: <LockOutlined />,
+    type: "password",
+    rules: [
+      { required: true, message: "Please enter your password" },
+      { min: 8, message: "Password must be at least 8 characters" },
+    ],
+  },
+];

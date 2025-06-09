@@ -5,7 +5,7 @@ import pollReducer from "./modules/polls/features/pollSlices";
 import dashboardReducer from "./modules/dashboard/features/dashboardSlices";
 import usersReducer from "./modules/voter/features/userSlices";
 import choicesReducer from "./core/features/choiceSlices";
-
+import sharedReducer from "./core/features/sharedStateSlices";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -14,6 +14,7 @@ export const store = configureStore({
     users: usersReducer,
     dashboard: dashboardReducer,
     choices: choicesReducer,
+    shared: sharedReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

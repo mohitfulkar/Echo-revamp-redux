@@ -1,3 +1,6 @@
+import type { StepsProps } from "antd";
+import type { ReactNode } from "react";
+
 export interface DataPanelProps {
   title: string;
   count: string;
@@ -48,4 +51,21 @@ export interface ReusableTableProps {
 
 export interface SearchProps {
   searchValue: string;
+}
+
+export interface StepItem {
+  title: string;
+  status?: "wait" | "process" | "finish" | "error";
+  icon?: ReactNode;
+  description?: string;
+  subTitle?: string;
+}
+
+export interface StepperProps {
+  steps: StepItem[];
+  current?: number;
+  direction?: StepsProps["direction"];
+  size?: StepsProps["size"];
+  responsive?: boolean;
+  onChange?: StepsProps["onChange"];
 }

@@ -4,6 +4,7 @@ import {
   createPanelist,
   fetchAllUsers,
   getPanelist,
+  getPanelistByCategoryId,
   getRecentUsers,
 } from "../controllers/userController.js";
 import {
@@ -24,5 +25,6 @@ router.post(
   createPanelist
 );
 router.get("/panelists", getPanelist);
+router.get("/panelists/categories/:categoryId", getPanelistByCategoryId);
 
 export default router;
