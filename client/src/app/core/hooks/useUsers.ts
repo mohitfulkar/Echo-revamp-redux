@@ -12,7 +12,11 @@ export const useUsers = (
 ) => {
   const dispatch = useDispatch<AppDispatch>();
   const itemsByKey = useSelector((state: RootState) => state.users.itemsByKey);
-
+  const tabData = useMemo(() => itemsByKey[tab]?.data[tab], [itemsByKey, tab]);
+  const paginationInfo = useMemo(
+    () => itemsByKey[tab]?.data?.pagination || null,
+    [itemsByKey, tab]
+  );
   useEffect(() => {
     dispatch(
       getUsersByTab({
@@ -25,12 +29,6 @@ export const useUsers = (
       })
     );
   }, [dispatch, tab, searchValue, pageIndex, pageSize]);
-
-  const tabData = useMemo(() => itemsByKey[tab]?.data[tab], [itemsByKey, tab]);
-  const paginationInfo = useMemo(
-    () => itemsByKey[tab]?.data?.pagination || null,
-    [itemsByKey, tab]
-  );
 
   return { tabData, paginationInfo };
 };

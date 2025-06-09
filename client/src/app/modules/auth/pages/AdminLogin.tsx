@@ -19,10 +19,8 @@ const AdminLogin: React.FC = () => {
         setLoading(true);
         try {
             const values = await loginForm.validateFields(); // { password: '...' }
-            console.log("payload", values);
 
             const response = await dispatch(adminLogin(values));
-            console.log('response', response)
 
             if (adminLogin.fulfilled.match(response)) {
                 const { user } = response.payload;

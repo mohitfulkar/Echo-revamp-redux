@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { TableComponent } from '../../../core/components/Table';
 import type { ActionType, ColumnConfig, DataType } from '../../../core/models/sharedComponent';
-import { getUsersByTab } from '../features/userSlices';
+import { useUsers } from '../../../core/hooks/useUsers';
+import { PAGINATION } from '../../../core/constants/pagination';
+import { columnConfigMap } from '../constants/userTable';
 
 interface UserProps {
     searchValue: string;
@@ -12,19 +14,13 @@ interface UserProps {
 
 const UserData: React.FC<UserProps> = ({ searchValue }) => {
     const location = useLocation();
-    const dispatch = useDispatch<AppDispatch>();
-    const { itemsByKey } = useSelector((state: RootState) => state.users);
 
     const tab = useMemo(() =>
         new URLSearchParams(location.search).get('tab') || 'voter',
         [location.search]
     );
 
-    const columnsConfig: ColumnConfig[] = useMemo(() => [
-        { title: 'Full Name', dataIndex: 'fullName' },
-        { title: 'Email', dataIndex: 'email' },
-        { title: 'Role', dataIndex: 'role' },
-    ], []);
+    const columnsConfig = useMemo(() => columnConfigMap[tab] || [], [tab]);
 
     const handleEdit = useCallback((row: DataType) => {
         const name = row.fullName || row.firstName || 'Unknown User';
@@ -49,24 +45,11 @@ const UserData: React.FC<UserProps> = ({ searchValue }) => {
         },
     ], [handleEdit, handleDelete]);
 
-    const tabData = useMemo(() => itemsByKey[tab], [itemsByKey, tab]);
-    const hasFetchedTabData = tabData && Array.isArray(tabData.data) && tabData.data.length > 0;
-
-    useEffect(() => {
-        if (!hasFetchedTabData) {
-            const role = tab
-            const params = {
-                ...(role && { role }),
-                ...(searchValue && { searchValue })
-            };
-
-            dispatch(getUsersByTab({ tab, params }));
-        }
-    }, [tab, dispatch, searchValue, hasFetchedTabData]);
-
+    const { tabData } = useUsers(tab, searchValue, PAGINATION.pageIndex, PAGINATION.limit);
+  
     return (
         <TableComponent
-            data={hasFetchedTabData ? tabData?.data : []}
+            data={tabData}
             columnsConfig={columnsConfig}
             actions={actions}
         />

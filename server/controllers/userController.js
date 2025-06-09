@@ -34,8 +34,7 @@ export const fetchAllUsers = async (req, res) => {
       .select("-__v");
 
     sendResponse(res, true, "Users Fetched Successfully", HttpStatus.OK, {
-      pagination: buildMeta({ total, page, limit }),
-      data: users,
+      data: { pagination: buildMeta({ total, page, limit }), voter: users },
     });
   } catch (error) {
     sendServerError(res, "Unable to fetch Voters");

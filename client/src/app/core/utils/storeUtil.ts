@@ -106,7 +106,6 @@ export const addAsyncCaseHandlersUser = <
     })
     .addCase(asyncThunk.fulfilled, (state, action) => {
       const key = action.meta.arg?.tab || "users";
-      console.log("key", key);
       state.loading = false;
       state.itemsByKey[key] = action.payload; // Type-safe now
       state.success = true;
