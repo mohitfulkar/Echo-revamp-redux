@@ -224,3 +224,28 @@ export const getPanelist = async (req, res) => {
     sendServerError(res);
   }
 };
+
+
+export const getPanelistByCategoryId = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    const panelists = await Panelist.find({ category: categoryId });
+
+    if (!panelists || panelists.length === 0) {
+      sendResponse(
+        res,
+        false,
+        "No panelists found for this category",
+        HttpStatus.NOT_FOUND
+      );
+    }
+
+    sendResponse(res, true, "Panelist fetched successfully", HttpStatus.OK, {
+      data: panelists,
+    });
+  } catch (error) {
+    console.error("Error fetching panelists by category:", error);
+    sendServerError(res);
+  }
+};

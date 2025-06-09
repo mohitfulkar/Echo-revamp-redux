@@ -17,9 +17,10 @@ import AdminLogin from "./app/modules/auth/pages/AdminLogin";
 import AdminDashboard from "./app/modules/dashboard/pages/AdminDashboard";
 import PollLanding from "./app/modules/polls/pages/PollLanding";
 import VoterLanding from "./app/modules/voter/pages/UserLanding";
-import PanelistLogin from "./app/modules/auth/pages/PanelistLogin";
+import SuperPanelistLogin from "./app/modules/auth/pages/SuperPanelistLogin";
 import SuperPDashboard from "./app/modules/dashboard/pages/SuperPDashboard";
 import PanelistLanding from "./app/modules/voter/pages/PanelistLanding";
+import PanelistLogin from "./app/modules/auth/pages/PanelistLogin";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/panelist-login" element={<PanelistLogin />} />
+          <Route path="/login/super-panelist" element={<SuperPanelistLogin />} />
+          <Route path="/login/panelist" element={<PanelistLogin />} />
 
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<VoterDashboard />} />
