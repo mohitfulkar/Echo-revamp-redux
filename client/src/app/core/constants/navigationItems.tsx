@@ -11,6 +11,7 @@ import {
   FormOutlined,
   PieChartOutlined,
   QuestionCircleOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 
 export interface NavigationItem {
@@ -66,6 +67,19 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
     { key: "/user/results", icon: <BarChartOutlined />, label: "Results" },
     { key: "/user/profile", icon: <UserOutlined />, label: "Profile" },
     { key: "/user/help", icon: <QuestionCircleOutlined />, label: "Help / FAQ" },
+  ],
+  superP: [
+    { key: "/super-panelist/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
+    {
+      key: "/super-panelist/panelists",
+      icon: <UserOutlined />,
+      label: "Category Panelist",
+    },
+    {
+      key: "/super-panelist/categories",
+      icon: <AppstoreOutlined />,
+      label: "Categories",
+    },
   ],
 };
 

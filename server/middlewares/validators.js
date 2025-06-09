@@ -49,9 +49,7 @@ const registerRules = [
     }),
 ];
 
-/**
- * Validation rules for OTP verification
- */
+
 const otpRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 
@@ -64,32 +62,20 @@ const otpRules = [
     .withMessage("OTP must contain only numbers"),
 ];
 
-/**
- * Validation rules for resending OTP
- */
 const resendOtpRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 ];
 
-/**
- * Validation rules for login
- */
 const loginRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 
   check("password", "Password is required").not().isEmpty(),
 ];
 
-/**
- * Validation rules for password reset request
- */
 const resetPasswordRequestRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 ];
 
-/**
- * Validation rules for setting new password
- */
 const resetPasswordRules = [
   check("token", "Reset token is required").not().isEmpty(),
 

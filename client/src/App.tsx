@@ -17,6 +17,9 @@ import AdminLogin from "./app/modules/auth/pages/AdminLogin";
 import AdminDashboard from "./app/modules/dashboard/pages/AdminDashboard";
 import PollLanding from "./app/modules/polls/pages/PollLanding";
 import VoterLanding from "./app/modules/voter/pages/UserLanding";
+import PanelistLogin from "./app/modules/auth/pages/PanelistLogin";
+import SuperPDashboard from "./app/modules/dashboard/pages/SuperPDashboard";
+import PanelistLanding from "./app/modules/voter/pages/PanelistLanding";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,16 +44,23 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/admin-login" element={<AdminLogin />} />
-
+          <Route path="/panelist-login" element={<PanelistLogin />} />
 
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<VoterDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
             <Route path="/admin/polls" element={< PollLanding />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/manage-users" element={<VoterLanding />} />
 
-            {/* More role/feature-based routes can go here */}
+            {/* panelists url */}
+            <Route path="/super-panelist/dashboard" element={<SuperPDashboard />} />
+            <Route path="/super-panelist/panelists" element={<PanelistLanding />} />
+            <Route path="/super-panelist/categories" element={<PanelistLanding />} />
+
+
+
           </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />

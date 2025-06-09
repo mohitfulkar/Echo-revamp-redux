@@ -6,7 +6,32 @@ export const getPaginationOptions = (query) => {
   return { page, limit, skip };
 };
 
-export const buildMeta = ({ total, page, limit }) => {
+export const buildMeta = ({
+  total,
+  page,
+  limit,
+  baseUrl = "",
+  queryParams = {},
+}) => {
   const pages = Math.ceil(total / limit);
-  return { total, page, limit, pages };
+
+  const buildUrl = (newPage) => {
+    const params = new URLSearchParams({
+      ...queryParams,
+      page: newPage,
+      limit,
+    }).toString();
+    return `${baseUrl}?${params}`;
+  };
+
+  const meta = {
+    total,
+    page,
+    limit,
+    pages,
+    prev: page > 1 ? buildUrl(page - 1) : null,
+    next: page < pages ? buildUrl(page + 1) : null,
+  };
+
+  return meta;
 };

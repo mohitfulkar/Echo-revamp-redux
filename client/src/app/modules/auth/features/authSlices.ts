@@ -79,6 +79,22 @@ export const adminLogin = createAsyncThunk<
     return rejectWithValue("Incorrect password");
   }
 });
+export const superPanelistLogin = createAsyncThunk<
+  { message: string; user: string },
+  { password: string },
+  { rejectValue: string }
+>("auth/superPanelistLogin", async (payload, { rejectWithValue }) => {
+  const superPPassword = import.meta.env.VITE_SUPER_P_PASSWORD;
+
+  if (!superPPassword) {
+    return rejectWithValue("Super Panelist password not set");
+  }
+  if (payload.password === superPPassword) {
+    return { message: "Login successful", user: "superP" };
+  } else {
+    return rejectWithValue("Incorrect password");
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -95,6 +111,7 @@ const authSlice = createSlice({
     addAsyncCaseHandlersAuth(builder, registerUser);
     addAsyncCaseHandlersAuth(builder, loginUser);
     addAsyncCaseHandlersAuth(builder, adminLogin);
+    addAsyncCaseHandlersAuth(builder, superPanelistLogin);
   },
 });
 

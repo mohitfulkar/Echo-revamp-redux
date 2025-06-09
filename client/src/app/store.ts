@@ -4,6 +4,7 @@ import navigationReducer from "./core/features/navigationSlices";
 import pollReducer from "./modules/polls/features/pollSlices";
 import dashboardReducer from "./modules/dashboard/features/dashboardSlices";
 import usersReducer from "./modules/voter/features/userSlices";
+import choicesReducer from "./core/features/choiceSlices";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     poll: pollReducer,
     users: usersReducer,
     dashboard: dashboardReducer,
+    choices: choicesReducer,
     // Add other reducers here
   },
   middleware: (getDefaultMiddleware) =>
