@@ -69,6 +69,9 @@ const Poll: React.FC<PollProps> = ({ searchValue }) => {
                         <PollField label="Created At">
                             {dayjs(poll.createdAt).format('DD MMM YYYY')}
                         </PollField>
+                        <PollField label="Total Votes">
+                            {poll.voteCountTotal}
+                        </PollField>
                     </div>
                 </div>
             ))}

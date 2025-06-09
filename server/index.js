@@ -6,6 +6,8 @@ import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import pollRoutes from "./routes/pollRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import choiceRoutes from "./routes/choiceRoutes.js";
 import { HttpStatus } from "./constants/statusCode.js";
 import { logger } from "./middlewares/logger.js";
 
@@ -28,6 +30,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api", dashboardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/poll", pollRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/choices", choiceRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

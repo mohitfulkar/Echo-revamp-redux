@@ -26,13 +26,14 @@ export const getUsersByTab = createAsyncThunk<
   { rejectValue: string }
 >("users/getUsersByTab", async ({ tab, params }, { rejectWithValue }) => {
   try {
+    console.log("{ tab, params }", { tab, params });
     let response;
     switch (tab) {
       case "voter":
         response = await userService.getAll("", params);
         break;
-      case "panelist":
-        response = await userService.getAll("", params);
+      case "panelists":
+        response = await userService.getAll("panelists", params);
         break;
       case "admin":
         response = await userService.getAll("", params);
@@ -40,7 +41,7 @@ export const getUsersByTab = createAsyncThunk<
       default:
         throw new Error("Invalid tab name");
     }
-
+    console.log("tab", tab);
     return { tab, data: response.data }; // assume response.data holds the array/list
   } catch (error: any) {
     return rejectWithValue(
@@ -49,12 +50,27 @@ export const getUsersByTab = createAsyncThunk<
   }
 });
 
+export const getAllPanelists = createAsyncThunk<
+  any[],
+  any,
+  { rejectValue: string }
+>("panelists/getAll", async (params, { rejectWithValue }) => {
+  try {
+    const response = await userService.getAll(params); // assumes axios response
+    return response.data; // make sure service returns `{ data: [...] }`
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch panelists"
+    );
+  }
+});
 const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
     addAsyncCaseHandlersUser(builder, getUsersByTab);
+    // addAsyncCaseHandlersUser(builder, getAllPanelists);
   },
 });
 

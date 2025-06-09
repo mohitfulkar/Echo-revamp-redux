@@ -8,6 +8,7 @@ import type { AuthState } from "../../modules/auth/models/auth.interface";
 import type { PollState } from "../../modules/polls/features/pollSlices";
 import type { DashboardState } from "../../modules/dashboard/features/dashboardSlices";
 import type { UserState } from "../../modules/voter/features/userSlices";
+import type { ChoiceOption, ChoiceState } from "../features/choiceSlices";
 
 export const addAsyncCaseHandlersAuth = (
   builder: ActionReducerMapBuilder<AuthState>,
@@ -92,7 +93,7 @@ export const addAsyncCaseHandlersDashboard = (
 
 export const addAsyncCaseHandlersUser = <
   Returned extends any[], // Make sure the response is an array
-  ThunkArg extends { status?: string }
+  ThunkArg extends { tab?: string }
 >(
   builder: ActionReducerMapBuilder<UserState>,
   asyncThunk: AsyncThunk<Returned, ThunkArg, { rejectValue: any }>
@@ -104,7 +105,8 @@ export const addAsyncCaseHandlersUser = <
       state.success = false;
     })
     .addCase(asyncThunk.fulfilled, (state, action) => {
-      const key = action.meta.arg?.status || "voter";
+      const key = action.meta.arg?.tab || "users";
+      console.log("key", key);
       state.loading = false;
       state.itemsByKey[key] = action.payload; // Type-safe now
       state.success = true;
@@ -113,5 +115,39 @@ export const addAsyncCaseHandlersUser = <
       state.loading = false;
       state.error = action.payload;
       state.success = false;
+    });
+};
+
+export const addAsyncCaseHandlersChoice = (
+  builder: ActionReducerMapBuilder<ChoiceState>,
+  asyncThunk: any
+) => {
+  builder
+    .addCase(asyncThunk.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(
+      asyncThunk.fulfilled,
+      (
+        state,
+        action: PayloadAction<
+          ChoiceOption[],
+          string,
+          {
+            arg: {
+              parentKey: string;
+            };
+          }
+        >
+      ) => {
+        const parentKey = action.meta.arg.parentKey;
+        state.loading = false;
+        state.choices[parentKey] = action.payload;
+      }
+    )
+    .addCase(asyncThunk.rejected, (state, action: PayloadAction<any>) => {
+      state.loading = false;
+      state.error = action.payload || "Something went wrong";
     });
 };

@@ -78,9 +78,10 @@ export const getAll = async (req, res) => {
   try {
     const { page, limit, skip } = getPaginationOptions(req.query);
     const { searchValue } = req.query;
+
     const filter = {};
     if (searchValue) {
-      const regex = new RegExp(searchValue, "i"); // case-insensitive
+      const regex = new RegExp(searchValue, "i");
       filter.$or = [
         { title: { $regex: regex } },
         { status: { $regex: regex } },
@@ -92,16 +93,48 @@ export const getAll = async (req, res) => {
     if (req.query.status) {
       filter.status = { $regex: req.query.status };
     }
+
     const total = await Poll.countDocuments(filter);
-    const polls = await Poll.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .populate({
-        path: "questions",
-        select: "-__v",
-      })
-      .select("-__v");
+
+    const polls = await Poll.aggregate([
+      { $match: filter },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "questions",
+          localField: "questions",
+          foreignField: "_id",
+          as: "questions",
+        },
+      },
+      {
+        $lookup: {
+          from: "options",
+          let: { pollId: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$pollId", "$$pollId"] } } },
+            { $group: { _id: null, totalVotes: { $sum: "$voteCount" } } },
+          ],
+          as: "voteStats",
+        },
+      },
+      {
+        $addFields: {
+          voteCountTotal: {
+            $ifNull: [{ $arrayElemAt: ["$voteStats.totalVotes", 0] }, 0],
+          },
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+          "questions.__v": 0,
+          voteStats: 0, // remove intermediate lookup array
+        },
+      },
+    ]);
 
     sendResponse(res, true, "Poll Data Fetched Successfully", HttpStatus.OK, {
       data: {
