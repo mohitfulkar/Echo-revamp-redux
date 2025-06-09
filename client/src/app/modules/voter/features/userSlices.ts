@@ -26,7 +26,6 @@ export const getUsersByTab = createAsyncThunk<
   { rejectValue: string }
 >("users/getUsersByTab", async ({ tab, params }, { rejectWithValue }) => {
   try {
-    console.log("{ tab, params }", { tab, params });
     let response;
     switch (tab) {
       case "voter":

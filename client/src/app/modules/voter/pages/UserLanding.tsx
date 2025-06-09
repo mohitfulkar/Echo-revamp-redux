@@ -9,7 +9,7 @@ import UserData from '../components/UserData';
 const VoterLanding: React.FC = () => {
     const tabItems: TabConfig[] = [
         { label: 'Voters', key: 'voter' },
-        { label: 'Panelists', key: 'panelist' },
+        { label: 'Panelists', key: 'panelists' },
         { label: 'Admins', key: 'admin' },
     ];
     const [searchParams, setSearchParams] = useSearchParams();
@@ -20,7 +20,7 @@ const VoterLanding: React.FC = () => {
 
 
     const handleTabChange = (key: string) => {
-        console.log('key', key)
+    
         setActiveTab(key);
         setSearchParams({ tab: key });
     };

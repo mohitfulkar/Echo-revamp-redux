@@ -14,7 +14,6 @@ export const store = configureStore({
     users: usersReducer,
     dashboard: dashboardReducer,
     choices: choicesReducer,
-    // Add other reducers here
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -13,7 +13,6 @@ const PanelistLanding: React.FC = () => {
     const tab: string = 'panelists'
 
     const [searchValue, setSearchValue] = useState<string>('');
-
     const { items } = useChoices("categories");
 
     const addItems = () => { }
