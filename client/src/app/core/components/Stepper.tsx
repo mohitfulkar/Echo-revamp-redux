@@ -45,11 +45,7 @@ const StepperWithContent: React.FC<StepperWithContentProps> = ({
             <div className="flex justify-end gap-4">
                 {current > 0 && <Button onClick={prev}>Previous</Button>}
                 {current < steps.length - 1 && <Button type="primary" onClick={next}>Next</Button>}
-                {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => alert('Finished!')}>
-                        Finish
-                    </Button>
-                )}
+
             </div>
         </div>
     );

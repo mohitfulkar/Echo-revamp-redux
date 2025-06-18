@@ -7,10 +7,16 @@ import { authService } from "../service/authService";
 import type {
   AuthState,
   OtpPayload,
+  PanelistLogin,
   UserLogin,
   UserRegistration,
 } from "../models/auth.interface";
-import { LOGIN, REGISTER, VERIFY_OTP } from "../constants/auth.constants";
+import {
+  LOGIN,
+  PANELIST_LOGIN,
+  REGISTER,
+  VERIFY_OTP,
+} from "../constants/auth.constants";
 import { addAsyncCaseHandlersAuth } from "../../../core/utils/storeUtil";
 
 const initialState: AuthState = {
@@ -57,6 +63,18 @@ export const loginUser = createAsyncThunk<
 >("auth/loginUser", async (payload, { rejectWithValue }) => {
   try {
     const response = await authService.create(LOGIN, payload);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Login failed");
+  }
+});
+export const loginPanelist = createAsyncThunk<
+  any,
+  PanelistLogin,
+  { rejectValue: string }
+>("auth/loginPanelist", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await authService.create(PANELIST_LOGIN, payload);
     return response;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -112,6 +130,7 @@ const authSlice = createSlice({
     addAsyncCaseHandlersAuth(builder, loginUser);
     addAsyncCaseHandlersAuth(builder, adminLogin);
     addAsyncCaseHandlersAuth(builder, superPanelistLogin);
+    addAsyncCaseHandlersAuth(builder, loginPanelist);
   },
 });
 

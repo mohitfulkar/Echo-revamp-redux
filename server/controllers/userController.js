@@ -71,6 +71,7 @@ export const createPanelist = async (req, res) => {
       contributionSummary,
       excellenceRating,
       category,
+      password,
       authorizedToCreatePolls,
     } = req.body;
 
@@ -123,6 +124,7 @@ export const createPanelist = async (req, res) => {
       image: imagePath,
       category,
       authorizedToCreatePolls,
+      password,
     });
     sendResponse(
       res,
@@ -130,7 +132,19 @@ export const createPanelist = async (req, res) => {
       "Panelist created successfully",
       HttpStatus.CREATED,
       {
-        data: panelist,
+        data: {
+          name,
+          email,
+          contactNumber,
+          socialMedia,
+          occupation,
+          areaOfExpertise: expertiseArray,
+          contributionSummary,
+          excellenceRating,
+          image: imagePath,
+          category,
+          authorizedToCreatePolls,
+        },
       }
     );
   } catch (error) {
@@ -224,7 +238,6 @@ export const getPanelist = async (req, res) => {
     sendServerError(res);
   }
 };
-
 
 export const getPanelistByCategoryId = async (req, res) => {
   try {

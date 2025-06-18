@@ -53,24 +53,34 @@ export const getPanelists = createAsyncThunk<
   any[],
   any,
   { rejectValue: string }
->("panelists/getAll", async (params, { rejectWithValue }) => {
-  try {
-    const response = await userService.getAll("", params); // assumes axios response
-    return response.data; // make sure service returns `{ data: [...] }`
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch panelists"
-    );
+>(
+  "panelists/getAll",
+  async ({ parentKey, id, params }, { rejectWithValue }) => {
+    try {
+      const response = await userService.getItemById(parentKey, id, params); // assumes axios response
+      return response.data; // make sure service returns `{ data: [...] }`
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch panelists"
+      );
+    }
   }
-});
+);
 const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUsers: (state) => {
+      state.itemsByKey = {};
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+    },
+  },
   extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
     addAsyncCaseHandlersUser(builder, getUsersByTab);
     addAsyncCaseHandlersUser(builder, getPanelists);
   },
 });
-
+export const { resetUsers } = userSlice.actions;
 export default userSlice.reducer;
