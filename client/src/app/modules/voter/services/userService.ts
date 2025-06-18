@@ -19,4 +19,11 @@ export const userService = {
     });
     return response.data;
   },
+
+  getItemById: async (parentKey: string, id: string, params?: any) => {
+    const response = await axios.get(`${USERS_URL}/${parentKey}/${id}`, {
+      params: params || {},
+    });
+    return response.data;
+  },
 };

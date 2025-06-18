@@ -49,7 +49,6 @@ const registerRules = [
     }),
 ];
 
-
 const otpRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 
@@ -69,6 +68,11 @@ const resendOtpRules = [
 const loginRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 
+  check("password", "Password is required").not().isEmpty(),
+];
+const panelistLoginRules = [
+  check("categoryId", "Category is required").not().isEmpty(),
+  check("email", "Please include a valid email").isEmail().normalizeEmail(),
   check("password", "Password is required").not().isEmpty(),
 ];
 
@@ -100,5 +104,6 @@ export const validateRegister = validate(registerRules);
 export const validateOtp = validate(otpRules);
 export const validateResendOtp = validate(resendOtpRules);
 export const validateLogin = validate(loginRules);
+export const validatePanelistLogin = validate(panelistLoginRules);
 export const validateResetPasswordRequest = validate(resetPasswordRequestRules);
 export const validateResetPassword = validate(resetPasswordRules);

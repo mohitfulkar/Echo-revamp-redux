@@ -81,6 +81,11 @@ const panelistSchema = new mongoose.Schema({
     default: "", // Empty if not uploaded
   },
 
+  password: {
+    type: String,
+    required: true,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,

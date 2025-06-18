@@ -6,6 +6,8 @@ import { sendOTPEmail } from "../services/emailService.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
 import jwt from "jsonwebtoken";
 import { HttpStatus } from "../constants/statusCode.js";
+import Panelist from "../models/Panelist.js";
+import Category from "../models/Category.js";
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 const OTP_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
@@ -153,8 +155,6 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log(`[Login] Attempting login for email: ${email}`);
-
     // 1. Check if user exists
     const user = await User.findOne({ email });
 
@@ -202,7 +202,7 @@ export const loginUser = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    return sendResponse(res, true, "Login successful", HttpStatus.OK, {
+    sendResponse(res, true, "Login successful", HttpStatus.OK, {
       data: {
         token,
         user: {
@@ -217,4 +217,51 @@ export const loginUser = async (req, res) => {
     console.error(" Error during login:", error);
     sendServerError(res);
   }
+};
+
+export const panelistLogin = async (req, res) => {
+  try {
+    const { categoryId, email, password } = req.body;
+    const panelist = await Panelist.findOne({ email });
+    const category = await Category.findOne({ _id: categoryId });
+
+    console.log(panelist, category);
+    if (!panelist || !category) {
+      sendResponse(
+        res,
+        false,
+        "Panelist or Category Not Found",
+        HttpStatus.UNAUTHORIZED,
+        false
+      );
+    }
+    const isMatch = password === panelist.password;
+    if (!isMatch) {
+      return sendResponse(
+        res,
+        false,
+        "Invalid email or password",
+        HttpStatus.BAD_REQUEST,
+        false
+      );
+    }
+    const token = jwt.sign(
+      { id: panelist._id, email: panelist.email, category: categoryId },
+      process.env.JWT_SE_PANELIST || "your_jwt_secret",
+      { expiresIn: "1d" }
+    );
+    sendResponse(res, true, "Login successful", HttpStatus.OK, {
+      data: {
+        token,
+        user: {
+          id: panelist._id,
+          fullName: panelist.fullName,
+          email: panelist.email,
+          role: "panelist",
+          categoryId: categoryId,
+          categoryName: category.name,
+        },
+      },
+    });
+  } catch (error) {}
 };
