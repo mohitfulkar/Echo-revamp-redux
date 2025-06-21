@@ -222,19 +222,46 @@ export const loginUser = async (req, res) => {
 export const panelistLogin = async (req, res) => {
   try {
     const { categoryId, email, password } = req.body;
-    const panelist = await Panelist.findOne({ email });
-    const category = await Category.findOne({ _id: categoryId });
+    console.log("categoryId, email, password", categoryId, email, password);
 
-    console.log(panelist, category);
-    if (!panelist || !category) {
-      sendResponse(
+    // Find panelist by email AND categoryId
+    const panelist = await Panelist.findOne({ email });
+    if (!panelist) {
+      return sendResponse(
         res,
         false,
-        "Panelist or Category Not Found",
+        "Panelist not found",
+        HttpStatus.NOT_FOUND
+      );
+    }
+
+    // 2. Check if the categoryId matches the panelist's assigned category
+    if (String(panelist.category) !== String(categoryId)) {
+      return sendResponse(
+        res,
+        false,
+        "Panelist does not belong to the selected category",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return sendResponse(res, false, "Category not found", 404);
+    }
+    console.log("panelist", panelist);
+    console.log("category", category);
+
+    if (!panelist || !category) {
+      return sendResponse(
+        res,
+        false,
+        "Panelist or Category not found or mismatched",
         HttpStatus.UNAUTHORIZED,
         false
       );
     }
+
     const isMatch = password === panelist.password;
     if (!isMatch) {
       return sendResponse(
@@ -245,12 +272,14 @@ export const panelistLogin = async (req, res) => {
         false
       );
     }
+
     const token = jwt.sign(
       { id: panelist._id, email: panelist.email, category: categoryId },
       process.env.JWT_SE_PANELIST || "your_jwt_secret",
       { expiresIn: "1d" }
     );
-    sendResponse(res, true, "Login successful", HttpStatus.OK, {
+
+    return sendResponse(res, true, "Login successful", HttpStatus.OK, {
       data: {
         token,
         user: {
@@ -258,10 +287,13 @@ export const panelistLogin = async (req, res) => {
           fullName: panelist.fullName,
           email: panelist.email,
           role: "panelist",
-          categoryId: categoryId,
+          categoryId,
           categoryName: category.name,
         },
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error("Panelist login error:", error);
+    return sendServerError(res);
+  }
 };

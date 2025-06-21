@@ -1,5 +1,5 @@
-import { HttpStatus } from "../../constants/statusCode.js";
-import { sendResponse, sendServerError } from "../response.js";
+import { HttpStatus } from "../constants/statusCode.js";
+import { sendResponse, sendServerError } from "./response.js";
 
 export const getChoices = async (model, labelKey, valueKey = "_id", res) => {
   try {
