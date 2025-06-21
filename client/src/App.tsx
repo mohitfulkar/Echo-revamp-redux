@@ -21,6 +21,7 @@ import SuperPanelistLogin from "./app/modules/auth/pages/SuperPanelistLogin";
 import SuperPDashboard from "./app/modules/dashboard/pages/SuperPDashboard";
 import PanelistLanding from "./app/modules/voter/pages/PanelistLanding";
 import PanelistLogin from "./app/modules/auth/pages/PanelistLogin";
+import SuperPanelistForm from "./app/modules/voter/pages/SuperPanelistForm";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -55,9 +56,10 @@ const App: React.FC = () => {
             <Route path="/admin/polls" element={< PollLanding />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/manage-users" element={<VoterLanding />} />
+            <Route path="/admin/super-panelist/add" element={<SuperPanelistForm />} />
 
-            {/* panelists url */}
-            <Route path="/super-panelist/dashboard" element={<SuperPDashboard />} />
+              {/* panelists url */ }
+              < Route path="/super-panelist/dashboard" element={<SuperPDashboard />} />
             <Route path="/super-panelist/panelists" element={<PanelistLanding />} />
             <Route path="/super-panelist/categories" element={<PanelistLanding />} />
 

@@ -1,4 +1,4 @@
-import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, MailOutlined, LockOutlined, PhoneOutlined, SolutionOutlined, StarOutlined, FileImageOutlined } from "@ant-design/icons";
 import type { ReactNode } from "react";
 
 export interface FormValues {
@@ -12,7 +12,7 @@ export interface FieldConfig {
   placeholder: string;
   prefix?: ReactNode;
   rules?: any[];
-  type?: "select" | "password" | "text";
+  type?: "select" | "password" | "text" | "multi-select" | "textarea" | "number" | "upload";
   dependencies?: string[];
   optionsKey?: string;
   label?: string;
@@ -138,5 +138,91 @@ export const panelistFields: FieldConfig[] = [
     prefix: <LockOutlined />,
     type: "password",
     rules: [{ required: true, message: "Please enter your password" }],
+  },
+];
+
+
+export const superPanelistFields: FieldConfig[] = [
+  {
+    name: "name",
+    label: "Full Name",
+    type: "text",
+    placeholder: "Enter your full name",
+    prefix: <UserOutlined />,
+    rules: [{ required: true, message: "Please enter your name" }],
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "text",
+    placeholder: "Enter your email",
+    prefix: <MailOutlined />,
+    rules: [
+      { required: true, message: "Please enter your email" },
+      { type: "email", message: "Invalid email format" },
+    ],
+  },
+  {
+    name: "contactNumber",
+    label: "Contact Number",
+    type: "text",
+    placeholder: "Enter contact number",
+    prefix: <PhoneOutlined />,
+    rules: [{ required: true, message: "Please enter your contact number" }],
+  },
+  {
+    name: "occupation",
+    label: "Occupation",
+    type: "text",
+    placeholder: "Enter your occupation",
+    prefix: <SolutionOutlined />,
+    rules: [{ required: true, message: "Please enter your occupation" }],
+  },
+  {
+    name: "areaOfExpertise",
+    label: "Area of Expertise",
+    type: "text",
+    placeholder: "Enter areas (e.g., AI, Education)",
+    optionsKey: "expertiseOptions",
+    rules: [{ required: true, message: "Please enter at least one area" }],
+  },
+  {
+    name: "contributionSummary",
+    label: "Contribution Summary",
+    type: "textarea",
+    placeholder: "Describe your contributions",
+    rules: [{ required: true, message: "Please describe your contribution" }],
+  },
+  {
+    name: "excellenceRating",
+    label: "Excellence Rating",
+    type: "number",
+    placeholder: "Rate from 0 to 10",
+    prefix: <StarOutlined />,
+    rules: [
+      { required: false },
+      {
+        type: "number",
+        min: 0,
+        max: 10,
+        message: "Rating must be between 0 and 10",
+      },
+    ],
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    prefix: <LockOutlined />,
+    rules: [{ required: true, message: "Please enter a password" }],
+  },
+  {
+    name: "image",
+    label: "Profile Image",
+    type: "upload",
+    placeholder: "Upload image",
+    prefix: <FileImageOutlined />,
+    rules: [{ required: true, message: "Please upload a image" }],
   },
 ];

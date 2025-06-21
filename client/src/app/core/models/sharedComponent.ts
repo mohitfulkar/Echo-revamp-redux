@@ -69,3 +69,17 @@ export interface StepperProps {
   responsive?: boolean;
   onChange?: StepsProps["onChange"];
 }
+
+export interface CrumbItem {
+  label: string;
+  href?: string;
+  icon?: React.ReactNode;
+}
+
+/**
+ * Props for SharedBreadcrumb component
+ */
+export interface SharedBreadcrumbProps {
+  items: CrumbItem[];
+  showHome?: boolean;
+}
