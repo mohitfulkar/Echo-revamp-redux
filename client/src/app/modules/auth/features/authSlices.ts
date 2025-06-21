@@ -75,7 +75,7 @@ export const loginPanelist = createAsyncThunk<
 >("auth/loginPanelist", async (payload, { rejectWithValue }) => {
   try {
     const response = await authService.create(PANELIST_LOGIN, payload);
-    return response;
+    return response
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Login failed");
   }

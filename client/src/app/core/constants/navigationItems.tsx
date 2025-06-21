@@ -42,16 +42,16 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
     },
   ],
   panelist: [
-    { key: "/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
+    { key: "/panelist/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
     { key: "/my-polls", icon: <FormOutlined />, label: "My Polls" },
     {
-      key: "/poll-responses",
+      key: "/panelist/poll-responses",
       icon: <CheckCircleOutlined />,
       label: "Poll Responses",
     },
-    { key: "/analytics", icon: <PieChartOutlined />, label: "Analytics" },
+    { key: "/panelist/analytics", icon: <PieChartOutlined />, label: "Analytics" },
     {
-      key: "/notifications",
+      key: "/panelist/notifications",
       icon: <NotificationOutlined />,
       label: "Notifications",
     },

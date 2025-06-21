@@ -7,14 +7,15 @@ export interface FormValues {
   password: string;
   confirmPassword: string;
 }
-
 export interface FieldConfig {
-  name: keyof FormValues;
+  name: string;
   placeholder: string;
-  prefix: ReactNode;
-  rules: any[];
-  type?: "text" | "password";
+  prefix?: ReactNode;
+  rules?: any[];
+  type?: "select" | "password" | "text";
   dependencies?: string[];
+  optionsKey?: string;
+  label?: string;
 }
 
 export const formFields: FieldConfig[] = [
@@ -108,15 +109,34 @@ export const superPLoginFields: FieldConfig[] = [
     ],
   },
 ];
-export const panelistLoginFields: FieldConfig[] = [
+
+
+
+export const panelistFields: FieldConfig[] = [
+  {
+    name: "categoryId",
+    type: "select",
+    label: "Select Your Category",
+    placeholder: "Select the Category",
+    optionsKey: "items",
+  },
+  {
+    name: "email",
+    label: "Email",
+    placeholder: "Email Address",
+    prefix: <MailOutlined />,
+    type: "text",
+    rules: [
+      { required: true, message: "Please enter your email" },
+      { type: "email", message: "Please enter a valid email address" },
+    ],
+  },
   {
     name: "password",
+    label: "Password",
     placeholder: "Password",
     prefix: <LockOutlined />,
     type: "password",
-    rules: [
-      { required: true, message: "Please enter your password" },
-      { min: 8, message: "Password must be at least 8 characters" },
-    ],
+    rules: [{ required: true, message: "Please enter your password" }],
   },
 ];

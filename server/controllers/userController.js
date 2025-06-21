@@ -1,6 +1,7 @@
 import { HttpStatus } from "../constants/statusCode.js";
 import Panelist from "../models/Panelist.js";
 import User from "../models/User.js";
+import { buildSearchFilter } from "../routes/queryUtils.js";
 import { buildMeta, getPaginationOptions } from "../utils/pagination.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
 
@@ -159,17 +160,19 @@ export const getPanelist = async (req, res) => {
     const { page, limit, skip } = getPaginationOptions(req.query);
     const { searchValue, category, status, authorized } = req.query;
 
-    const filter = {};
+  
 
     // Search across name, email, occupation, and expertise
     if (searchValue) {
-      const regex = new RegExp(searchValue, "i");
-      filter.$or = [
-        { name: { $regex: regex } },
-        { email: { $regex: regex } },
-        { occupation: { $regex: regex } },
-        { areaOfExpertise: { $regex: regex } },
-      ];
+      Object.assign(
+        filter,
+        buildSearchFilter(searchValue, [
+          "name",
+          "email",
+          "occupation",
+          "areaOfExpertise",
+        ])
+      );
     }
 
     if (category) {
@@ -244,16 +247,6 @@ export const getPanelistByCategoryId = async (req, res) => {
     const { categoryId } = req.params;
 
     const panelists = await Panelist.find({ category: categoryId });
-
-    if (!panelists || panelists.length === 0) {
-      sendResponse(
-        res,
-        false,
-        "No panelists found for this category",
-        HttpStatus.NOT_FOUND
-      );
-    }
-
     sendResponse(res, true, "Panelist fetched successfully", HttpStatus.OK, {
       data: panelists,
     });

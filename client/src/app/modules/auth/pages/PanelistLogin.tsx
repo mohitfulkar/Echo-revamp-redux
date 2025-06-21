@@ -1,32 +1,60 @@
-import React, { useEffect, useMemo, useState } from "react";
-
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../../store";
+import { loginPanelist, resetAuthState } from "../features/authSlices";
 import SharedSelect from "../../../core/components/SharedSelect";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../store";
+import CustomButton from "../../../core/components/CustomButton";
+import { Form, Input, message } from "antd";
+import { panelistFields } from "../models/signupForm.model";
+import { showToast } from "../../../core/service/ToastService";
+import { resetFields } from "../service/FormService";
+import { setActiveModule } from "../../../core/features/navigationSlices";
+import { useNavigate } from "react-router-dom";
 import { useChoices } from "../../../core/hooks/useChoices";
-import { getPanelists } from "../../voter/features/userSlices";
 
 const PanelistLogin: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>();
-    const [selectedPanelist, setSelectedPanelist] = useState<string>();
     const dispatch = useDispatch<AppDispatch>();
+    const [form] = Form.useForm();
+    const navigate = useNavigate();
 
-    const { itemsByKey } = useSelector((state: RootState) => state.users);
-    const { items } = useChoices('categories');
+    const { items } = useChoices('categories')
+    console.log('items', items)
 
-    useEffect(() => {
-        if (selectedCategory) {
-            dispatch(getPanelists({ parentKey: 'panelists/categories', id: selectedCategory }));
+    const handleSubmit = async () => {
+        try {
+            const values = await form.validateFields();
+
+            if (!selectedCategory) {
+                message.error("Please select both category and name.");
+                return;
+            }
+            const payload = {
+                categoryId: selectedCategory,
+                email: values.email,
+                password: values.password,
+            };
+            console.log('payload', payload)
+
+            const response = await dispatch(loginPanelist(payload));
+            if (loginPanelist.fulfilled.match(response)) {
+                const { token, user } = response.payload.data;
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(user));
+                showToast.success(response.payload);
+                resetFields(form);
+                dispatch(setActiveModule("panelist"));
+                localStorage.setItem("activeModule", "panelist");
+                navigate("/panelist/dashboard");
+                dispatch(resetAuthState());
+            } else {
+                showToast.error(response.payload || "");
+            }
+        } catch (err) {
+            console.log("Form validation failed", err);
+            showToast.error("Something went wrong!");
         }
-    }, [selectedCategory, dispatch]);
-
-    // 🔄 Format users for SharedSelect
-    const panelistOptions = useMemo(() => {
-        return (itemsByKey?.users || []).map((user: any) => ({
-            label: `${user.name} - ${user.occupation}`,
-            value: user._id,
-        }));
-    }, [itemsByKey]);
+    };
 
     return (
         <div className="h-screen bg-white px-6 md:px-24 py-12">
@@ -39,22 +67,43 @@ const PanelistLogin: React.FC = () => {
                 </div>
 
                 {/* Right Side */}
-                <div className="p-12 w-full md:w-1/2">
-                    <p className="h4 text-center">Panelist Login</p>
-                    <div className="text-center">
-                        <SharedSelect
-                            label="Select Your Category"
-                            options={items}
-                            value={selectedCategory}
-                            onChange={setSelectedCategory}
+                <div className="p-8 w-full md:w-1/2 text-center">
+                    <p className="h4">Panelist Login</p>
+
+                    <Form layout="vertical" form={form} className="mt-8 text-left">
+                        {panelistFields.map((field) => (
+                            <Form.Item
+                                key={field.name}
+                                name={field.name}
+                                label={field.label}
+                                rules={field.rules}
+                            >
+                                {field.type === "select" ? (
+                                    <SharedSelect
+                                        options={items}
+                                        placeholder={field.placeholder}
+                                        onChange={setSelectedCategory}
+                                        value={selectedCategory}
+                                    />
+                                ) : field.type === "password" ? (
+                                    <Input.Password
+                                        placeholder={field.placeholder}
+                                        prefix={field.prefix}
+                                    />
+                                ) : (
+                                    <Input placeholder={field.placeholder} prefix={field.prefix} />
+                                )}
+                            </Form.Item>
+                        ))}
+
+                        <CustomButton
+                            label="LOGIN"
+                            className="w-full"
+                            type="primary"
+                            onClick={handleSubmit}
                         />
-                        <SharedSelect
-                            label="Select Your Name"
-                            options={panelistOptions}
-                            value={selectedPanelist}
-                            onChange={setSelectedPanelist}
-                        />
-                    </div>
+                    </Form>
+
                 </div>
             </div>
         </div>
