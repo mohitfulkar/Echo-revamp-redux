@@ -89,6 +89,68 @@ export const validateCreatePanelist = [
     .optional()
     .isURL()
     .withMessage("Invalid website URL"),
+  check("password", "Password is required").not().isEmpty(),
+];
+
+export const validateSuperPanelistCreatePanelist = [
+  check("name")
+    .notEmpty()
+    .withMessage("Name is required")
+    .isString()
+    .withMessage("Name must be a string"),
+
+  check("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format"),
+
+  check("contactNumber")
+    .notEmpty()
+    .withMessage("Contact number is required")
+    .isMobilePhone()
+    .withMessage("Invalid contact number"),
+
+  check("occupation").notEmpty().withMessage("Occupation is required"),
+
+  check("areaOfExpertise")
+    .notEmpty()
+    .withMessage("Area of expertise is required"),
+
+  check("contributionSummary")
+    .notEmpty()
+    .withMessage("Contribution summary is required"),
+
+  check("excellenceRating")
+    .optional()
+    .isFloat({ min: 0, max: 10 })
+    .withMessage("Excellence rating must be between 0 and 10"),
+
+  // Optional social media URLs
+  check("socialMedia.linkedIn")
+    .optional()
+    .isURL()
+    .withMessage("Invalid LinkedIn URL"),
+
+  check("socialMedia.twitter")
+    .optional()
+    .isURL()
+    .withMessage("Invalid Twitter URL"),
+
+  check("socialMedia.github")
+    .optional()
+    .isURL()
+    .withMessage("Invalid GitHub URL"),
+
+  check("socialMedia.website")
+    .optional()
+    .isURL()
+    .withMessage("Invalid website URL"),
+
+  check("password", "Password is required").not().isEmpty(),
 ];
 
 export const validatePanelistCreation = validate(validateCreatePanelist);
+export const validateSuperPanelistCreation = validate(
+  validateSuperPanelistCreatePanelist
+);

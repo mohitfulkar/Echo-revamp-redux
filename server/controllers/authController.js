@@ -16,7 +16,9 @@ const OTP_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
  * Register controller
  */
 export const register = async (req, res) => {
+  
   try {
+
     const { fullName, email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {

@@ -78,6 +78,8 @@ div {
 
 h1,
 .h1 {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-4xl); /* 48px */
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -87,6 +89,8 @@ h1,
 /* H2 - Section Headers */
 h2,
 .h2 {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-3xl); /* 36px */
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
@@ -96,6 +100,8 @@ h2,
 /* H3 - Subsection Headers */
 h3,
 .h3 {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-2xl); /* 30px */
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
@@ -105,6 +111,8 @@ h3,
 /* H4 - Sub-subsection Headers */
 h4,
 .h4 {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-xl); /* 24px */
   font-weight: var(--font-weight-medium);
   color: var(--text-primary);
@@ -114,6 +122,8 @@ h4,
 /* H5 - Minor Headers */
 h5,
 .h5 {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-lg); /* 20px */
   font-weight: var(--font-weight-medium);
   color: var(--text-secondary);
@@ -123,6 +133,8 @@ h5,
 /* H6 - Small Headers */
 h6,
 .h6 {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-md); /* 18px */
   font-weight: var(--font-weight-regular);
   color: var(--text-secondary);
@@ -130,6 +142,8 @@ h6,
 }
 
 .p {
+  font-family: "Poppins", sans-serif;
+
   font-size: var(--font-size-base);
   color: var(--text-secondary);
   font-weight: var(--font-weight-regular);

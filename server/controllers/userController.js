@@ -1,9 +1,11 @@
 import { HttpStatus } from "../constants/statusCode.js";
 import Panelist from "../models/Panelist.js";
+import SuperPanelist from "../models/SuperPanelist.js";
 import User from "../models/User.js";
 import { buildSearchFilter } from "../routes/queryUtils.js";
 import { buildMeta, getPaginationOptions } from "../utils/pagination.js";
 import { sendResponse, sendServerError } from "../utils/response.js";
+import bcrypt from "bcryptjs";
 
 export const fetchAllUsers = async (req, res) => {
   try {
@@ -39,25 +41,6 @@ export const fetchAllUsers = async (req, res) => {
     });
   } catch (error) {
     sendServerError(res, "Unable to fetch Voters");
-  }
-};
-
-export const getRecentUsers = async (req, res) => {
-  try {
-    const days = parseInt(req.query.days) || 30;
-
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-
-    const users = await User.find({
-      createdAt: { $gte: startDate },
-    });
-    sendResponse(res, true, "Voters Fetched successfully", HttpStatus.OK, {
-      data: users,
-    });
-  } catch (error) {
-    console.error("Error fetching recent voters:", error);
-    sendServerError(res, "Unable to fetch voters");
   }
 };
 
@@ -160,8 +143,6 @@ export const getPanelist = async (req, res) => {
     const { page, limit, skip } = getPaginationOptions(req.query);
     const { searchValue, category, status, authorized } = req.query;
 
-  
-
     // Search across name, email, occupation, and expertise
     if (searchValue) {
       Object.assign(
@@ -253,5 +234,62 @@ export const getPanelistByCategoryId = async (req, res) => {
   } catch (error) {
     console.error("Error fetching panelists by category:", error);
     sendServerError(res);
+  }
+};
+
+export const createSuperPanelist = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      contactNumber,
+      socialMedia,
+      occupation,
+      areaOfExpertise,
+      contributionSummary,
+      excellenceRating,
+      image,
+      password,
+    } = req.body;
+
+    // Check if email already exists
+    const existingPanelist = await SuperPanelist.findOne({ email });
+    if (existingPanelist) {
+      return sendResponse(res, true, "Email already exists", 400);
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create and save the super panelist
+    const newPanelist = new SuperPanelist({
+      name,
+      email,
+      contactNumber,
+      socialMedia,
+      occupation,
+      areaOfExpertise,
+      contributionSummary,
+      excellenceRating,
+      image,
+      password: hashedPassword,
+    });
+
+    await newPanelist.save();
+
+    return sendResponse(
+      res,
+      true,
+      "Super Panelist created successfully",
+      HttpStatus.CREATED,
+      { data: newPanelist }
+    );
+  } catch (error) {
+    console.error("Error creating super panelist:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message,
+    });
   }
 };

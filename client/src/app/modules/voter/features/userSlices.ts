@@ -66,6 +66,22 @@ export const getPanelists = createAsyncThunk<
     }
   }
 );
+export const createSuperPanelists = createAsyncThunk<
+  any[],
+  any,
+  { rejectValue: string }
+>("panelists/createSuperPanelists", async (payload, { rejectWithValue }) => {
+  try {
+    console.log("payload", payload);
+    const response = await userService.create("super-panelists", payload); // assumes axios response
+    return response.data; // make sure service returns `{ data: [...] }`
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch panelists"
+    );
+  }
+});
+
 const userSlice = createSlice({
   name: "users",
   initialState,
@@ -80,6 +96,7 @@ const userSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
     addAsyncCaseHandlersUser(builder, getUsersByTab);
     addAsyncCaseHandlersUser(builder, getPanelists);
+    addAsyncCaseHandlersUser(builder, createSuperPanelists);
   },
 });
 export const { resetUsers } = userSlice.actions;
