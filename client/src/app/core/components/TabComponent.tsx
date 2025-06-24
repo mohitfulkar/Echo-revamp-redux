@@ -13,7 +13,7 @@ const SharedTabs: React.FC<SharedTabsProps> = ({ tabs, defaultActiveKey, classNa
     }));
 
     return (
-        <div className={`bg-white p-4 rounded-lg shadow`}>
+        <div className={`bg-white p-4 rounded-md shadow`}>
             <Tabs defaultActiveKey={defaultActiveKey || tabs[0]?.key} items={items} onChange={onChange} />
         </div>
     );

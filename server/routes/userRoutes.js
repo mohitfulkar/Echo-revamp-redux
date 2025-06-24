@@ -19,7 +19,12 @@ const router = express.Router();
 router.get("/", fetchAllUsers);
 router.post(
   "/panelists",
-  uploadToPanelist.single("image"),
+  uploadToPanelist.fields([
+    { name: "photo", maxCount: 5 }, // Allow multiple photos
+    { name: "identityProof", maxCount: 5 }, // Allow multiple identity proofs
+    { name: "resume", maxCount: 3 }, // Allow multiple resumes
+    { name: "certification", maxCount: 10 }, // Allow multiple certifications
+  ]),
   validatePanelistCreation,
   createPanelist
 );

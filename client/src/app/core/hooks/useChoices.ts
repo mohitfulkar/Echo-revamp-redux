@@ -9,6 +9,7 @@ export const useChoices = (parentKey: string) => {
   const items = useSelector(
     (state: RootState) => state.choices.choices[parentKey] || []
   );
+
   const loading = useSelector((state: RootState) => state.choices.loading);
 
   useEffect(() => {

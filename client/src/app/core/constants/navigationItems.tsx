@@ -76,8 +76,8 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
       label: "Category Panelist",
     },
     {
-      key: "/super-panelist/categories",
-      icon: <AppstoreOutlined />,
+      key: "/super-panelist/settings",
+      icon: <SettingOutlined />,
       label: "Categories",
     },
   ],

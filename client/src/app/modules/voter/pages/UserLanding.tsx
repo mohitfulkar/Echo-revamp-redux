@@ -24,13 +24,13 @@ const VoterLanding: React.FC = () => {
         {
             key: 2,
             label: "Panelist",
-            onClick: () => navigate("/panelist/add")
+            onClick: () => navigate("/admin/panelist/social-media/add")
         },
 
         {
             key: 3,
             label: "Voter",
-            onClick: () => navigate("/voter/add")
+            onClick: () => navigate("/admin/voter/add")
         },
 
     ];
