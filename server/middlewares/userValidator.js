@@ -24,7 +24,30 @@ const validate = (validationRules) => {
   ];
 };
 
+const validateFileUpload = (fieldName, required = true) => {
+  return (req, res, next) => {
+    const files = req.files;
+
+    const isMissingOrEmpty =
+      !files || !files[fieldName] || files[fieldName].length === 0;
+
+    if (required && isMissingOrEmpty) {
+      req.validationErrors = req.validationErrors || [];
+      req.validationErrors.push({
+        type: "field",
+        msg: `${
+          fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+        } is required`,
+        path: fieldName,
+        location: "files",
+      });
+    }
+    next();
+  };
+};
+
 export const validateCreatePanelist = [
+  // Personal Details
   check("name")
     .notEmpty()
     .withMessage("Name is required")
@@ -43,56 +66,71 @@ export const validateCreatePanelist = [
     .isMobilePhone()
     .withMessage("Invalid contact number"),
 
+  check("password").notEmpty().withMessage("Password is required"),
+
+  // Social Media (all optional but must be valid URLs if present)
+  check("linkedIn").optional().isURL().withMessage("Invalid LinkedIn URL"),
+
+  check("twitter").optional().isURL().withMessage("Invalid Twitter URL"),
+
+  check("github").optional().isURL().withMessage("Invalid GitHub URL"),
+
+  check("website").optional().isURL().withMessage("Invalid Website URL"),
+
+  check("otherSocialMedia")
+    .optional()
+    .isURL()
+    .withMessage("Invalid Other Social Media URL"),
+
+  // Profession
   check("occupation").notEmpty().withMessage("Occupation is required"),
 
   check("areaOfExpertise")
     .isArray({ min: 1 })
     .withMessage("At least one area of expertise is required"),
 
+  check("yearsOfExperience")
+    .notEmpty()
+    .withMessage("Years of experience is required")
+    .isNumeric()
+    .withMessage("Years of experience must be a number"),
+
+  // Contribution
   check("contributionSummary")
     .notEmpty()
     .withMessage("Contribution summary is required"),
 
-  check("excellenceRating")
+  check("publications")
     .optional()
-    .isFloat({ min: 0, max: 10 })
-    .withMessage("Excellence rating must be between 0 and 10"),
+    .isString()
+    .withMessage("Publications must be a string"),
 
-  check("category")
+  check("awards").optional().isString().withMessage("Awards must be a string"),
+
+  // Designation
+  check("assignedCategory")
     .notEmpty()
-    .withMessage("Category is required")
-    .isMongoId()
-    .withMessage("Invalid category ID"),
+    .withMessage("Assign Category is required"),
 
-  check("authorizedToCreatePolls")
-    .optional()
-    .isBoolean()
-    .withMessage("authorizedToCreatePolls must be a boolean"),
+  check("designationTitle")
+    .notEmpty()
+    .withMessage("Designation Title is required"),
 
-  // Optional social media URLs
-  check("socialMedia.linkedIn")
-    .optional()
-    .isURL()
-    .withMessage("Invalid LinkedIn URL"),
+  check("assignedBy").notEmpty().withMessage("Assigned By is required"),
 
-  check("socialMedia.twitter")
+  check("areaOfResponsibility")
     .optional()
-    .isURL()
-    .withMessage("Invalid Twitter URL"),
+    .isArray()
+    .withMessage("Area of Responsibility must be an array"),
 
-  check("socialMedia.github")
-    .optional()
-    .isURL()
-    .withMessage("Invalid GitHub URL"),
-
-  check("socialMedia.website")
-    .optional()
-    .isURL()
-    .withMessage("Invalid website URL"),
-  check("password", "Password is required").not().isEmpty(),
+  // Uploads – just check for existence (actual file type/size should be handled by multer or client)
+  validateFileUpload("photo", true),
+  validateFileUpload("identityProof", true),
+  validateFileUpload("resume", false),
+  validateFileUpload("certification", false), // Optional
 ];
 
-export const validateSuperPanelistCreatePanelist = [
+export const validateSuperPanelist = [
   check("name")
     .notEmpty()
     .withMessage("Name is required")
@@ -151,6 +189,4 @@ export const validateSuperPanelistCreatePanelist = [
 ];
 
 export const validatePanelistCreation = validate(validateCreatePanelist);
-export const validateSuperPanelistCreation = validate(
-  validateSuperPanelistCreatePanelist
-);
+export const validateSuperPanelistCreation = validate(validateSuperPanelist);

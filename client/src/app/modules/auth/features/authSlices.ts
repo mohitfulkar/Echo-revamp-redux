@@ -15,6 +15,7 @@ import {
   LOGIN,
   PANELIST_LOGIN,
   REGISTER,
+  SUPER_PANELIST_LOGIN,
   VERIFY_OTP,
 } from "../constants/auth.constants";
 import { addAsyncCaseHandlersAuth } from "../../../core/utils/storeUtil";
@@ -75,7 +76,7 @@ export const loginPanelist = createAsyncThunk<
 >("auth/loginPanelist", async (payload, { rejectWithValue }) => {
   try {
     const response = await authService.create(PANELIST_LOGIN, payload);
-    return response
+    return response;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Login failed");
   }
@@ -97,20 +98,17 @@ export const adminLogin = createAsyncThunk<
     return rejectWithValue("Incorrect password");
   }
 });
-export const superPanelistLogin = createAsyncThunk<
-  { message: string; user: string },
-  { password: string },
-  { rejectValue: string }
->("auth/superPanelistLogin", async (payload, { rejectWithValue }) => {
-  const superPPassword = import.meta.env.VITE_SUPER_P_PASSWORD;
 
-  if (!superPPassword) {
-    return rejectWithValue("Super Panelist password not set");
-  }
-  if (payload.password === superPPassword) {
-    return { message: "Login successful", user: "superP" };
-  } else {
-    return rejectWithValue("Incorrect password");
+export const loginSuperPanelist = createAsyncThunk<
+  any,
+  PanelistLogin,
+  { rejectValue: string }
+>("auth/loginSuperPanelist", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await authService.create(SUPER_PANELIST_LOGIN, payload);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Login failed");
   }
 });
 
@@ -129,7 +127,7 @@ const authSlice = createSlice({
     addAsyncCaseHandlersAuth(builder, registerUser);
     addAsyncCaseHandlersAuth(builder, loginUser);
     addAsyncCaseHandlersAuth(builder, adminLogin);
-    addAsyncCaseHandlersAuth(builder, superPanelistLogin);
+    addAsyncCaseHandlersAuth(builder, loginSuperPanelist);
     addAsyncCaseHandlersAuth(builder, loginPanelist);
   },
 });

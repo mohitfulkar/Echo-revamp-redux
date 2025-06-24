@@ -1,5 +1,6 @@
 import type { StepsProps } from "antd";
 import type { ReactNode } from "react";
+import type { FieldConfig } from "./FormConfigs";
 
 export interface DataPanelProps {
   title: string;
@@ -82,4 +83,31 @@ export interface CrumbItem {
 export interface SharedBreadcrumbProps {
   items: CrumbItem[];
   showHome?: boolean;
+}
+export interface StepFormProps {
+  action: "create" | "edit";
+  onNext: () => void;
+  onBack?: () => void;
+  stepKey?: string;
+}
+
+export interface CardFields {
+  label: string;
+  key: string;
+  type?: string;
+}
+
+export interface CardComponentProps {
+  labels: CardFields[];
+  data: any[];
+}
+
+export interface FormModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (values: any) => void;
+  title?: string;
+  initialValues?: any;
+  formFields: FieldConfig[];
+  loading?: boolean;
 }

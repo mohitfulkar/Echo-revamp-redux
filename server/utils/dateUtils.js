@@ -19,3 +19,29 @@ export const getMonthlyDateRanges = () => {
     endOfPreviousMonth,
   };
 };
+
+export function formatTimestampToDate(timestamp) {
+  if (!timestamp) return "-";
+
+  const date = new Date(timestamp);
+
+  const options = {
+    year: "numeric",
+    month: "short", // e.g., Jan, Feb
+    day: "numeric",
+  };
+
+  return date.toLocaleString("en-IN", options); // You can change locale as needed
+}
+export function formatTimestampToTime(timestamp) {
+  if (!timestamp) return "-";
+
+  const date = new Date(timestamp);
+
+  const options = {
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+
+  return date.toLocaleString("en-IN", options); // You can change locale as needed
+}

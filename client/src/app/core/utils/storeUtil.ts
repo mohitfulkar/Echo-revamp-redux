@@ -9,6 +9,8 @@ import type { PollState } from "../../modules/polls/features/pollSlices";
 import type { DashboardState } from "../../modules/dashboard/features/dashboardSlices";
 import type { UserState } from "../../modules/voter/features/userSlices";
 import type { ChoiceOption, ChoiceState } from "../features/choiceSlices";
+import type { CategoryState } from "../../modules/settings/features/categorySlices";
+import type { ExpertiseState } from "../../modules/settings/features/expertiseSlices";
 
 export const addAsyncCaseHandlersAuth = (
   builder: ActionReducerMapBuilder<AuthState>,
@@ -149,4 +151,59 @@ export const addAsyncCaseHandlersChoice = (
       state.loading = false;
       state.error = action.payload || "Something went wrong";
     });
+};
+
+export const addAsyncCaseHandlersCategory = (
+  builder: ActionReducerMapBuilder<CategoryState>,
+  asyncThunk: any
+) => {
+  builder
+    .addCase(asyncThunk.pending, (state: CategoryState) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    })
+    .addCase(
+      asyncThunk.fulfilled,
+      (state: CategoryState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.data = action.payload;
+        state.success = true;
+      }
+    )
+    .addCase(
+      asyncThunk.rejected,
+      (state: CategoryState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      }
+    );
+};
+export const addAsyncCaseHandlersExpertise = (
+  builder: ActionReducerMapBuilder<ExpertiseState>,
+  asyncThunk: any
+) => {
+  builder
+    .addCase(asyncThunk.pending, (state: ExpertiseState) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    })
+    .addCase(
+      asyncThunk.fulfilled,
+      (state: ExpertiseState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.data = action.payload;
+        state.success = true;
+      }
+    )
+    .addCase(
+      asyncThunk.rejected,
+      (state: ExpertiseState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      }
+    );
 };

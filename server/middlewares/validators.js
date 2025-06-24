@@ -75,7 +75,6 @@ const panelistLoginRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
   check("password", "Password is required").not().isEmpty(),
 ];
-
 const resetPasswordRequestRules = [
   check("email", "Please include a valid email").isEmail().normalizeEmail(),
 ];

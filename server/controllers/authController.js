@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import { HttpStatus } from "../constants/statusCode.js";
 import Panelist from "../models/Panelist.js";
 import Category from "../models/Category.js";
+import SuperPanelist from "../models/SuperPanelist.js";
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 const OTP_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
@@ -16,9 +17,7 @@ const OTP_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
  * Register controller
  */
 export const register = async (req, res) => {
-  
   try {
-
     const { fullName, email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
@@ -68,10 +67,6 @@ export const register = async (req, res) => {
   }
 };
 
-``;
-/**
- * Verify OTP controller
- */
 export const verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -151,8 +146,6 @@ export const verifyOTP = async (req, res) => {
   }
 };
 
-//user login
-
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -224,7 +217,6 @@ export const loginUser = async (req, res) => {
 export const panelistLogin = async (req, res) => {
   try {
     const { categoryId, email, password } = req.body;
-    console.log("categoryId, email, password", categoryId, email, password);
 
     // Find panelist by email AND categoryId
     const panelist = await Panelist.findOne({ email });
@@ -274,7 +266,6 @@ export const panelistLogin = async (req, res) => {
         false
       );
     }
-
     const token = jwt.sign(
       { id: panelist._id, email: panelist.email, category: categoryId },
       process.env.JWT_SE_PANELIST || "your_jwt_secret",
@@ -296,6 +287,52 @@ export const panelistLogin = async (req, res) => {
     });
   } catch (error) {
     console.error("Panelist login error:", error);
+    return sendServerError(res);
+  }
+};
+export const superPanelistLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find panelist by email AND categoryId
+    const sPanelist = await SuperPanelist.findOne({ email });
+    if (!sPanelist) {
+      return sendResponse(
+        res,
+        false,
+        "Super Panelist not found",
+        HttpStatus.NOT_FOUND
+      );
+    }
+
+    const isMatch = bcrypt.compare(password, sPanelist.password);
+    if (!isMatch) {
+      return sendResponse(
+        res,
+        false,
+        "Invalid email or password",
+        HttpStatus.BAD_REQUEST,
+        false
+      );
+    }
+
+    const token = jwt.sign(
+      { id: sPanelist._id, email: sPanelist.email },
+      process.env.JWT_SECRET_SUPER_PANELIST || "your_jwt_secret",
+      { expiresIn: "1d" }
+    );
+
+    return sendResponse(res, true, "Login successful", HttpStatus.OK, {
+      token,
+      user: {
+        id: sPanelist._id,
+        fullName: sPanelist.fullName,
+        email: sPanelist.email,
+        role: "super-panelist",
+      },
+    });
+  } catch (error) {
+    console.error("Super Panelist login error:", error);
     return sendServerError(res);
   }
 };

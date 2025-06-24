@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Form, Input, Button, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { resetAuthState, superPanelistLogin } from "../features/authSlices";
+import { resetAuthState, loginSuperPanelist } from "../features/authSlices";
 import type { AppDispatch } from "../../../store";
 import { showToast } from "../../../core/service/ToastService";
 import { setActiveModule } from "../../../core/features/navigationSlices";
 import { resetFields } from "../service/FormService";
 import { superPLoginFields } from "../models/signupForm.model";
+import { renderFormField } from "../../../core/components/FormTemplate";
 const { Title } = Typography;
 const SuperPanelistLogin: React.FC = () => {
     const [loginForm] = Form.useForm();
@@ -19,9 +20,11 @@ const SuperPanelistLogin: React.FC = () => {
         setLoading(true);
         try {
             const values = await loginForm.validateFields(); // { password: '...' }
-            const response = await dispatch(superPanelistLogin(values));
-            if (superPanelistLogin.fulfilled.match(response)) {
+            const response = await dispatch(loginSuperPanelist(values));
+            console.log('response', response)
+            if (loginSuperPanelist.fulfilled.match(response)) {
                 const { user } = response.payload;
+                console.log('user', user)
                 localStorage.setItem("user", JSON.stringify(user));
                 showToast.success("Super Panelist login successful!");
                 resetFields(loginForm);
@@ -53,7 +56,7 @@ const SuperPanelistLogin: React.FC = () => {
                 <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-8">
                     <div className="w-full max-w-md">
                         <Title level={2} className="!mb-6 !text-center">
-                            Super Panelist Admin
+                            SP LOGIN
                         </Title>
                         <Form
                             form={loginForm}
@@ -61,22 +64,7 @@ const SuperPanelistLogin: React.FC = () => {
                             layout="vertical"
                             autoComplete="off"
                             requiredMark={false}
-                        >
-                            {superPLoginFields.map((field) => (
-                                <Form.Item
-                                    key={field.name}
-                                    name={field.name}
-                                    dependencies={field.dependencies}
-                                    rules={field.rules}
-                                    className="mb-4"
-                                >
-                                    <Input
-                                        placeholder={field.placeholder}
-                                        type={field.type || "text"}
-                                    />
-                                </Form.Item>
-                            ))}
-
+                        >{superPLoginFields.map(renderFormField)}
                             <Form.Item>
                                 <Button
                                     type="primary"

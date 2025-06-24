@@ -50,42 +50,46 @@ export const createPanelist = async (req, res) => {
       name,
       email,
       contactNumber,
+      password,
       occupation,
       areaOfExpertise,
+      yearsOfExperience,
       contributionSummary,
-      excellenceRating,
-      category,
-      password,
-      authorizedToCreatePolls,
+      publications,
+      awards,
+      assignedCategory,
+      areaOfResponsibility,
+      designationTitle,
+      assignedBy,
+      linkedIn,
+      twitter,
+      github,
+      website,
+      otherSocialMedia,
     } = req.body;
 
-    // Handle socialMedia (parse if sent as JSON string via form-data)
-    let socialMedia = {};
-    if (req.body.socialMedia) {
-      try {
-        socialMedia =
-          typeof req.body.socialMedia === "string"
-            ? JSON.parse(req.body.socialMedia)
-            : req.body.socialMedia;
-      } catch (err) {
-        sendResponse(
-          res,
-          false,
-          "Invalid JSON format for socialMedia",
-          HttpStatus.BAD_REQUEST
-        );
-      }
-    }
-
-    // Normalize areaOfExpertise to array if needed
+    // Normalize expertise to array
     const expertiseArray = Array.isArray(areaOfExpertise)
       ? areaOfExpertise
       : [areaOfExpertise];
 
-    // Check for existing panelist
+    const responsibilityArray = Array.isArray(areaOfResponsibility)
+      ? areaOfResponsibility
+      : areaOfResponsibility
+      ? [areaOfResponsibility]
+      : [];
+
+    const getFilenames = (field) =>
+      req.files?.[field]?.map((file) => file.path) || [];
+
+    const identityProof = getFilenames("identityProof");
+    const resume = getFilenames("resume");
+    const certification = getFilenames("certification");
+    const photo = getFilenames("photo"); // Check for existing panelist
+
     const existing = await Panelist.findOne({ email });
     if (existing) {
-      sendResponse(
+      return sendResponse(
         res,
         false,
         "A panelist with this email already exists",
@@ -93,47 +97,44 @@ export const createPanelist = async (req, res) => {
       );
     }
 
-    // Handle uploaded image (if available)
-    const imagePath = req.file ? req.file.path : "";
-
     const panelist = await Panelist.create({
       name,
       email,
       contactNumber,
-      socialMedia,
+      password,
       occupation,
       areaOfExpertise: expertiseArray,
+      yearsOfExperience,
       contributionSummary,
-      excellenceRating,
-      image: imagePath,
-      category,
-      authorizedToCreatePolls,
-      password,
+      publications,
+      awards,
+      assignedCategory, // ← Move to root level
+      areaOfResponsibility: responsibilityArray, // ← Move to root level
+      designationTitle, // ← Move to root level
+      assignedBy, // ← Move to root level
+      linkedIn,
+      twitter,
+      github,
+      website,
+      otherSocialMedia,
+      identityProof,
+      resume,
+      certification,
+      photo,
     });
-    sendResponse(
+
+    return sendResponse(
       res,
       true,
       "Panelist created successfully",
       HttpStatus.CREATED,
       {
-        data: {
-          name,
-          email,
-          contactNumber,
-          socialMedia,
-          occupation,
-          areaOfExpertise: expertiseArray,
-          contributionSummary,
-          excellenceRating,
-          image: imagePath,
-          category,
-          authorizedToCreatePolls,
-        },
+        data: panelist,
       }
     );
   } catch (error) {
     console.error("Error creating panelist:", error);
-    sendServerError(res);
+    return sendServerError(res);
   }
 };
 
@@ -144,6 +145,7 @@ export const getPanelist = async (req, res) => {
     const { searchValue, category, status, authorized } = req.query;
 
     // Search across name, email, occupation, and expertise
+    const filter = {};
     if (searchValue) {
       Object.assign(
         filter,
@@ -169,7 +171,7 @@ export const getPanelist = async (req, res) => {
     }
 
     const total = await Panelist.countDocuments(filter);
-
+    console.log("total", total);
     const panelists = await Panelist.aggregate([
       { $match: filter },
       { $sort: { createdAt: -1 } },
@@ -204,8 +206,7 @@ export const getPanelist = async (req, res) => {
         },
       },
     ]);
-
-    sendResponse(res, true, "Panelists fetched successfully", 200, {
+    return sendResponse(res, true, "Panelists fetched successfully", 200, {
       data: {
         pagination: buildMeta({
           total,
@@ -219,7 +220,7 @@ export const getPanelist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching panelists:", error);
-    sendServerError(res);
+    return sendServerError(res);
   }
 };
 
@@ -251,6 +252,11 @@ export const createSuperPanelist = async (req, res) => {
       image,
       password,
     } = req.body;
+
+    // Log all keys from req.body
+    Object.keys(req.body).forEach((key) => {
+      console.log(`createSuperPanelist req.body[${key}]:`, req.body[key]);
+    });
 
     // Check if email already exists
     const existingPanelist = await SuperPanelist.findOne({ email });

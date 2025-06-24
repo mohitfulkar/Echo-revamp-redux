@@ -7,7 +7,7 @@ interface CustomButtonProps extends ButtonProps {
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({ label, ...rest }) => {
-    return <Button {...rest} >{label}</Button>;
+    return <Button  {...rest} >{label}</Button>;
 };
 
 export default CustomButton;

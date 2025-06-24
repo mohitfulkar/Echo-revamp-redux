@@ -53,27 +53,39 @@ export const getPanelists = createAsyncThunk<
   any[],
   any,
   { rejectValue: string }
->(
-  "panelists/getAll",
-  async ({ parentKey, id, params }, { rejectWithValue }) => {
-    try {
-      const response = await userService.getItemById(parentKey, id, params); // assumes axios response
-      return response.data; // make sure service returns `{ data: [...] }`
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch panelists"
-      );
-    }
+>("users/getAll", async ({ parentKey, id, params }, { rejectWithValue }) => {
+  try {
+    const response = await userService.getItemById(parentKey, id, params); // assumes axios response
+    return response.data; // make sure service returns `{ data: [...] }`
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch panelists"
+    );
   }
-);
+});
 export const createSuperPanelists = createAsyncThunk<
   any[],
   any,
   { rejectValue: string }
->("panelists/createSuperPanelists", async (payload, { rejectWithValue }) => {
+>("users/createSuperPanelists", async (payload, { rejectWithValue }) => {
   try {
     console.log("payload", payload);
     const response = await userService.create("super-panelists", payload); // assumes axios response
+    return response.data; // make sure service returns `{ data: [...] }`
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch panelists"
+    );
+  }
+});
+export const createPanelists = createAsyncThunk<
+  any[],
+  any,
+  { rejectValue: string }
+>("users/createPanelists", async (payload, { rejectWithValue }) => {
+  try {
+    console.log("payload", payload);
+    const response = await userService.create("panelists", payload); // assumes axios response
     return response.data; // make sure service returns `{ data: [...] }`
   } catch (error: any) {
     return rejectWithValue(
@@ -97,6 +109,7 @@ const userSlice = createSlice({
     addAsyncCaseHandlersUser(builder, getUsersByTab);
     addAsyncCaseHandlersUser(builder, getPanelists);
     addAsyncCaseHandlersUser(builder, createSuperPanelists);
+    addAsyncCaseHandlersUser(builder, createPanelists);
   },
 });
 export const { resetUsers } = userSlice.actions;
