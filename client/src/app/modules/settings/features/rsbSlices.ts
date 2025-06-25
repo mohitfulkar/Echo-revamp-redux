@@ -3,8 +3,8 @@ import {
   createSlice,
   type ActionReducerMapBuilder,
 } from "@reduxjs/toolkit";
-import { addAsyncCaseHandlersExpertise } from "../../../core/utils/storeUtil";
-import { expertiseService } from "../services/settingService";
+import { rsbService } from "../services/settingService";
+import { addAsyncCaseHandlersRsb } from "../../../core/utils/storeUtil";
 
 export interface PaginationInfo {
   total: number;
@@ -15,7 +15,7 @@ export interface PaginationInfo {
   next: string | null;
 }
 
-export interface ExpertiseDataItem {
+export interface RsbDataItem {
   name: string;
   description: string;
   isActive?: boolean;
@@ -24,17 +24,17 @@ export interface ExpertiseDataItem {
   createdTime?: string;
 }
 
-export interface ExpertiseState {
+export interface RsbState {
   data: {
     pagination: PaginationInfo;
-    expertises: ExpertiseDataItem[];
+    rsb: RsbDataItem[];
   };
   loading: boolean;
   error: string | null;
   success: boolean;
 }
 
-const initialState: ExpertiseState = {
+const initialState: RsbState = {
   data: {
     pagination: {
       total: 0,
@@ -44,21 +44,21 @@ const initialState: ExpertiseState = {
       prev: null,
       next: null,
     },
-    expertises: [],
+    rsb: [],
   },
   loading: false,
   error: null,
   success: false,
 };
 
-export const getExpertise = createAsyncThunk<
+export const getRsb = createAsyncThunk<
   any,
   { parentKey: string; params: any },
   { rejectValue: string }
->("rsb/getExpertise", async ({ parentKey, params }, thunkAPI) => {
+>("rsb/getRsb", async ({ parentKey, params }, thunkAPI) => {
   console.log(params, parentKey);
   try {
-    const response = await expertiseService.getAll(parentKey, params);
+    const response = await rsbService.getAll(parentKey, params);
     return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
@@ -66,13 +66,14 @@ export const getExpertise = createAsyncThunk<
     );
   }
 });
-export const createExpertise = createAsyncThunk<
+
+export const createRsb = createAsyncThunk<
   any,
   { parentKey: string; payload: any },
   { rejectValue: string }
->("expertise/createExpertise", async ({ parentKey, payload }, thunkAPI) => {
+>("rsb/createRsb", async ({ parentKey, payload }, thunkAPI) => {
   try {
-    const response = await expertiseService.create(parentKey, payload);
+    const response = await rsbService.create(parentKey, payload);
     return response;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
@@ -81,13 +82,13 @@ export const createExpertise = createAsyncThunk<
   }
 });
 
-const expertiseSlice = createSlice({
-  name: "expertise",
+const rsbSlice = createSlice({
+  name: "rsb",
   initialState,
   reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<ExpertiseState>) => {
-    addAsyncCaseHandlersExpertise(builder, getExpertise);
-    addAsyncCaseHandlersExpertise(builder, createExpertise);
+  extraReducers: (builder: ActionReducerMapBuilder<RsbState>) => {
+    addAsyncCaseHandlersRsb(builder, getRsb);
+    addAsyncCaseHandlersRsb(builder, createRsb);
   },
 });
-export default expertiseSlice.reducer;
+export default rsbSlice.reducer;

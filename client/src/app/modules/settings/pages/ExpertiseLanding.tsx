@@ -11,6 +11,8 @@ import { showToast } from '../../../core/service/ToastService';
 import { PAGINATION } from '../../../core/constants/pagination';
 import { Pagination } from 'antd';
 import { createExpertise, getExpertise } from '../features/expertiseSlices';
+import { IconCardComponent } from '../../../core/components/IconCardComponent';
+import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 export interface CardDataItem {
     name: string;
@@ -30,20 +32,18 @@ const ExpertiseLanding: React.FC = () => {
     const { data: expertiseData } = useSelector((state: RootState) => state.expertise);
 
     const handleSearch = () => {
-        dispatch(getExpertise({ page: PAGINATION.pageIndex, limit: PAGINATION.limit }));
+        dispatch(getExpertise({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit, searchValue: searchValue } }));
     };
 
-    const handleAdd = () => setIsModalOpen(true);
-    const handleModalClose = () => setIsModalOpen(false);
 
     const handleFormSubmit = async (formValues: any) => {
-        console.log('formValues', formValues)
         const resultAction = await dispatch(
             createExpertise({ parentKey: '', payload: formValues })
         );
         if (createExpertise.fulfilled.match(resultAction)) {
             showToast.success('Expertise created successfully');
-            dispatch(getExpertise({ page: PAGINATION.pageIndex, limit: PAGINATION.limit }));
+            dispatch(getExpertise({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit, searchValue: searchValue } }));
+
             setIsModalOpen(false);
         } else {
             showToast.error(resultAction.payload || 'Failed to create expertise');
@@ -51,14 +51,29 @@ const ExpertiseLanding: React.FC = () => {
     };
 
     useEffect(() => {
-        dispatch(getExpertise({ page: currentPage, limit: PAGINATION.limit }));
+        dispatch(getExpertise({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
     }, [dispatch, currentPage]);
-
     const labels: CardFields[] = [
-        { label: 'Name', key: 'name' },
-        { label: 'Created Date', key: 'createdDate' },
-        { label: 'Created Time', key: 'createdTime' },
-        { label: 'Status', key: 'statusDisplay', type: 'status' },
+        {
+            key: "name",
+            type: "title", // This will be rendered as the card title
+        },
+        {
+            label: "Created Date",
+            key: "createdDate",
+            icon: <CalendarOutlined />,
+        },
+        {
+            label: "Created Time",
+            key: "createdTime",
+            icon: <ClockCircleOutlined />,
+        },
+        {
+            label: "Status",
+            key: "statusDisplay",
+            type: "status",
+            icon: <CheckCircleOutlined />, // You can swap with another status-representing icon if desired
+        },
     ];
 
     return (
@@ -70,10 +85,10 @@ const ExpertiseLanding: React.FC = () => {
                     placeholder="Search Expertise"
                     handleSearch={handleSearch}
                 />
-                <CustomButton label="ADD" className="w-[10%]" type="primary" onClick={handleAdd} />
+                <CustomButton label="ADD" className="w-[10%]" type="primary" onClick={() => setIsModalOpen(true)} />
             </div>
 
-            <CardComponent labels={labels} data={expertiseData?.expertises || []} />
+            <IconCardComponent labels={labels} data={expertiseData?.expertises || []} />
 
             <div className="mt-4 flex justify-end">
                 <Pagination
@@ -89,7 +104,7 @@ const ExpertiseLanding: React.FC = () => {
                     formFields={categoryFormFields}
                     title="Add Expertise"
                     open={isModalOpen}
-                    onClose={handleModalClose}
+                    onClose={() => setIsModalOpen(false)}
                     onSubmit={handleFormSubmit}
                 />
             )}

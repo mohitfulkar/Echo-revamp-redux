@@ -1,8 +1,10 @@
 import axios from "axios";
-import { BASE_URL } from "../../../core/environment/environment.local";
+import {
+  CATEGORY_API,
+  EXPERTISE_API,
+  RSB_API,
+} from "../../../core/environment/environment.local";
 
-const CATEGORY_API = `${BASE_URL}/category`;
-const EXPERTISE_API = `${BASE_URL}/expertise`;
 export const categoryService = {
   create: async (parentKey: string, payload: any) => {
     const response = await axios.post(`${CATEGORY_API}/${parentKey}`, payload);
@@ -23,6 +25,19 @@ export const expertiseService = {
   },
   getAll: async (parentKey: string, params?: {}) => {
     const response = await axios.get(`${EXPERTISE_API}/${parentKey}`, {
+      params: params || {},
+    });
+    return response.data;
+  },
+};
+
+export const rsbService = {
+  create: async (parentKey: string, payload: any) => {
+    const response = await axios.post(`${RSB_API}/${parentKey}`, payload);
+    return response.data;
+  },
+  getAll: async (parentKey: string, params?: {}) => {
+    const response = await axios.get(`${RSB_API}/${parentKey}`, {
       params: params || {},
     });
     return response.data;

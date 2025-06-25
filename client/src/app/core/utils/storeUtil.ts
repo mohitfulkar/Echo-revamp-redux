@@ -11,6 +11,7 @@ import type { UserState } from "../../modules/voter/features/userSlices";
 import type { ChoiceOption, ChoiceState } from "../features/choiceSlices";
 import type { CategoryState } from "../../modules/settings/features/categorySlices";
 import type { ExpertiseState } from "../../modules/settings/features/expertiseSlices";
+import type { RsbState } from "../../modules/settings/features/rsbSlices";
 
 export const addAsyncCaseHandlersAuth = (
   builder: ActionReducerMapBuilder<AuthState>,
@@ -201,6 +202,33 @@ export const addAsyncCaseHandlersExpertise = (
     .addCase(
       asyncThunk.rejected,
       (state: ExpertiseState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      }
+    );
+};
+export const addAsyncCaseHandlersRsb = (
+  builder: ActionReducerMapBuilder<RsbState>,
+  asyncThunk: any
+) => {
+  builder
+    .addCase(asyncThunk.pending, (state: RsbState) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    })
+    .addCase(
+      asyncThunk.fulfilled,
+      (state: RsbState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.data = action.payload;
+        state.success = true;
+      }
+    )
+    .addCase(
+      asyncThunk.rejected,
+      (state: RsbState, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;

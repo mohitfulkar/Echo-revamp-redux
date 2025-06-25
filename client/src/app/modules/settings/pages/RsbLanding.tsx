@@ -5,55 +5,53 @@ import { CardComponent } from '../../../core/components/CardComponent';
 import type { CardFields } from '../../../core/models/sharedComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../store';
-import { createCategory, getCategory } from '../features/categorySlices';
 import FormModal from '../../../core/components/FormModal';
 import { categoryFormFields } from '../constants/FormFields';
 import { showToast } from '../../../core/service/ToastService';
 import { PAGINATION } from '../../../core/constants/pagination';
 import { Pagination } from 'antd';
+import { createRsb, getRsb } from '../features/rsbSlices';
 import { IconCardComponent } from '../../../core/components/IconCardComponent';
-import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, EyeOutlined } from '@ant-design/icons';
 
 export interface CardDataItem {
     name: string;
     description: string;
-    image?: string;
-    createdDate?: string;
-    createdTime?: string;
     isActive?: boolean;
     statusDisplay?: string;
+    createdDate?: string;
+    createdTime?: string;
 }
 
-const CategoryLanding: React.FC = () => {
+const RsbLanding: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [searchValue, setSearchValue] = useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(PAGINATION.pageIndex);
 
-    const { data: categoryData } = useSelector((state: RootState) => state.category);
+    const { data: rsbData } = useSelector((state: RootState) => state.rsb);
 
     const handleSearch = () => {
-        dispatch(getCategory({ parentKey: '', params: { page: PAGINATION.pageIndex, limit: PAGINATION.limit, searchValue: searchValue } }));
+        dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit, searchValue: searchValue } }));
     };
 
-    const handleAdd = () => setIsModalOpen(true);
-    const handleModalClose = () => setIsModalOpen(false);
 
     const handleFormSubmit = async (formValues: any) => {
-        const resultAction = await dispatch(
-            createCategory({ parentKey: '', payload: formValues })
-        );
-        if (createCategory.fulfilled.match(resultAction)) {
-            showToast.success('Category created successfully');
-            dispatch(getCategory({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
 
+        const resultAction = await dispatch(
+            createRsb({ parentKey: '', payload: formValues })
+        );
+        if (createRsb.fulfilled.match(resultAction)) {
+            showToast.success('Responsibility created successfully');
+            dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             setIsModalOpen(false);
         } else {
-            showToast.error(resultAction.payload || 'Failed to create category');
+            showToast.error(resultAction.payload || 'Failed to create Responsibility');
         }
     };
+
     useEffect(() => {
-        dispatch(getCategory({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
+        dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
     }, [dispatch, currentPage]);
 
     const labels: CardFields[] = [
@@ -79,25 +77,40 @@ const CategoryLanding: React.FC = () => {
         },
     ];
 
+    const handleAction = () => (action: string, record: any) => {
+        if (action === "view") {
+            console.log("Viewing", record);
+        } else if (action === "edit") {
+            console.log("Editing", record);
+        } else if (action === "delete") {
+            console.log("Deleting", record);
+        }
+    }
+
     return (
         <>
             <div className="flex justify-between mb-4">
                 <SearchBar
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
-                    placeholder="Search Category"
+                    placeholder="Search Responsibility"
                     handleSearch={handleSearch}
                 />
-                <CustomButton label="ADD" className="w-[10%]" type="primary" onClick={handleAdd} />
+                <CustomButton label="ADD" className="w-[10%]" type="primary" onClick={() => setIsModalOpen(true)} />
             </div>
 
-            <IconCardComponent labels={labels} data={categoryData?.categories || []} />
+
+            <IconCardComponent
+                labels={labels}
+                data={rsbData?.rsb}
+                handleAction={handleAction}
+            />
 
             <div className="mt-4 flex justify-end">
                 <Pagination
                     current={currentPage}
                     pageSize={PAGINATION.limit}
-                    total={categoryData?.pagination?.total}
+                    total={rsbData?.pagination?.total || 0}
                     onChange={(page) => setCurrentPage(page)}
                 />
             </div>
@@ -105,9 +118,9 @@ const CategoryLanding: React.FC = () => {
             {isModalOpen && (
                 <FormModal
                     formFields={categoryFormFields}
-                    title="Add Category"
+                    title="Add Responsibility"
                     open={isModalOpen}
-                    onClose={handleModalClose}
+                    onClose={() => setIsModalOpen(false)}
                     onSubmit={handleFormSubmit}
                 />
             )}
@@ -115,4 +128,4 @@ const CategoryLanding: React.FC = () => {
     );
 };
 
-export default CategoryLanding;
+export default RsbLanding;
