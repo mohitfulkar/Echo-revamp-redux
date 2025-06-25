@@ -92,14 +92,16 @@ export interface StepFormProps {
 }
 
 export interface CardFields {
-  label: string;
+  label?: string;
   key: string;
   type?: string;
+  icon?: ReactNode;
 }
 
 export interface CardComponentProps {
   labels: CardFields[];
   data: any[];
+  handleAction?: (action: "view" | "edit" | "delete", record: any) => void;
 }
 
 export interface FormModalProps {

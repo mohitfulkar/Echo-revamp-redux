@@ -9,6 +9,7 @@ import sharedReducer from "./core/features/sharedStateSlices";
 import multiStepStateReducer from "./core/features/multiStepStateReducer";
 import categoryReducer from "./modules/settings/features/categorySlices";
 import expertiseReducer from "./modules/settings/features/expertiseSlices";
+import rsbReducer from "./modules/settings/features/rsbSlices";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     multiStepState: multiStepStateReducer,
     category: categoryReducer,
     expertise: expertiseReducer,
+    rsb: rsbReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

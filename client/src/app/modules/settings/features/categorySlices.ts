@@ -42,20 +42,21 @@ const initialState: CategoryState = {
   success: false,
 };
 
-export const getCategory = createAsyncThunk<any, any, { rejectValue: string }>(
-  "category/getCategory",
-  async (params, thunkAPI) => {
-    try {
-      const response = await categoryService.getAll("", params); // now valid
-      return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Something went wrong"
-      );
-    }
+export const getCategory = createAsyncThunk<
+  any,
+  { parentKey: string; params: any },
+  { rejectValue: string }
+>("rsb/getCategory", async ({ parentKey, params }, thunkAPI) => {
+  console.log(params, parentKey);
+  try {
+    const response = await categoryService.getAll(parentKey, params);
+    return response.data;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.message || "Something went wrong"
+    );
   }
-);
-
+});
 export const createCategory = createAsyncThunk<
   any,
   { parentKey: string; payload: any },

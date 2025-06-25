@@ -5,6 +5,7 @@ import SharedTabs from "../../../core/components/TabComponent";
 import { useSearchParams } from "react-router-dom";
 import CategoryLanding from "./CategoryLanding";
 import ExpertiseLanding from "./ExpertiseLanding";
+import RsbLanding from "./RsbLanding";
 
 const SuperPSettingLanding: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,6 +32,8 @@ const SuperPSettingLanding: React.FC = () => {
         return <CategoryLanding />;
       case 'expertise':
         return <ExpertiseLanding />;
+      case 'rsb':
+        return <RsbLanding />;
       default:
         return null;
     }

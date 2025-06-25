@@ -9,6 +9,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setSearchValue,
     placeholder = 'Search...',
     handleSearch,
+
 }) => {
     return (
         <Search
