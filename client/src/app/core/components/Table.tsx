@@ -1,16 +1,19 @@
 import React from 'react';
 import { Table, Button, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { DataType, ReusableTableProps } from '../models/sharedComponent';
+import type { DataType, ReusableTableProps, ColumnConfig } from '../models/sharedComponent';
+import StatusTag from './StatusTag';
 
 export const TableComponent: React.FC<ReusableTableProps> = ({ data, columnsConfig, actions = [] }) => {
     // map columnsConfig to AntD ColumnsType<DataType>
     const columns: ColumnsType<DataType> = [
-        ...columnsConfig.map(({ title, dataIndex }) => ({
+        ...columnsConfig.map(({ title, dataIndex, type }: ColumnConfig) => ({
             title,
             dataIndex,
             key: dataIndex,
-
+            render: type === 'status'
+                ? (value: string) => <StatusTag status={value} />
+                : undefined,
         })),
         ...(actions.length > 0
             ? [

@@ -13,7 +13,7 @@ const PanelistLanding: React.FC = () => {
     const tab: string = 'panelists'
 
     const [searchValue, setSearchValue] = useState<string>('');
-    const { items } = useChoices("categories");
+    const { items } = useChoices("category");
 
     const addItems = () => { }
     const handleSearch = () => { }
@@ -26,30 +26,14 @@ const PanelistLanding: React.FC = () => {
         {
             title: 'Area of Expertise',
             dataIndex: 'areaOfExpertise',
-            render: (expertise: string[]) => expertise?.join(', ') || '-'
-        },
-        {
-            title: 'Excellence Rating',
-            dataIndex: 'excellenceRating',
-            render: (rating: number) => rating?.toFixed(1) || '-'
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status: string) => (
-                <span className={`px-2 py-1 rounded text-xs ${status === 'active' ? 'bg-green-100 text-green-800' :
-                    status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-gray-100 text-gray-800'
-                    }`}>
-                    {status}
-                </span>
-            )
+            type: 'status'
+
         },
-        {
-            title: 'Authorized to Create Polls',
-            dataIndex: 'authorizedToCreatePolls',
-            render: (authorized: boolean) => authorized ? 'Yes' : 'No'
-        }
+
     ], []);
 
     const handleEdit = useCallback((row: DataType) => {
@@ -76,7 +60,7 @@ const PanelistLanding: React.FC = () => {
     ], [handleEdit, handleDelete]);
 
 
-    const { tabData, paginationInfo } = useUsers(tab, searchValue, PAGINATION.pageIndex, PAGINATION.limit);
+    const { tabData, paginationInfo } = useUsers(tab, { searchValue: searchValue, page: PAGINATION.pageIndex, limit: PAGINATION.limit, status: 'ACTIVE' });
 
     return (
         <div>

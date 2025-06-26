@@ -4,12 +4,7 @@ import { useEffect, useMemo } from "react";
 import { getUsersByTab } from "../../modules/voter/features/userSlices";
 import type { AppDispatch, RootState } from "../../store";
 
-export const useUsers = (
-  tab: string,
-  searchValue: string,
-  pageIndex: number,
-  pageSize: number
-) => {
+export const useUsers = (tab: string, params: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const itemsByKey = useSelector((state: RootState) => state.users.itemsByKey);
   const tabData = useMemo(() => itemsByKey[tab]?.data[tab], [itemsByKey, tab]);
@@ -21,14 +16,10 @@ export const useUsers = (
     dispatch(
       getUsersByTab({
         tab,
-        params: {
-          limit: pageSize,
-          page: pageIndex,
-          ...(searchValue && { searchValue }),
-        },
+        params: params,
       })
     );
-  }, [dispatch, tab, searchValue, pageIndex, pageSize]);
+  }, [dispatch, tab]);
 
   return { tabData, paginationInfo };
 };

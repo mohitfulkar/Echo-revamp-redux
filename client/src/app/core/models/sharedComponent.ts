@@ -36,6 +36,7 @@ export interface DataType {
 export interface ColumnConfig {
   title: string;
   dataIndex: string;
+  type?: string;
 }
 
 export interface ActionType {
