@@ -20,9 +20,9 @@ const DesignationForm: React.FC<StepFormProps> = ({ stepKey, onNext, onBack }) =
     const { items: RsbOptions } = useChoices('rsb');
 
     const fieldOptionsMap: Record<string, any[]> = {
-        assignedCategory: categoryOptions || [],
-        designationTitle: designationOptions || [],
-        areaOfResponsibility: RsbOptions || [],
+        assignedCategory: categoryOptions,
+        designationTitle: designationOptions,
+        areaOfResponsibility: RsbOptions,
     };
     const dynamicFields = applyFieldOptions(designationFormFields, fieldOptionsMap);
     useEffect(() => {
