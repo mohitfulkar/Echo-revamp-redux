@@ -56,7 +56,7 @@ const SuperPanelistLogin: React.FC = () => {
                 <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-8">
                     <div className="w-full max-w-md">
                         <Title level={2} className="!mb-6 !text-center">
-                            SP LOGIN
+                            Super Panelist Login
                         </Title>
                         <Form
                             form={loginForm}
@@ -64,7 +64,7 @@ const SuperPanelistLogin: React.FC = () => {
                             layout="vertical"
                             autoComplete="off"
                             requiredMark={false}
-                        >{superPLoginFields.map(renderFormField)}
+                        >    {superPLoginFields.map((field) => renderFormField(field))}
                             <Form.Item>
                                 <Button
                                     type="primary"

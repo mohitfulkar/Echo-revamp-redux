@@ -70,7 +70,7 @@ export const IconCardComponent: React.FC<CardComponentProps> = ({ labels, data, 
 
                         {/* Other Fields */}
                         <div className="space-y-2">
-                            {otherFields.map((field, fieldIndex) => (
+                            {otherFields.map((field) => (
                                 <div
                                     key={field.key}
                                     className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
@@ -110,12 +110,6 @@ export const IconCardComponent: React.FC<CardComponentProps> = ({ labels, data, 
                         {/* Bottom Accent Line */}
                         <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
-                        {/* Card Number Badge */}
-                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-white text-xs font-bold">
-                                {index + 1}
-                            </span>
-                        </div>
                     </div>
                 );
             })}

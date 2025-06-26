@@ -11,17 +11,33 @@ const ExpertiseSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      trim: true,
       default: "",
     },
-    isActive: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
     timestamps: true,
   }
 );
+
+// Auto-update updatedAt on every save
+ExpertiseSchema.pre("save", function (next) {
+  this.updatedAt = new Date();
+  next();
+});
 
 const Expertise = mongoose.model("Expertise", ExpertiseSchema);
 export default Expertise;

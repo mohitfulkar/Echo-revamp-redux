@@ -16,6 +16,21 @@ export const categoryService = {
     });
     return response.data;
   },
+  update: async (parentKey: string, id: string, payload: any) => {
+    const response = await axios.put(
+      `${CATEGORY_API}/${parentKey}/${id}`,
+      payload
+    );
+    return response.data;
+  },
+  updateBase: async (id: string, payload: any) => {
+    const response = await axios.put(`${CATEGORY_API}/${id}`, payload);
+    return response.data;
+  },
+  delete: async (parentKey: string, id: string) => {
+    const response = await axios.delete(`${CATEGORY_API}/${parentKey}/${id}`);
+    return response.data;
+  },
 };
 
 export const expertiseService = {
@@ -29,6 +44,16 @@ export const expertiseService = {
     });
     return response.data;
   },
+
+  updateBase: async (id: string, payload: any) => {
+    const response = await axios.put(`${EXPERTISE_API}/${id}`, payload);
+    return response.data;
+  },
+
+  delete: async (parentKey: string, id: string) => {
+    const response = await axios.delete(`${EXPERTISE_API}/${parentKey}/${id}`);
+    return response.data;
+  },
 };
 
 export const rsbService = {
@@ -40,6 +65,16 @@ export const rsbService = {
     const response = await axios.get(`${RSB_API}/${parentKey}`, {
       params: params || {},
     });
+    return response.data;
+  },
+
+  updateBase: async (id: string, payload: any) => {
+    const response = await axios.put(`${RSB_API}/${id}`, payload);
+    return response.data;
+  },
+
+  delete: async (parentKey: string, id: string) => {
+    const response = await axios.delete(`${RSB_API}/${parentKey}/${id}`);
     return response.data;
   },
 };

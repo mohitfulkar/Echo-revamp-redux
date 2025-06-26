@@ -80,6 +80,37 @@ export const createExpertise = createAsyncThunk<
     );
   }
 });
+export const updateExpertise = createAsyncThunk<
+  any,
+  { id: string; payload: any },
+  { rejectValue: string }
+>("expertise/updateExpertise", async ({ id, payload }, { rejectWithValue }) => {
+  try {
+    const response = await expertiseService.updateBase(id, payload);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Something went wrong"
+    );
+  }
+});
+export const deleteExpertise = createAsyncThunk<
+  any,
+  { parentKey: string; id: string },
+  { rejectValue: string }
+>(
+  "expertise/deleteExpertise",
+  async ({ parentKey, id }, { rejectWithValue }) => {
+    try {
+      const response = await expertiseService.delete(parentKey, id);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Something went wrong"
+      );
+    }
+  }
+);
 
 const expertiseSlice = createSlice({
   name: "expertise",
@@ -88,6 +119,8 @@ const expertiseSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<ExpertiseState>) => {
     addAsyncCaseHandlersExpertise(builder, getExpertise);
     addAsyncCaseHandlersExpertise(builder, createExpertise);
+    addAsyncCaseHandlersExpertise(builder, updateExpertise);
+    addAsyncCaseHandlersExpertise(builder, deleteExpertise);
   },
 });
 export default expertiseSlice.reducer;

@@ -4,7 +4,9 @@ import TextArea from "antd/es/input/TextArea";
 import { Option } from "antd/es/mentions";
 import type { FieldConfig } from "../models/FormConfigs";
 
-export const renderFormField = (field: FieldConfig) => {
+export const renderFormField = (field: FieldConfig, disabled = false) => {
+
+
     switch (field.type) {
         case "text":
         case "password":
@@ -20,6 +22,7 @@ export const renderFormField = (field: FieldConfig) => {
                         className="p"
                         placeholder={field.placeholder}
                         prefix={field.prefix}
+                        disabled={disabled}
                     />
                 </Form.Item>
             );
@@ -36,6 +39,7 @@ export const renderFormField = (field: FieldConfig) => {
                         rows={4}
                         className="p"
                         placeholder={field.placeholder}
+                        disabled={disabled}
                     />
                 </Form.Item>
             );
@@ -54,6 +58,7 @@ export const renderFormField = (field: FieldConfig) => {
                         style={{ width: "100%" }}
                         className="p"
                         placeholder={field.placeholder}
+                        disabled={disabled}
                     />
                 </Form.Item>
             );
@@ -68,8 +73,8 @@ export const renderFormField = (field: FieldConfig) => {
                     getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
                     rules={field.rules}
                 >
-                    <Upload name="image" listType="picture" beforeUpload={() => false}>
-                        <Button icon={<UploadOutlined />}>{field.placeholder}</Button>
+                    <Upload name="image" listType="picture" beforeUpload={() => false} disabled={disabled}>
+                        <Button icon={<UploadOutlined />} disabled={disabled}>{field.placeholder}</Button>
                     </Upload>
                 </Form.Item>
             );
@@ -82,12 +87,12 @@ export const renderFormField = (field: FieldConfig) => {
                     rules={field.rules}
                     label={<span className="p">{field.label}</span>}
                 >
-                    <Select placeholder={field.placeholder}>
+                    <Select placeholder={field.placeholder} disabled={disabled}>
                         {field.options?.map((opt) => {
                             const value = typeof opt === "string" ? opt : opt.value;
                             const label = typeof opt === "string" ? opt : opt.label ?? opt.value;
                             return (
-                                <Option key={value} value={value}>
+                                <Option key={value} value={value} disabled={disabled}>
                                     {label}
                                 </Option>
                             );
@@ -108,12 +113,13 @@ export const renderFormField = (field: FieldConfig) => {
                         mode="multiple"
                         placeholder={field.placeholder}
                         allowClear
+                        disabled={disabled}
                     >
                         {field.options?.map((opt) => {
                             const value = typeof opt === "string" ? opt : opt.value;
                             const label = typeof opt === "string" ? opt : opt.label ?? opt.value;
                             return (
-                                <Option key={value} value={value}>
+                                <Option key={value} value={value} disabled={disabled}>
                                     {label}
                                 </Option>
                             );
@@ -131,7 +137,7 @@ export const renderFormField = (field: FieldConfig) => {
                     rules={field.rules}
                     label={<span className="p">{field.label}</span>}
                 >
-                    <Checkbox>{field.placeholder}</Checkbox>
+                    <Checkbox disabled={disabled}>{field.placeholder}</Checkbox>
                 </Form.Item>
             );
 
@@ -144,7 +150,7 @@ export const renderFormField = (field: FieldConfig) => {
                     label={<span className="p">{field.label}</span>}
                     rules={field.rules}
                 >
-                    <Switch />
+                    <Switch disabled={disabled} />
                 </Form.Item>
             );
 
@@ -156,7 +162,7 @@ export const renderFormField = (field: FieldConfig) => {
                     label={<span className="p">{field.label}</span>}
                     rules={field.rules}
                 >
-                    <Checkbox.Group options={field.options || []} />
+                    <Checkbox.Group options={field.options || []} disabled={disabled} />
                 </Form.Item>
             );
 
@@ -173,6 +179,7 @@ export const renderFormField = (field: FieldConfig) => {
                         defaultValue={field.defaultValue ?? 30}
                         min={field.min ?? 0}
                         max={field.max ?? 100}
+                        disabled={disabled}
                     />
                 </Form.Item>
             );

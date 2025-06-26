@@ -39,7 +39,7 @@ const SocialMediaForm: React.FC<StepFormProps> = ({ onBack, stepKey, onNext }) =
         <>
             <Form layout="vertical" form={form} >
                 <div className='grid grid-cols-2 gap-3'>
-                    {socialMediaFormFields.map(renderFormField)}
+                    {socialMediaFormFields.map((field) => renderFormField(field))}
                 </div>
                 <div className='flex justify-between mt-6'>
                     <CustomButton label='Cancel' className='w-[30%]' onClick={onBack}></CustomButton>

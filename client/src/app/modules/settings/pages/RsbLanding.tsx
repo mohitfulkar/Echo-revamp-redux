@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../../../core/components/SearchBar';
 import CustomButton from '../../../core/components/CustomButton';
-import { CardComponent } from '../../../core/components/CardComponent';
 import type { CardFields } from '../../../core/models/sharedComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../store';
@@ -10,9 +9,10 @@ import { categoryFormFields } from '../constants/FormFields';
 import { showToast } from '../../../core/service/ToastService';
 import { PAGINATION } from '../../../core/constants/pagination';
 import { Pagination } from 'antd';
-import { createRsb, getRsb } from '../features/rsbSlices';
+import { createRsb, getRsb, updateRsb } from '../features/rsbSlices';
 import { IconCardComponent } from '../../../core/components/IconCardComponent';
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, EyeOutlined } from '@ant-design/icons';
+import ViewModal from '../../../core/components/ViewModal';
 
 export interface CardDataItem {
     name: string;
@@ -27,7 +27,9 @@ const RsbLanding: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [searchValue, setSearchValue] = useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(PAGINATION.pageIndex);
+    const [oldItem, setOldItem] = useState<any>(null);
 
     const { data: rsbData } = useSelector((state: RootState) => state.rsb);
 
@@ -35,18 +37,29 @@ const RsbLanding: React.FC = () => {
         dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit, searchValue: searchValue } }));
     };
 
-
     const handleFormSubmit = async (formValues: any) => {
-
-        const resultAction = await dispatch(
-            createRsb({ parentKey: '', payload: formValues })
-        );
-        if (createRsb.fulfilled.match(resultAction)) {
-            showToast.success('Responsibility created successfully');
-            dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
-            setIsModalOpen(false);
+        if (oldItem) {
+            // TODO: Implement updateRsb dispatch here if you have an updateRsb thunk
+            // Example:
+            const resultAction = await dispatch(updateRsb({ id: oldItem.id, payload: formValues }));
+            if (updateRsb.fulfilled.match(resultAction)) {
+                showToast.success('Responsibility updated successfully');
+                onModalClose()
+                dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
+            } else {
+                showToast.error(resultAction.payload || 'Failed to update Responsibility');
+            }
         } else {
-            showToast.error(resultAction.payload || 'Failed to create Responsibility');
+            const resultAction = await dispatch(
+                createRsb({ parentKey: '', payload: formValues })
+            );
+            if (createRsb.fulfilled.match(resultAction)) {
+                showToast.success('Responsibility created successfully');
+                dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
+                onModalClose()
+            } else {
+                showToast.error(resultAction.payload || 'Failed to create Responsibility');
+            }
         }
     };
 
@@ -71,20 +84,48 @@ const RsbLanding: React.FC = () => {
         },
         {
             label: "Status",
-            key: "statusDisplay",
+            key: "status",
             type: "status",
             icon: <CheckCircleOutlined />, // You can swap with another status-representing icon if desired
         },
     ];
 
-    const handleAction = () => (action: string, record: any) => {
-        if (action === "view") {
-            console.log("Viewing", record);
-        } else if (action === "edit") {
-            console.log("Editing", record);
-        } else if (action === "delete") {
-            console.log("Deleting", record);
+    const viewFields: CardFields[] = [
+        { key: 'name', label: 'Responsibility Name', icon: <CheckCircleOutlined /> },
+        { label: 'Description', key: 'description', icon: <EyeOutlined /> },
+        { label: 'Status', key: 'status', type: 'status', icon: <CheckCircleOutlined /> },
+        { label: 'Created Date', key: 'createdDate', icon: <CalendarOutlined /> },
+        { label: 'Created Time', key: 'createdTime', icon: <ClockCircleOutlined /> },
+        { label: 'Last Updated Date', key: 'updatedDate', icon: <CalendarOutlined /> },
+        { label: 'Last Updated Time', key: 'updatedTime', icon: <ClockCircleOutlined /> },
+    ];
+
+    const onView = (item: any) => {
+        setIsViewModalOpen(true);
+        setOldItem(item);
+    };
+
+    const onEdit = (item: any) => {
+        setIsModalOpen(true);
+        setOldItem(item);
+    };
+
+    const handleAction = (action: string, item: any) => {
+        switch (action) {
+            case 'edit':
+                onEdit(item);
+                break;
+            case 'view':
+                onView(item);
+                break;
+            // Add delete if needed
         }
+    };
+
+    const onModalClose = () => {
+        setIsModalOpen(false)
+        setIsViewModalOpen(false)
+        setOldItem(null);
     }
 
     return (
@@ -118,10 +159,22 @@ const RsbLanding: React.FC = () => {
             {isModalOpen && (
                 <FormModal
                     formFields={categoryFormFields}
-                    title="Add Responsibility"
+                    title={oldItem ? 'Edit Responsibility' : 'Add Responsibility'}
                     open={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
+                    onClose={onModalClose}
                     onSubmit={handleFormSubmit}
+                    initialValues={oldItem}
+                    disabledFields={oldItem ? ['name'] : []}
+                />
+            )}
+
+            {isViewModalOpen && (
+                <ViewModal
+                    open={isViewModalOpen}
+                    onClose={onModalClose}
+                    fields={viewFields}
+                    data={oldItem}
+                    title="View Responsibility"
                 />
             )}
         </>

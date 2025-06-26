@@ -13,15 +13,11 @@ const categorySchema = new mongoose.Schema({
     trim: true,
   },
 
-  image: {
-    type: String, // Optional: thumbnail or banner for the category
-    default: "",
+  status: {
+    type: String,
+    trim: true,
+    required: true,
   },
-
-  isActive: {
-    type: Boolean,
-  },
-
   createdAt: {
     type: Date,
     default: Date.now,

@@ -4,7 +4,7 @@ import { renderFormField } from '../../../../core/components/FormTemplate'
 import CustomButton from '../../../../core/components/CustomButton'
 import type { StepFormProps } from '../../../../core/models/sharedComponent'
 import { Form } from 'antd'
-import { resetAllFormData, resetFormData, setStepData } from '../../../../core/features/multiStepStateReducer'
+import { resetAllFormData, setStepData } from '../../../../core/features/multiStepStateReducer'
 import { store, type AppDispatch, type RootState } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { createPanelists } from '../../features/userSlices'
@@ -53,7 +53,7 @@ const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
     return (
         <>
             <Form layout="vertical" form={form} > <div className='grid grid-cols-2 gap-3'>
-                {uploadFormFields.map(renderFormField)}
+                {uploadFormFields.map((field) => renderFormField(field))}
             </div>
                 <div className='flex justify-between mt-6'>
                     <CustomButton label='Cancel' className='w-[30%]' onClick={onBack}></CustomButton>

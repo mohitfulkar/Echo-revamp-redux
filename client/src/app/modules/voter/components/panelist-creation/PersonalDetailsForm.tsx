@@ -41,7 +41,7 @@ const PersonalDetailsForm: React.FC<StepFormProps> = ({ stepKey, onNext }) => {
         <>
             <Form layout="vertical" form={form}>
                 <div className='grid grid-cols-2 gap-3'>
-                    {personalDetailsFormFields.map(renderFormField)}
+                    {personalDetailsFormFields.map((field) => renderFormField(field))}
                 </div>
 
                 <div className='flex justify-between mt-6'>

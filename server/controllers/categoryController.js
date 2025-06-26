@@ -1,4 +1,6 @@
 import Category from "../models/Category.js";
+import { buildSearchFilter } from "../routes/queryUtils.js";
+import { createDocumentService } from "../services/CRUDService.js";
 import {
   formatTimestampToDate,
   formatTimestampToTime,
@@ -9,29 +11,34 @@ import { sendResponse, sendServerError } from "../utils/response.js";
 // @desc Create a new category
 export const createCategory = async (req, res) => {
   try {
-    const { name, description } = req.body;
-    const image = req.file ? req.file.path : "";
+    const { name, description, status } = req.body;
 
-    // Check for duplicate name
-    const exists = await Category.findOne({ name });
-    if (exists) {
-      return sendResponse(
-        res,
-        false,
-        "Category with this name already exists",
-        409
-      );
+    const categoryData = {
+      name: name?.trim(),
+      description: description || "",
+      status: status,
+    };
+
+    const result = await createDocumentService({
+      model: Category,
+      data: categoryData,
+      uniqueFields: ["name"], // Check uniqueness on name field
+      successMessage: "Category created successfully",
+      duplicateMessage: "Category already exists",
+    });
+
+    if (result.success) {
+      return sendResponse(res, true, result.message, result.status, {
+        data: {
+          id: result.data._id,
+          name: result.data.name,
+          description: result.data.description,
+          status: result.data.status,
+        },
+      });
+    } else {
+      return sendResponse(res, false, result.message, result.status);
     }
-
-    const category = await Category.create({
-      name,
-      description,
-      image,
-    });
-
-    return sendResponse(res, true, "Category created successfully", 201, {
-      data: category,
-    });
   } catch (error) {
     console.error("Error creating category:", error);
     return sendServerError(res, "Internal server error", error);
@@ -47,7 +54,7 @@ export const getAllCategories = async (req, res) => {
 
     const filter = {};
     if (searchValue) {
-      Object.assign(filter, buildSearchFilter(searchValue, ["name"]));
+      Object.assign(filter, buildSearchFilter(searchValue, ["name", "status"]));
     }
 
     const total = await Category.countDocuments(filter);
@@ -66,14 +73,16 @@ export const getAllCategories = async (req, res) => {
           queryParams: req.query,
         }),
         categories: categories.map(
-          ({ name, description, image, createdAt, isActive }) => ({
-            name,
+          ({ _id, name, description, createdAt, status, updatedAt }) => ({
+            id: _id,
+            name: name,
             description,
-            image,
+            status,
             createdDate: formatTimestampToDate(createdAt),
+            updatedDate: formatTimestampToDate(updatedAt),
             createdTime: formatTimestampToTime(createdAt),
-            isActive,
-            statusDisplay: isActive ? "ACTIVE" : "INACTIVE",
+            updatedTime: formatTimestampToTime(updatedAt),
+            status,
           })
         ),
       },
@@ -103,14 +112,12 @@ export const getCategoryById = async (req, res) => {
 // @desc Update category
 export const updateCategory = async (req, res) => {
   try {
-    const { name, description, isActive } = req.body;
-    const image = req.file ? req.file.path : undefined;
+    const { name, description, status } = req.body;
 
     const updatedData = {
       ...(name && { name }),
       ...(description && { description }),
-      ...(typeof isActive !== "undefined" && { isActive }),
-      ...(image && { image }),
+      ...(status && { status }),
       updatedAt: new Date(),
     };
 
@@ -146,7 +153,9 @@ export const deleteCategory = async (req, res) => {
       return sendResponse(res, false, "Category not found", 404);
     }
 
-    return sendResponse(res, true, "Category deactivated successfully", 200);
+    return sendResponse(res, true, "Category deactivated successfully", 200, {
+      data: deleted,
+    });
   } catch (error) {
     console.error("Error deleting category:", error);
     return sendServerError(res, "Internal server error", error);

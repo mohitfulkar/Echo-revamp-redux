@@ -74,6 +74,35 @@ export const createCategory = createAsyncThunk<
     }
   }
 );
+export const updateCategory = createAsyncThunk<
+  any,
+  { id: string; payload: any },
+  { rejectValue: string }
+>("category/updateCategory", async ({ id, payload }, { rejectWithValue }) => {
+  try {
+    const response = await categoryService.updateBase(id, payload);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Something went wrong"
+    );
+  }
+});
+
+export const deleteCategory = createAsyncThunk<
+  any,
+  { parentKey: string; id: string },
+  { rejectValue: string }
+>("category/deleteCategory", async ({ parentKey, id }, { rejectWithValue }) => {
+  try {
+    const response = await categoryService.delete(parentKey, id);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Something went wrong"
+    );
+  }
+});
 
 const categorySlice = createSlice({
   name: "category",

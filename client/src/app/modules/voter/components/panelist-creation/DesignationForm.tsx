@@ -15,7 +15,7 @@ const DesignationForm: React.FC<StepFormProps> = ({ stepKey, onNext, onBack }) =
     const dispatch = useDispatch<AppDispatch>()
     const currentItem: string = 'designation'
     const savedData = useSelector((state: RootState) => state.multiStepState[currentItem])
-    const { items: categoryOptions } = useChoices('categories'); // ✅ Hook used correctly
+    const { items: categoryOptions } = useChoices('category'); // ✅ Hook used correctly
     const { items: designationOptions } = useChoices('designation');
     const { items: RsbOptions } = useChoices('rsb');
 
@@ -48,7 +48,7 @@ const DesignationForm: React.FC<StepFormProps> = ({ stepKey, onNext, onBack }) =
         <>
             <Form layout="vertical" form={form} >
                 <div className='grid grid-cols-2 gap-3'>
-                    {dynamicFields.map(renderFormField)}
+                    {dynamicFields.map((field) => renderFormField(field))}
                 </div>
                 <div className='flex justify-between mt-6'>
                     <CustomButton label='Cancel' className='w-[30%]' onClick={onBack}></CustomButton>

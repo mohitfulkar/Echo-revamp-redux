@@ -82,6 +82,36 @@ export const createRsb = createAsyncThunk<
   }
 });
 
+export const updateRsb = createAsyncThunk<
+  any,
+  { id: string; payload: any },
+  { rejectValue: string }
+>("rsb/updateRsb", async ({ id, payload }, { rejectWithValue }) => {
+  try {
+    const response = await rsbService.updateBase(id, payload);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Something went wrong"
+    );
+  }
+});
+
+export const deleteRsb = createAsyncThunk<
+  any,
+  { parentKey: string; id: string },
+  { rejectValue: string }
+>("rsb/deleteRsb", async ({ parentKey, id }, { rejectWithValue }) => {
+  try {
+    const response = await rsbService.delete(parentKey, id);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Something went wrong"
+    );
+  }
+});
+
 const rsbSlice = createSlice({
   name: "rsb",
   initialState,
@@ -89,6 +119,8 @@ const rsbSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<RsbState>) => {
     addAsyncCaseHandlersRsb(builder, getRsb);
     addAsyncCaseHandlersRsb(builder, createRsb);
+    addAsyncCaseHandlersRsb(builder, updateRsb);
+    addAsyncCaseHandlersRsb(builder, deleteRsb);
   },
 });
 export default rsbSlice.reducer;
