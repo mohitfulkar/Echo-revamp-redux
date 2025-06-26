@@ -16,10 +16,13 @@ export const categoryFormFields: FieldConfig[] = [
         rules: [{ required: false }],
     },
     {
-        name: "isActive",
-        label: "Is Active",
-        type: "switch", // ✅ updated from "slider" to "switch"
+        name: "status",
+        label: "Status",
+        placeholder: "Select status",
+        type: "select",
         rules: [{ required: false }],
+        options: ['ACTIVE', 'INACTIVE', 'EXPIRED', 'PENDING']
+
     },
 ];
 

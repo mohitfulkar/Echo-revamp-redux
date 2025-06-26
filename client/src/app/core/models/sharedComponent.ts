@@ -112,4 +112,5 @@ export interface FormModalProps {
   initialValues?: any;
   formFields: FieldConfig[];
   loading?: boolean;
+  disabledFields?: string[];
 }

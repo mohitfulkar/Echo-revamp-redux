@@ -1,7 +1,7 @@
 // models/AreaOfExpertise.js
 import mongoose from "mongoose";
 
-const ReponsibilitySchema = new mongoose.Schema(
+const ResponsibilitySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -11,11 +11,21 @@ const ReponsibilitySchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      trim: true,
       default: "",
     },
-    isActive: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
@@ -23,5 +33,11 @@ const ReponsibilitySchema = new mongoose.Schema(
   }
 );
 
-const Responsibility = mongoose.model("Responsibility", ReponsibilitySchema);
+// Auto-update updatedAt on every save
+ResponsibilitySchema.pre("save", function (next) {
+  this.updatedAt = new Date();
+  next();
+});
+
+const Responsibility = mongoose.model("Responsibility", ResponsibilitySchema);
 export default Responsibility;

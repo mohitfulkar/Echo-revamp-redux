@@ -41,7 +41,7 @@ const ContributionForm: React.FC<StepFormProps> = ({ stepKey, onBack, onNext }) 
     return (
         <>
             <Form layout="vertical" form={form}>
-                <div className="grid grid-cols-2 gap-3">{contributionFormFields.map(renderFormField)}</div>
+                <div className="grid grid-cols-2 gap-3">{contributionFormFields.map((field) => renderFormField(field))}</div>
 
                 <div className="flex justify-between mt-6">
                     <CustomButton label="Cancel" className="w-[30%]" onClick={onBack} />

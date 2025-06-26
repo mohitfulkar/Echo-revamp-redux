@@ -45,7 +45,7 @@ const ProfessionForm: React.FC<StepFormProps> = ({ stepKey, onNext, onBack }) =>
     return (
         <Form layout="vertical" form={form}>
             <div className="grid grid-cols-2 gap-3">
-                {dynamicFields.map(renderFormField)}
+                {dynamicFields.map((field) => renderFormField(field))}
             </div>
 
             <div className="flex justify-between mt-6">

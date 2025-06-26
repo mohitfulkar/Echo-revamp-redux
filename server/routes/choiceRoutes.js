@@ -9,7 +9,7 @@ import {
 } from "../controllers/choiceController.js";
 const router = express.Router();
 
-router.get("/categories", getCategories);
+router.get("/category", getCategories);
 router.get("/panelists", getPanelists);
 router.get("/expertise", getExpertises);
 router.get("/rsb", getRsb);

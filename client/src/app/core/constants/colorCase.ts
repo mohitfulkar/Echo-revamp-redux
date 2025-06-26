@@ -1,6 +1,6 @@
 // utils/colorPipe.ts
 export const getStatusColor = (status: string): string => {
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case "active":
       return "green";
     case "completed":
@@ -11,6 +11,8 @@ export const getStatusColor = (status: string): string => {
       return "red";
     case "expired":
       return "red";
+    case "pending":
+      return "orange";
     default:
       return "gray";
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Form } from 'antd';
 import { renderFormField } from './FormTemplate';
 import type { FormModalProps } from '../models/sharedComponent';
@@ -13,8 +13,16 @@ const FormModal: React.FC<FormModalProps> = ({
     formFields,
     initialValues = {},
     loading = false,
+    disabledFields = []
 }) => {
     const [form] = Form.useForm();
+
+    // Populate form when initialValues change
+    useEffect(() => {
+        if (open) {
+            form.setFieldsValue(initialValues);
+        }
+    }, [initialValues, open, form]);
 
     const handleFinish = (values: any) => {
         onSubmit(values);
@@ -37,10 +45,13 @@ const FormModal: React.FC<FormModalProps> = ({
                 initialValues={initialValues}
                 onFinish={handleFinish}
             >
-                {formFields.map(renderFormField)}
+                {formFields.map((field) =>
+                    renderFormField(field, disabledFields?.includes(field.name))
+                )}
             </Form>
         </Modal>
     );
 };
+
 
 export default FormModal;
