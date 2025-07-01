@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 });
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api", dashboardRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/poll", pollRoutes);
 app.use("/api/category", categoryRoutes);

@@ -43,7 +43,7 @@ const panelConfig = [
 const AdminDashboard: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const stats = useSelector((state: RootState) => state.dashboard.items);
-   
+
 
     useEffect(() => {
         if (!stats || Object.keys(stats).length === 0) {

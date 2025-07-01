@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   CATEGORY_API,
+  DESIGNATION_API,
   EXPERTISE_API,
   RSB_API,
 } from "../../../core/environment/environment.local";
@@ -75,6 +76,34 @@ export const rsbService = {
 
   delete: async (parentKey: string, id: string) => {
     const response = await axios.delete(`${RSB_API}/${parentKey}/${id}`);
+    return response.data;
+  },
+};
+
+export const designationService = {
+  create: async (parentKey: string, payload: any) => {
+    const response = await axios.post(
+      `${DESIGNATION_API}/${parentKey}`,
+      payload
+    );
+    return response.data;
+  },
+  getAll: async (parentKey: string, params?: {}) => {
+    const response = await axios.get(`${DESIGNATION_API}/${parentKey}`, {
+      params: params || {},
+    });
+    return response.data;
+  },
+
+  updateBase: async (id: string, payload: any) => {
+    const response = await axios.put(`${DESIGNATION_API}/${id}`, payload);
+    return response.data;
+  },
+
+  delete: async (parentKey: string, id: string) => {
+    const response = await axios.delete(
+      `${DESIGNATION_API}/${parentKey}/${id}`
+    );
     return response.data;
   },
 };

@@ -72,7 +72,7 @@ const PanelistSchema = new mongoose.Schema(
     // Assignment Information
     assignedCategory: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "categories",
+      ref: "Category",
     },
 
     areaOfResponsibility: [

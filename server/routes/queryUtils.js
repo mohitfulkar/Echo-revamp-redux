@@ -5,7 +5,6 @@
  * @returns {Object} - MongoDB filter with $or condition.
  */
 
-
 export const buildSearchFilter = (searchValue, fields) => {
   if (!searchValue || !fields.length) return {};
 

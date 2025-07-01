@@ -1,4 +1,4 @@
-import type { StepsProps } from "antd";
+import type { StepsProps, TablePaginationConfig } from "antd";
 import type { ReactNode } from "react";
 import type { FieldConfig } from "./FormConfigs";
 
@@ -6,7 +6,7 @@ export interface DataPanelProps {
   title: string;
   count: string;
   icon: React.ReactNode;
-  percentage: string; // e.g. "12%" or "-5%"
+  percentage?: string; // e.g. "12%" or "-5%"
 }
 
 export interface SearchBarProps {
@@ -40,7 +40,7 @@ export interface ColumnConfig {
 }
 
 export interface ActionType {
-  name: string;
+  icon: ReactNode;
   label: string;
   onClick: (row: DataType) => void;
 }
@@ -49,6 +49,9 @@ export interface ReusableTableProps {
   data: DataType[];
   columnsConfig: ColumnConfig[];
   actions?: ActionType[];
+  icon?: ReactNode;
+  pagination?: TablePaginationConfig;
+  rowKey?: string | number;
 }
 
 export interface SearchProps {

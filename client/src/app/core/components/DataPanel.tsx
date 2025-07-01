@@ -10,7 +10,7 @@ const DataPanel: React.FC<DataPanelProps> = ({
     icon,
     percentage,
 }) => {
-    const percentageValue = parseFloat(percentage.replace('%', ''));
+    const percentageValue = parseFloat((percentage ?? "0").replace('%', ''));
     const isPositive = percentageValue >= 0;
     const comparisonText = "vs last month";
 
@@ -29,20 +29,22 @@ const DataPanel: React.FC<DataPanelProps> = ({
             </div>
 
             {/* Percentage Change */}
-            <div className="flex items-center text-xs text-gray-500">
-                <span
-                    className={`text-[1rem] flex items-center font-medium mr-2 ${isPositive ? "text-green-600" : "text-red-600"
-                        }`}
-                >
-                    {isPositive ? (
-                        <ArrowUpOutlined className="mr-1" />
-                    ) : (
-                        <ArrowDownOutlined className="mr-1" />
-                    )}
-                    {Math.abs(percentageValue)}%
-                </span>
-                <span className="label ">{comparisonText}</span>
-            </div>
+            {percentage && (
+                <div className="flex items-center text-xs text-gray-500">
+                    <span
+                        className={`text-[1rem] flex items-center font-medium mr-2 ${isPositive ? "text-green-600" : "text-red-600"
+                            }`}
+                    >
+                        {isPositive ? (
+                            <ArrowUpOutlined className="mr-1" />
+                        ) : (
+                            <ArrowDownOutlined className="mr-1" />
+                        )}
+                        {Math.abs(percentageValue)}%
+                    </span>
+                    <span className="label ">{comparisonText}</span>
+                </div>
+            )}
         </div>
     );
 };
