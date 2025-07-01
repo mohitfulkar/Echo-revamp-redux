@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../store';
 import { setStepData } from '../../../../core/features/multiStepStateReducer';
+import { getUserRole } from '../../../../core/service/localStorageService';
 
 const PersonalDetailsForm: React.FC<StepFormProps> = ({ stepKey, onNext }) => {
     const currentItem: string = 'personalDetails'
@@ -37,6 +38,15 @@ const PersonalDetailsForm: React.FC<StepFormProps> = ({ stepKey, onNext }) => {
         }
     }
 
+
+    const handleNavigation = () => {
+        const role = getUserRole()
+        if (role === 'super-panelist') {
+            navigate("")
+        } else if (role === 'admin') {
+            navigate('/admin/manage-users')
+        }
+    }
     return (
         <>
             <Form layout="vertical" form={form}>
@@ -45,7 +55,7 @@ const PersonalDetailsForm: React.FC<StepFormProps> = ({ stepKey, onNext }) => {
                 </div>
 
                 <div className='flex justify-between mt-6'>
-                    <CustomButton label='Cancel' className='w-[30%]' onClick={() => navigate('/admin/manage-users')} />
+                    <CustomButton label='Cancel' className='w-[30%]' onClick={handleNavigation} />
                     <CustomButton label='Next' className='w-[30%]' type='primary' onClick={handleSubmit} />
                 </div>
             </Form>

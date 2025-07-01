@@ -1,4 +1,5 @@
 import { HttpStatus } from "../constants/statusCode.js";
+import Category from "../models/Category.js";
 import Panelist from "../models/Panelist.js";
 import SuperPanelist from "../models/SuperPanelist.js";
 import User from "../models/User.js";
@@ -13,12 +14,15 @@ export const fetchAllUsers = async (req, res) => {
     const { page, limit, skip } = getPaginationOptions(req.query);
     const { searchValue } = req.query;
     const filter = {};
-    if (searchValue) {
-      const regex = new RegExp(searchValue, "i"); // case-insensitive
-      filter.$or = [
-        { fullName: { $regex: regex } },
-        { email: { $regex: regex } },
-      ];
+    Object.assign(
+      filter,
+      buildSearchFilter(searchValue, ["fullName", "email"])
+    );
+    if (assignedCategory) {
+      filter.assignedCategory = {
+        $regex: req.query.assignedCategory,
+        $options: "i",
+      };
     }
     if (isVerified) {
       filter.isVerified = { $regex: req.query.isVerified, $options: "i" };
@@ -142,7 +146,9 @@ export const getPanelist = async (req, res) => {
   try {
     const baseUrl = `${req.protocol}://${req.get("host")}${req.path}`;
     const { page, limit, skip } = getPaginationOptions(req.query);
-    const { searchValue, category, status, authorized } = req.query;
+    const { searchValue, assignedCategory, status } = req.query;
+    console.log("assignedCategory", assignedCategory);
+    console.log("status", status);
 
     // Search across name, email, occupation, and expertise
     const filter = {};
@@ -158,54 +164,47 @@ export const getPanelist = async (req, res) => {
       );
     }
 
-    if (category) {
-      filter.category = category; // expecting category id
+    if (assignedCategory) {
+      filter.assignedCategory = assignedCategory; // expecting category id
     }
 
     if (status) {
       filter.status = status; // pending/approved/rejected
     }
 
-    if (typeof authorized !== "undefined") {
-      filter.authorizedToCreatePolls = authorized === "true";
-    }
-
     const total = await Panelist.countDocuments(filter);
     console.log("total", total);
-    const panelists = await Panelist.aggregate([
-      { $match: filter },
-      { $sort: { createdAt: -1 } },
-      { $skip: skip },
-      { $limit: limit },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "categoryInfo",
-        },
-      },
-      {
-        $unwind: { path: "$categoryInfo", preserveNullAndEmptyArrays: true },
-      },
-      {
-        $lookup: {
-          from: "polls",
-          localField: "_id",
-          foreignField: "createdBy",
-          as: "pollsCreated",
-        },
-      },
+    // Fetch panelists with assignedCategory populated
+    const panelists = await Panelist.find(filter)
+      .populate({ path: "assignedCategory", select: "name _id" })
+      .lean();
 
-      {
-        $project: {
-          __v: 0,
-          "categoryInfo.__v": 0,
-          "pollsCreated.__v": 0,
-          "pollsCreated.questions": 0, // omit large fields if needed
-        },
-      },
-    ]);
+    // For each panelist, fetch polls by createdBy (panelist _id), and questions by pollId
+    const panelistsWithDetails = await Promise.all(
+      panelists.map(async (panelist) => {
+        // Fetch polls created by this panelist
+        const polls = await (await import("../models/Poll.js")).default
+          .find({ createdBy: panelist._id })
+          .lean();
+        // For each poll, fetch questions
+        const pollsWithQuestions = await Promise.all(
+          polls.map(async (poll) => {
+            const questions = await (
+              await import("../models/Questions.js")
+            ).default
+              .find({ pollId: poll._id })
+              .lean();
+            return { ...poll, questions };
+          })
+        );
+        return {
+          ...panelist,
+          assignedCategory: panelist.assignedCategory, // already populated
+          polls: pollsWithQuestions,
+        };
+      })
+    );
+
     return sendResponse(res, true, "Panelists fetched successfully", 200, {
       data: {
         pagination: buildMeta({
@@ -215,7 +214,7 @@ export const getPanelist = async (req, res) => {
           baseUrl,
           queryParams: req.query,
         }),
-        panelists,
+        panelists: panelistsWithDetails,
       },
     });
   } catch (error) {

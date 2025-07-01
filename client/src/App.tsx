@@ -24,6 +24,7 @@ import PanelistLogin from "./app/modules/auth/pages/PanelistLogin";
 import SuperPanelistCreation from "./app/modules/voter/pages/SuperPanelistCreation";
 import PanelistCreation from "./app/modules/voter/pages/PanelistCreation";
 import SuperPSettingLanding from './app/modules/settings/pages/SuperPSettingLanding';
+import { authRoutes } from "./app/modules/auth/routes/routes";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -45,16 +46,12 @@ const App: React.FC = () => {
     >
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/login/super-panelist" element={<SuperPanelistLogin />} />
-          <Route path="/login/panelist" element={<PanelistLogin />} />
-
+          {authRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<VoterDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
-
             <Route path="/admin/polls" element={< PollLanding />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/manage-users" element={<VoterLanding />} />

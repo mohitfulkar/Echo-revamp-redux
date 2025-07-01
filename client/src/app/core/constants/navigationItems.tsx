@@ -11,7 +11,7 @@ import {
   FormOutlined,
   PieChartOutlined,
   QuestionCircleOutlined,
-  AppstoreOutlined,
+
 } from "@ant-design/icons";
 
 export interface NavigationItem {
@@ -76,9 +76,9 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
       label: "Category Panelist",
     },
     {
-      key: "/super-panelist/settings",
+      key: "/super-panelist/settings?tab=category",
       icon: <SettingOutlined />,
-      label: "Categories",
+      label: "Configuration",
     },
   ],
 };

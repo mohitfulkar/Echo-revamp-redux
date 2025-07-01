@@ -43,23 +43,23 @@ export const IconCardComponent: React.FC<CardComponentProps> = ({ labels, data, 
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out">
+                            <div className="flex opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out">
                                 <button
-                                    className="p-2 rounded-lg hover:bg-blue-50 transition-colors duration-200 group/btn"
+                                    className="p-1 rounded-lg hover:bg-blue-50 transition-colors duration-200 group/btn"
                                     onClick={() => handleAction?.("view", item)}
                                     title="View Details"
                                 >
                                     <EyeOutlined className="text-blue-500 text-base group-hover/btn:text-blue-600 group-hover/btn:scale-110 transition-all duration-200" />
                                 </button>
                                 <button
-                                    className="p-2 rounded-lg hover:bg-green-50 transition-colors duration-200 group/btn"
+                                    className="p-1 rounded-lg hover:bg-green-50 transition-colors duration-200 group/btn"
                                     onClick={() => handleAction?.("edit", item)}
                                     title="Edit Item"
                                 >
                                     <EditOutlined className="text-green-500 text-base group-hover/btn:text-green-600 group-hover/btn:scale-110 transition-all duration-200" />
                                 </button>
                                 <button
-                                    className="p-2 rounded-lg hover:bg-red-50 transition-colors duration-200 group/btn"
+                                    className="p-1 rounded-lg hover:bg-red-50 transition-colors duration-200 group/btn"
                                     onClick={() => handleAction?.("delete", item)}
                                     title="Delete Item"
                                 >

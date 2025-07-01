@@ -8,6 +8,7 @@ import {
   deleteCategory,
 } from "../controllers/categoryController.js";
 import { validateCategoryCreation } from "../middlewares/categoryMiddleware.js";
+import { categorySummary } from "../controllers/dashboardController.js";
 
 const router = express.Router();
 

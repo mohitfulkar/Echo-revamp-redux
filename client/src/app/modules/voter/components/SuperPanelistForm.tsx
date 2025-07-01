@@ -47,7 +47,7 @@ const SuperPanelistForm: React.FC = () => {
         <>
             <Form layout="vertical" form={form} >
                 <div className='grid grid-cols-3 gap-3'>
-                    {superPanelistFields.map(renderFormField)}
+                    {superPanelistFields.map((field) => renderFormField(field))}
 
                 </div>
 
