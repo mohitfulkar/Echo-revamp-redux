@@ -13,6 +13,7 @@ import { createDesignation, getDesignation, updateDesignation } from '../feature
 import { IconCardComponent } from '../../../core/components/IconCardComponent';
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import ViewModal from '../../../core/components/ViewModal';
+import { incrementConfigsByStatus, updateConfigsByStatus } from '../../dashboard/features/dashboardSlices';
 
 export interface CardDataItem {
     name: string;
@@ -43,6 +44,7 @@ const DesignationLanding: React.FC = () => {
             if (updateDesignation.fulfilled.match(resultAction)) {
                 showToast.success('Designation updated successfully');
                 onModalClose();
+                dispatch(updateConfigsByStatus({ oldStatus: oldItem?.status, newStatus: formValues?.status }));
                 dispatch(getDesignation({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to update Designation');
@@ -53,8 +55,9 @@ const DesignationLanding: React.FC = () => {
             );
             if (createDesignation.fulfilled.match(resultAction)) {
                 showToast.success('Designation created successfully');
-                dispatch(getDesignation({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
                 onModalClose();
+                dispatch(incrementConfigsByStatus(formValues?.status))
+                dispatch(getDesignation({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to create Designation');
             }

@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createSlice,
   type ActionReducerMapBuilder,
+  type PayloadAction,
 } from "@reduxjs/toolkit";
 import { pollService } from "../../polls/service/pollService";
 import { addAsyncCaseHandlersDashboard } from "../../../core/utils/storeUtil";
@@ -81,19 +82,48 @@ export const getDesignationSummary = createAsyncThunk<
   any,
   void,
   { rejectValue: string }
->("dashboard/getDesignationSummary", async (_ButtonColorTypes, { rejectWithValue }) => {
-  try {
-    const response = await DashboardService.getAll("designation-summary");
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Action failed");
+>(
+  "dashboard/getDesignationSummary",
+  async (_ButtonColorTypes, { rejectWithValue }) => {
+    try {
+      const response = await DashboardService.getAll("designation-summary");
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Action failed");
+    }
   }
-});
+);
 
 const dashboardSlices = createSlice({
   name: "dashboard",
   initialState,
-  reducers: {},
+  reducers: {
+    incrementConfigsByStatus: (state, action: PayloadAction<string>) => {
+      const status = action.payload;
+      const summary = state.items;
+      if (summary && typeof summary[status] === "number") {
+        console.log("mohit");
+        summary[status] += 1;
+        summary.total += 1;
+      }
+    },
+    updateConfigsByStatus: (
+      state,
+      action: PayloadAction<{ oldStatus: string; newStatus: string }>
+    ) => {
+      const summary = state.items;
+      const { oldStatus, newStatus } = action.payload;
+
+      if (
+        summary &&
+        typeof summary[oldStatus] === "number" &&
+        typeof summary[newStatus] === "number"
+      ) {
+        summary[oldStatus] -= 1;
+        summary[newStatus] += 1;
+      }
+    },
+  },
   extraReducers: (builder: ActionReducerMapBuilder<DashboardState>) => {
     addAsyncCaseHandlersDashboard(builder, getAdminDashboard);
     addAsyncCaseHandlersDashboard(builder, getCategorySummary);
@@ -102,4 +132,7 @@ const dashboardSlices = createSlice({
     addAsyncCaseHandlersDashboard(builder, getDesignationSummary);
   },
 });
+
+export const { incrementConfigsByStatus, updateConfigsByStatus } =
+  dashboardSlices.actions;
 export default dashboardSlices.reducer;

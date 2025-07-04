@@ -13,6 +13,7 @@ import { createExpertise, getExpertise, updateExpertise } from '../features/expe
 import { IconCardComponent } from '../../../core/components/IconCardComponent';
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, FileOutlined, TagsOutlined } from '@ant-design/icons';
 import ViewModal from '../../../core/components/ViewModal';
+import { incrementConfigsByStatus, updateConfigsByStatus } from '../../dashboard/features/dashboardSlices';
 
 export interface CardDataItem {
     name: string;
@@ -46,6 +47,8 @@ const ExpertiseLanding: React.FC = () => {
             if (updateExpertise.fulfilled.match(resultAction)) {
                 showToast.success('Expertise updated successfully');
                 onModalClose()
+                dispatch(updateConfigsByStatus({ oldStatus: oldItem?.status, newStatus: formValues?.status }));
+
                 dispatch(getExpertise({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to update category');
@@ -58,6 +61,7 @@ const ExpertiseLanding: React.FC = () => {
             if (createExpertise.fulfilled.match(resultAction)) {
                 showToast.success('Expertise created successfully');
                 setIsModalOpen(false);
+                dispatch(incrementConfigsByStatus(formValues?.status))
                 dispatch(getExpertise({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to create category');
@@ -65,6 +69,9 @@ const ExpertiseLanding: React.FC = () => {
         }
     };
 
+    const updateDashboardState = () => {
+
+    }
     useEffect(() => {
         dispatch(getExpertise({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
     }, [dispatch, currentPage]);
