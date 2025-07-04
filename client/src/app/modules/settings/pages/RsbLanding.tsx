@@ -13,6 +13,7 @@ import { createRsb, getRsb, updateRsb } from '../features/rsbSlices';
 import { IconCardComponent } from '../../../core/components/IconCardComponent';
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import ViewModal from '../../../core/components/ViewModal';
+import { incrementConfigsByStatus, updateConfigsByStatus } from '../../dashboard/features/dashboardSlices';
 
 export interface CardDataItem {
     name: string;
@@ -45,6 +46,7 @@ const RsbLanding: React.FC = () => {
             if (updateRsb.fulfilled.match(resultAction)) {
                 showToast.success('Responsibility updated successfully');
                 onModalClose()
+                dispatch(updateConfigsByStatus({ oldStatus: oldItem?.status, newStatus: formValues?.status }));
                 dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to update Responsibility');
@@ -55,8 +57,9 @@ const RsbLanding: React.FC = () => {
             );
             if (createRsb.fulfilled.match(resultAction)) {
                 showToast.success('Responsibility created successfully');
-                dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
                 onModalClose()
+                dispatch(incrementConfigsByStatus(formValues?.status))
+                dispatch(getRsb({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to create Responsibility');
             }

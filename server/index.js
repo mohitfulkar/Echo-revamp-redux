@@ -1,11 +1,11 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
-import { config } from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import pollRoutes from "./routes/pollRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import panelistRoute from "./routes/panelistRoute.js";
+import superPRoutes from "./routes/superPRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import choiceRoutes from "./routes/choiceRoutes.js";
 import expertiseRoutes from "./routes/expertiseRoutes.js";
@@ -13,16 +13,13 @@ import reponsibilityRoutes from "./routes/reponsibilityRoutes.js";
 import designationRoutes from "./routes/designationRoutes.js";
 import { HttpStatus } from "./constants/statusCode.js";
 import { logger } from "./middlewares/logger.js";
+import connectDB from "./database/db.js";
 
 // Initialize express app
 const app = express();
 
 // Connect to MongoDB
-mongoose
-  .connect(config.mongodb.uri)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
-
+connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -41,6 +38,8 @@ app.use((err, req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/users", panelistRoute);
+app.use("/api/users", superPRoutes);
 app.use("/api/poll", pollRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/choices", choiceRoutes);

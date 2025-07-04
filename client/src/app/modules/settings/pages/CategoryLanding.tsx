@@ -13,6 +13,7 @@ import { Pagination } from 'antd';
 import { IconCardComponent } from '../../../core/components/IconCardComponent';
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, FileOutlined, TagsOutlined, } from '@ant-design/icons';
 import ViewModal from '../../../core/components/ViewModal';
+import { incrementConfigsByStatus, updateConfigsByStatus } from '../../dashboard/features/dashboardSlices';
 
 export interface CardDataItem {
     name: string;
@@ -48,6 +49,7 @@ const CategoryLanding: React.FC = () => {
             if (updateCategory.fulfilled.match(resultAction)) {
                 showToast.success('Category updated successfully');
                 onModalClose()
+                dispatch(updateConfigsByStatus({ oldStatus: oldItem?.status, newStatus: formValues?.status }));
                 dispatch(getCategory({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to update category');
@@ -60,6 +62,7 @@ const CategoryLanding: React.FC = () => {
             if (createCategory.fulfilled.match(resultAction)) {
                 showToast.success('Category created successfully');
                 setIsModalOpen(false);
+                dispatch(incrementConfigsByStatus(formValues?.status))
                 dispatch(getCategory({ parentKey: '', params: { page: currentPage, limit: PAGINATION.limit } }));
             } else {
                 showToast.error(resultAction.payload || 'Failed to create category');
