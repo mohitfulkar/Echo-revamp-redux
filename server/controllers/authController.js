@@ -230,7 +230,7 @@ export const panelistLogin = async (req, res) => {
     }
 
     // 2. Check if the categoryId matches the panelist's assigned category
-    if (String(panelist.category) !== String(categoryId)) {
+    if (String(panelist.assignedCategory) !== String(categoryId)) {
       return sendResponse(
         res,
         false,
@@ -256,7 +256,7 @@ export const panelistLogin = async (req, res) => {
       );
     }
 
-    const isMatch = password === panelist.password;
+    const isMatch = bcrypt.compare(password, panelist.password);
     if (!isMatch) {
       return sendResponse(
         res,
