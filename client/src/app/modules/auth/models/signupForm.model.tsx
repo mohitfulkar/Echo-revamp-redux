@@ -125,7 +125,7 @@ export const panelistFields: FieldConfig[] = [
     type: "select",
     label: "Select Your Category",
     placeholder: "Select the Category",
-    optionsKey: "items",
+    options: []
   },
   {
     name: "email",

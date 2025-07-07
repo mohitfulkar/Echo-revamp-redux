@@ -6,10 +6,11 @@ import { Select } from "antd";
 import { TableComponent } from '../../../core/components/Table';
 import type { ActionType, ColumnConfig, DataType } from '../../../core/models/sharedComponent';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { getUsersByTab } from '../features/userSlices';
+import { getUsersByTab } from '../../voter/features/userSlices';
 import { PAGINATION } from '../../../core/constants/pagination';
 import { useChoices } from '../../../core/hooks/useChoices';
 import type { AppDispatch, RootState } from '../../../store';
+import { useNavigate } from 'react-router-dom';
 
 const PanelistLanding: React.FC = () => {
     const tab = 'panelists';
@@ -18,6 +19,7 @@ const PanelistLanding: React.FC = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(PAGINATION.pageIndex);
     const { items } = useChoices("category");
+    const navigate = useNavigate()
 
     // Get users from Redux
     const itemsByKey = useSelector((state: RootState) => state.users.itemsByKey);
@@ -80,11 +82,13 @@ const PanelistLanding: React.FC = () => {
         { title: 'Area of Expertise', dataIndex: 'areaOfExpertise' },
         { title: 'Status', dataIndex: 'status', type: 'status' },
     ], []);
-    const addItems = () => { }
+    const addItems = () => {
+        navigate("/super-panelist/panelist/add")
+    }
 
     return (
         <div>
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-3">
                 <h3 className="h3">Panelist Management</h3>
                 <CustomButton
                     label="Add Panelist"
@@ -94,6 +98,7 @@ const PanelistLanding: React.FC = () => {
                     loading={false}
                 />
             </div>
+
 
             <div className='flex justify-between items-center mt-4'>
                 <SearchBar

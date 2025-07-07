@@ -7,9 +7,9 @@ import { Form } from 'antd'
 import { resetAllFormData, setStepData } from '../../../../core/features/multiStepStateReducer'
 import { store, type AppDispatch, type RootState } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { createPanelists } from '../../features/userSlices'
 import { prepareFormDataPayload } from '../../../../core/service/FormService'
 import { useNavigate } from 'react-router-dom'
+import { createPanelists } from '../../../voter/features/userSlices'
 
 const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
     const [form] = Form.useForm();

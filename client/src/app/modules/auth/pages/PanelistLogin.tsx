@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../store";
 import { loginPanelist, resetAuthState } from "../features/authSlices";
-import SharedSelect from "../../../core/components/SharedSelect";
 import CustomButton from "../../../core/components/CustomButton";
 import { Form, Input, message } from "antd";
 import { panelistFields } from "../models/signupForm.model";
@@ -11,6 +10,8 @@ import { resetFields } from "../service/FormService";
 import { setActiveModule } from "../../../core/features/navigationSlices";
 import { useNavigate } from "react-router-dom";
 import { useChoices } from "../../../core/hooks/useChoices";
+import { renderFormField } from "../../../core/components/FormTemplate";
+import { applyFieldOptions } from "../../../core/service/FormService";
 
 const PanelistLogin: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>();
@@ -18,12 +19,16 @@ const PanelistLogin: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
 
-    const { items } = useChoices('categories')
-    console.log('items', items)
+    const { items: categoryOptions } = useChoices('category'); // ✅ Hook used correctly
+    const fieldOptionsMap: Record<string, any[]> = {
+        categoryId: categoryOptions,
+    };
+    const dynamicFields = applyFieldOptions(panelistFields, fieldOptionsMap);
 
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
+            setSelectedCategory(values?.categoryId)
 
             if (!selectedCategory) {
                 message.error("Please select both category and name.");
@@ -71,31 +76,7 @@ const PanelistLogin: React.FC = () => {
                     <p className="h4">Panelist Login</p>
 
                     <Form layout="vertical" form={form} className="mt-8 text-left">
-                        {panelistFields.map((field) => (
-                            <Form.Item
-                                key={field.name}
-                                name={field.name}
-                                label={field.label}
-                                rules={field.rules}
-                            >
-                                {field.type === "select" ? (
-                                    <SharedSelect
-                                        options={items}
-                                        placeholder={field.placeholder}
-                                        onChange={setSelectedCategory}
-                                        value={selectedCategory}
-                                    />
-                                ) : field.type === "password" ? (
-                                    <Input.Password
-                                        placeholder={field.placeholder}
-                                        prefix={field.prefix}
-                                    />
-                                ) : (
-                                    <Input placeholder={field.placeholder} prefix={field.prefix} />
-                                )}
-                            </Form.Item>
-                        ))}
-
+                        {dynamicFields.map((field) => renderFormField(field))}
                         <CustomButton
                             label="LOGIN"
                             className="w-full"

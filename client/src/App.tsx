@@ -7,24 +7,18 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ConfigProvider } from "antd";
-import Login from "./app/modules/auth/pages/Login";
-import SignUp from "./app/modules/auth/pages/SignUp";
 import VoterDashboard from "./app/modules/dashboard/pages/VoterDashboard";
 import AppLayout from "./app/core/layouts/AppLayout";
 import { useDispatch } from "react-redux";
 import { setActiveModule } from "./app/core/features/navigationSlices";
-import AdminLogin from "./app/modules/auth/pages/AdminLogin";
 import AdminDashboard from "./app/modules/dashboard/pages/AdminDashboard";
 import PollLanding from "./app/modules/polls/pages/PollLanding";
 import VoterLanding from "./app/modules/voter/pages/UserLanding";
-import SuperPanelistLogin from "./app/modules/auth/pages/SuperPanelistLogin";
-import SuperPDashboard from "./app/modules/dashboard/pages/SuperPDashboard";
-import PanelistLanding from "./app/modules/voter/pages/PanelistLanding";
-import PanelistLogin from "./app/modules/auth/pages/PanelistLogin";
-import SuperPanelistCreation from "./app/modules/voter/pages/SuperPanelistCreation";
-import PanelistCreation from "./app/modules/voter/pages/PanelistCreation";
-import SuperPSettingLanding from './app/modules/settings/pages/SuperPSettingLanding';
+import SuperPanelistCreation from "./app/modules/super-panelistx/pages/SuperPanelistCreation";
+import PanelistCreation from "./app/modules/panelistx/pages/PanelistCreation";
 import { authRoutes } from "./app/modules/auth/routes/routes";
+import { superPanelistRoutes } from "./app/modules/super-panelistx/routes/routes";
+import { panelistRoutes } from "./app/modules/panelistx/routes/routes";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -59,11 +53,14 @@ const App: React.FC = () => {
             <Route path="/admin/panelist/:step/:action" element={<PanelistCreation />} />
             <Route path="/admin/panelist/:step/:id/:action" element={<PanelistCreation />} />
 
-            {/* panelists url */}
-            < Route path="/super-panelist/dashboard" element={<SuperPDashboard />} />
-            <Route path="/super-panelist/panelists" element={<PanelistLanding />} />
-            <Route path="/super-panelist/settings" element={<SuperPSettingLanding />} />
 
+            {panelistRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+
+            {superPanelistRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
 
 
           </Route>
