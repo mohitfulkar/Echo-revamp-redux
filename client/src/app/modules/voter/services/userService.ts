@@ -26,4 +26,11 @@ export const userService = {
     });
     return response.data;
   },
+  update: async (parentKey: string, id: string, payload?: any) => {
+    const response = await axios.put(
+      `${USERS_URL}/${parentKey}/${id}`,
+      payload
+    );
+    return response.data;
+  },
 };

@@ -7,21 +7,43 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../store';
 import { setStepData } from '../../../../core/features/multiStepStateReducer';
 import type { StepFormProps } from '../../../../core/models/sharedComponent';
+import { useParams } from 'react-router-dom';
+import { getPanelistById } from '../../../voter/features/userSlices';
 
 const SocialMediaForm: React.FC<StepFormProps> = ({ onBack, stepKey, onNext }) => {
     const [form] = Form.useForm();
     const dispatch = useDispatch<AppDispatch>()
     const currentItem: string = 'socialMedia'
 
-
-
     const items = useSelector((state: RootState) => state.multiStepState[currentItem])
+    const { action, panelistId } = useParams<{ action?: string; panelistId?: string }>();
 
     useEffect(() => {
-        if (items) {
-            form.setFieldsValue(items)
+        if (items && Object.keys(items).length > 0) {
+            form.setFieldsValue(items);
+        } else if (action === "edit" && panelistId) {
+            getOldItems();
         }
-    }, [items, currentItem, form])
+    }, [items, action, panelistId, form]);
+
+    const getOldItems = async () => {
+        if (action === "edit" && panelistId) {
+            try {
+                const resultAction = await dispatch(getPanelistById({ id: panelistId }));
+                if (getPanelistById.fulfilled.match(resultAction)) {
+                    const data = resultAction.payload;
+                    if (data) {
+                        form.setFieldsValue(data);
+                    }
+                } else {
+                    console.error("Failed to fetch panelist details:", resultAction.payload);
+                }
+            } catch (error) {
+                console.error("Failed to fetch panelist details:", error);
+            }
+        }
+    };
+
     const handleSubmit = async () => {
         try {
             const payload = await form.validateFields();
@@ -29,12 +51,12 @@ const SocialMediaForm: React.FC<StepFormProps> = ({ onBack, stepKey, onNext }) =
                 stepKey: stepKey || '',
                 data: payload,
             }));
-            console.log('Payload:', payload);
             onNext(); // Proceed to the next step
         } catch (error) {
             console.error('Validation Failed:', error);
         }
     }
+
     return (
         <>
             <Form layout="vertical" form={form} >
@@ -46,10 +68,6 @@ const SocialMediaForm: React.FC<StepFormProps> = ({ onBack, stepKey, onNext }) =
                     <CustomButton label='Next' className='w-[30%]' type='primary' onClick={handleSubmit}></CustomButton>
                 </div>
             </Form>
-
-
-
-
         </>
     )
 }

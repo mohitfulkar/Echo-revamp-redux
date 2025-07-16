@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { uploadFormFields } from '../../../auth/models/FormFields'
 import { renderFormField } from '../../../../core/components/FormTemplate'
 import CustomButton from '../../../../core/components/CustomButton'
@@ -8,42 +8,75 @@ import { resetAllFormData, setStepData } from '../../../../core/features/multiSt
 import { store, type AppDispatch, type RootState } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { prepareFormDataPayload } from '../../../../core/service/FormService'
-import { useNavigate } from 'react-router-dom'
-import { createPanelists } from '../../../voter/features/userSlices'
+import { useNavigate, useParams } from 'react-router-dom'
+import { createPanelists, getPanelistById, } from '../../../voter/features/userSlices'
 
 const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
     const [form] = Form.useForm();
-    const dispatch = useDispatch<AppDispatch>()
-    const navigate = useNavigate()
-    const currentItem: string = 'upload'
-    const items = useSelector((state: RootState) => state.multiStepState[currentItem])
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    const [oldItems, setOldItems] = useState<any>();
+    const currentItem: string = 'upload';
+    const items = useSelector((state: RootState) => state.multiStepState[currentItem]);
+    const { action, panelistId } = useParams<{ action?: string; panelistId?: string }>();
+
+    // Helper: Convert stored URLs (string or string[]) to Ant Design preview format
+
+
+
     useEffect(() => {
-        if (items) {
-            form.setFieldsValue(items)
+        if (items && Object.keys(items).length > 0) {
+            form.setFieldsValue(items);
+        } else if (action === "edit" && panelistId) {
+            getOldItems();
         }
-    }, [items, currentItem, form])
+    }, [items, action, panelistId, form]);
+
+    const getOldItems = async () => {
+        if (action === "edit" && panelistId) {
+            try {
+                const resultAction = await dispatch(getPanelistById({ id: panelistId }));
+                if (getPanelistById.fulfilled.match(resultAction)) {
+                    const data = resultAction.payload;
+                    setOldItems(data);
+                } else {
+                    console.error("Failed to fetch panelist details:", resultAction.payload);
+                }
+            } catch (error) {
+                console.error("Failed to fetch panelist details:", error);
+            }
+        }
+    };
 
     const handleSubmit = async () => {
         try {
             const currentStepPayload = await form.validateFields();
+
             dispatch(
                 setStepData({
                     stepKey: stepKey || '',
                     data: currentStepPayload,
                 })
             );
+
             const latestSteps = Object.values(
-                (await (store.getState() as RootState)).multiStepState
+                (store.getState() as RootState).multiStepState
             );
             const mergedValues = latestSteps.reduce((acc, obj) => {
                 return { ...acc, ...obj };
             }, {});
-            const payload = prepareFormDataPayload(mergedValues)
+
+            // You can keep your prepareFormDataPayload as is, but ensure it
+            // handles both originFileObj and url in your upload files.
+            const payload = prepareFormDataPayload(mergedValues);
+            for (const [key, value] of payload.entries()) {
+                console.log(`${key}:`, value);
+            }
 
             const response = await dispatch(createPanelists(payload));
             if (createPanelists.fulfilled.match(response)) {
                 dispatch(resetAllFormData());
-                navigate('/admin/manage-users?tab=panelist')
+                navigate('/super-panelist/panelists');
             }
         } catch (error) {
             console.error('Validation or submission failed:', error);
@@ -52,17 +85,17 @@ const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
 
     return (
         <>
-            <Form layout="vertical" form={form} > <div className='grid grid-cols-2 gap-3'>
-                {uploadFormFields.map((field) => renderFormField(field))}
-            </div>
+            <Form layout="vertical" form={form}>
+                <div className='grid grid-cols-2 gap-3'>
+                    {uploadFormFields.map((field) => renderFormField(field))}
+                </div>
                 <div className='flex justify-between mt-6'>
                     <CustomButton label='Cancel' className='w-[30%]' onClick={onBack}></CustomButton>
                     <CustomButton label='Create Panelist' className='w-[30%]' type='primary' onClick={handleSubmit}></CustomButton>
-                </div></Form>
-
-
+                </div>
+            </Form>
         </>
-    )
-}
+    );
+};
 
-export default UploadForm
+export default UploadForm;

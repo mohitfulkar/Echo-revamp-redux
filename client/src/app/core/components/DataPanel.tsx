@@ -19,13 +19,13 @@ const DataPanel: React.FC<DataPanelProps> = ({
         >
             {/* Title and Icon */}
             <div className="flex justify-between items-start mb-2">
-                <h5 className="h6">{title}</h5>
+                <h5 className="p">{title}</h5>
                 <span className="text-blue-400 text-lg">{icon}</span>
             </div>
 
             {/* Count */}
             <div className="mb-2">
-                <p className="h4">{count}</p>
+                <p className="h3">{count}</p>
             </div>
 
             {/* Percentage Change */}

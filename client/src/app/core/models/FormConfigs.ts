@@ -15,6 +15,7 @@ export interface FieldConfig {
   step?: number;
   marks?: Record<number, string>;
   accept?: string;
+  multiple?: boolean;
   maxFileSizeMB?: number;
   type?:
     | "select"

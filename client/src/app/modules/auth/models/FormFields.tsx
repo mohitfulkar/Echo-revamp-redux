@@ -195,7 +195,7 @@ export const professionFormFields: FieldConfig[] = [
         rules: [{ required: true, message: "Please enter your occupation" }],
     },
     {
-        name: "areaOfExpertise",
+        name: "expertise",
         label: "Area of Expertise",
         type: "multi-select", // or "checkbox-group"
         placeholder: "Select expertise areas",
@@ -203,7 +203,7 @@ export const professionFormFields: FieldConfig[] = [
         options: [], // you can customize
     },
     {
-        name: "yearsOfExperience",
+        name: "experience",
         label: "Years of Experience",
         type: "number",
         placeholder: "Enter number of years",
@@ -215,7 +215,7 @@ export const professionFormFields: FieldConfig[] = [
 
 export const contributionFormFields: FieldConfig[] = [
     {
-        name: "contributionSummary",
+        name: "contribution",
         label: "Contribution Summary",
         type: "textarea",
         placeholder: "Describe your contributions in the field",
@@ -244,7 +244,7 @@ export const contributionFormFields: FieldConfig[] = [
 
 export const designationFormFields: FieldConfig[] = [
     {
-        name: "assignedCategory",
+        name: "category",
         label: "Assign Category",
         type: "select",
         placeholder: "Select category to assign",
@@ -253,7 +253,7 @@ export const designationFormFields: FieldConfig[] = [
         options: []
     },
     {
-        name: "areaOfResponsibility",
+        name: "rsb",
         label: "Area of Responsibility",
         type: "multi-select",
         placeholder: "Select specific areas (optional)",
@@ -263,7 +263,7 @@ export const designationFormFields: FieldConfig[] = [
 
     },
     {
-        name: "designationTitle",
+        name: "designation",
         label: "Designation Title",
         type: "select",
         placeholder: "e.g. Subject Matter Expert, Lead Reviewer",
@@ -291,6 +291,7 @@ export const uploadFormFields: FieldConfig[] = [
         type: "upload",
         accept: ".pdf,.jpg,.jpeg,.png",
         maxFileSizeMB: 5,
+        multiple: true,
         rules: [{ required: true, message: "Please upload your identity proof." }],
         placeholder: "Upload PDF or image file",
     },
@@ -300,6 +301,7 @@ export const uploadFormFields: FieldConfig[] = [
         type: "upload",
         accept: ".pdf,.jpg,.jpeg,.png",
         maxFileSizeMB: 5,
+        multiple: true,
         rules: [{ required: false, message: "Please upload your cerfication" }],
         placeholder: "Upload PDF or image file",
     },

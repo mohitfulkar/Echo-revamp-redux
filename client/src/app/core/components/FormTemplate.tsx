@@ -73,11 +73,21 @@ export const renderFormField = (field: FieldConfig, disabled = false) => {
                     getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
                     rules={field.rules}
                 >
-                    <Upload name="image" listType="picture" beforeUpload={() => false} disabled={disabled}>
-                        <Button icon={<UploadOutlined />} disabled={disabled}>{field.placeholder}</Button>
+                    <Upload
+                        name="image"
+                        listType="picture"
+                        beforeUpload={() => false}
+                        multiple={field.multiple}
+                        accept={field.accept}
+                        disabled={disabled}
+                    >
+                        <Button icon={<UploadOutlined />} disabled={disabled}>
+                            {field.placeholder}
+                        </Button>
                     </Upload>
                 </Form.Item>
             );
+
 
         case "select":
             return (
