@@ -34,6 +34,9 @@ app.use((err, req, res, next) => {
   }
   next(err);
 });
+
+app.use("/uploads", express.static("uploads"));
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);

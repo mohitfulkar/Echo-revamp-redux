@@ -15,3 +15,7 @@ export const buildSearchFilter = (searchValue, fields) => {
     })),
   };
 };
+
+export const getBaseURL = (req) => {
+  return `${req.protocol}://${req.get("host")}${req.path}`;
+};

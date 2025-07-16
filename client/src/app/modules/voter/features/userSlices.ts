@@ -93,6 +93,34 @@ export const createPanelists = createAsyncThunk<
     );
   }
 });
+export const getPanelistById = createAsyncThunk<
+  any[],
+  any,
+  { rejectValue: string }
+>("users/getPanelistById", async ({ id }, { rejectWithValue }) => {
+  try {
+    const response = await userService.getItemById("panelist", id);
+    return response.data; // assumes response.data holds the panelist object
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch panelist"
+    );
+  }
+});
+export const updatePanelist = createAsyncThunk<
+  any[],
+  any,
+  { rejectValue: string }
+>("users/updatePanelist", async ({ id, payload }, { rejectWithValue }) => {
+  try {
+    const response = await userService.update("panelist", id, payload); // assumes axios response
+    return response.data; // assumes response.data holds the updated panelist object
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to update panelist"
+    );
+  }
+});
 
 const userSlice = createSlice({
   name: "users",
@@ -110,6 +138,8 @@ const userSlice = createSlice({
     addAsyncCaseHandlersUser(builder, getPanelists);
     addAsyncCaseHandlersUser(builder, createSuperPanelists);
     addAsyncCaseHandlersUser(builder, createPanelists);
+    addAsyncCaseHandlersUser(builder, getPanelistById);
+    addAsyncCaseHandlersUser(builder, updatePanelist);
   },
 });
 export const { resetUsers } = userSlice.actions;

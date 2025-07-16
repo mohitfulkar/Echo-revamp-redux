@@ -85,18 +85,18 @@ export const validateCreatePanelist = [
   // Profession
   check("occupation").notEmpty().withMessage("Occupation is required"),
 
-  check("areaOfExpertise")
+  check("expertise")
     .isArray({ min: 1 })
     .withMessage("At least one area of expertise is required"),
 
-  check("yearsOfExperience")
+  check("experience")
     .notEmpty()
     .withMessage("Years of experience is required")
     .isNumeric()
     .withMessage("Years of experience must be a number"),
 
   // Contribution
-  check("contributionSummary")
+  check("contribution")
     .notEmpty()
     .withMessage("Contribution summary is required"),
 
@@ -108,17 +108,13 @@ export const validateCreatePanelist = [
   check("awards").optional().isString().withMessage("Awards must be a string"),
 
   // Designation
-  check("assignedCategory")
-    .notEmpty()
-    .withMessage("Assign Category is required"),
+  check("category").notEmpty().withMessage("Assign Category is required"),
 
-  check("designationTitle")
-    .notEmpty()
-    .withMessage("Designation Title is required"),
+  check("designation").notEmpty().withMessage("Designation Title is required"),
 
   check("assignedBy").notEmpty().withMessage("Assigned By is required"),
 
-  check("areaOfResponsibility")
+  check("rsb")
     .optional()
     .isArray()
     .withMessage("Area of Responsibility must be an array"),

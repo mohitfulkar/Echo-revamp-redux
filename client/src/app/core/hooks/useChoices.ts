@@ -10,6 +10,8 @@ export const useChoices = (parentKey: string) => {
     (state: RootState) => state.choices.choices[parentKey] || []
   );
 
+  console.log("items", items);
+
   const loading = useSelector((state: RootState) => state.choices.loading);
 
   useEffect(() => {

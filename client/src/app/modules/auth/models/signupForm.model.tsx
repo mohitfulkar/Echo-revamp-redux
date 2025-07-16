@@ -9,9 +9,6 @@ export interface FormValues {
 }
 
 
-
-
-
 export const formFields: FieldConfig[] = [
   {
     name: "fullName",
