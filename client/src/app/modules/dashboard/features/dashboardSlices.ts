@@ -117,7 +117,6 @@ const dashboardSlices = createSlice({
       const status = action.payload;
       const summary = state.items;
       if (summary && typeof summary[status] === "number") {
-        console.log("mohit");
         summary[status] += 1;
         summary.total += 1;
       }

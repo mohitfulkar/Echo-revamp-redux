@@ -54,7 +54,6 @@ const PersonalDetailsForm: React.FC<StepFormProps> = ({ stepKey, onNext }) => {
                 stepKey: stepKey || '',
                 data: payload,
             }))
-            console.log('Payload:', payload)
             onNext() // Proceed to the next step
         } catch (error) {
             console.error('Validation Failed:', error)

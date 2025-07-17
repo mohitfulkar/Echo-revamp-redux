@@ -25,28 +25,26 @@ export const getDetailById = async (model, id, fields = ["_id"]) => {
     : fields;
 
   const doc = await model.findById(id, projection).lean();
-  console.log("doc", doc);
   return doc;
 };
 
+export const getFileFieldData = (field) => {
+  const uploaded = uploadedFiles[field] || [];
+  const existing = [];
 
-   export const getFileFieldData = (field) => {
-      const uploaded = uploadedFiles[field] || [];
-      const existing = [];
-
-      const bodyField = req.body[field];
-      if (Array.isArray(bodyField)) {
-        bodyField.forEach(entry => {
-          try {
-            const parsed = typeof entry === 'string' ? JSON.parse(entry) : entry;
-            if (parsed?.url) {
-              existing.push(parsed.url);
-            }
-          } catch (err) {
-            console.warn(`Failed to parse file entry for ${field}`, entry);
-          }
-        });
+  const bodyField = req.body[field];
+  if (Array.isArray(bodyField)) {
+    bodyField.forEach((entry) => {
+      try {
+        const parsed = typeof entry === "string" ? JSON.parse(entry) : entry;
+        if (parsed?.url) {
+          existing.push(parsed.url);
+        }
+      } catch (err) {
+        console.warn(`Failed to parse file entry for ${field}`, entry);
       }
+    });
+  }
 
-      return [...existing, ...uploaded]; // Merge existing + new
-    };
+  return [...existing, ...uploaded]; // Merge existing + new
+};

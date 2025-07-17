@@ -39,7 +39,6 @@ const PanelistLogin: React.FC = () => {
                 email: values.email,
                 password: values.password,
             };
-            console.log('payload', payload)
 
             const response = await dispatch(loginPanelist(payload));
             if (loginPanelist.fulfilled.match(response)) {
@@ -56,7 +55,6 @@ const PanelistLogin: React.FC = () => {
                 showToast.error(response.payload || "");
             }
         } catch (err) {
-            console.log("Form validation failed", err);
             showToast.error("Something went wrong!");
         }
     };

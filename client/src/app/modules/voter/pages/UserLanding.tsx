@@ -52,7 +52,6 @@ const VoterLanding: React.FC = () => {
     };
 
     const handleMainClick = () => {
-        console.log("Main button clicked");
     };
 
     return (

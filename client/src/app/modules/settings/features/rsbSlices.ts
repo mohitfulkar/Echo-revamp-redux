@@ -56,7 +56,6 @@ export const getRsb = createAsyncThunk<
   { parentKey: string; params: any },
   { rejectValue: string }
 >("rsb/getRsb", async ({ parentKey, params }, thunkAPI) => {
-  console.log(params, parentKey);
   try {
     const response = await rsbService.getAll(parentKey, params);
     return response.data;

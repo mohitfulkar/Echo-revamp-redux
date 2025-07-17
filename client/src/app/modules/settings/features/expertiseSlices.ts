@@ -56,7 +56,6 @@ export const getExpertise = createAsyncThunk<
   { parentKey: string; params: any },
   { rejectValue: string }
 >("rsb/getExpertise", async ({ parentKey, params }, thunkAPI) => {
-  console.log(params, parentKey);
   try {
     const response = await expertiseService.getAll(parentKey, params);
     return response.data;

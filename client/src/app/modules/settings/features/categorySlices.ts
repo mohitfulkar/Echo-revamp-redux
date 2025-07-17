@@ -47,7 +47,6 @@ export const getCategory = createAsyncThunk<
   { parentKey: string; params: any },
   { rejectValue: string }
 >("rsb/getCategory", async ({ parentKey, params }, thunkAPI) => {
-  console.log(params, parentKey);
   try {
     const response = await categoryService.getAll(parentKey, params);
     return response.data;

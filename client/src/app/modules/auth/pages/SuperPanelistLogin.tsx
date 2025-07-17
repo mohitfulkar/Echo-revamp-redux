@@ -21,10 +21,8 @@ const SuperPanelistLogin: React.FC = () => {
         try {
             const values = await loginForm.validateFields(); // { password: '...' }
             const response = await dispatch(loginSuperPanelist(values));
-            console.log('response', response)
             if (loginSuperPanelist.fulfilled.match(response)) {
                 const { user } = response.payload;
-                console.log('user', user)
                 localStorage.setItem("user", JSON.stringify(user));
                 showToast.success("Super Panelist login successful!");
                 resetFields(loginForm);

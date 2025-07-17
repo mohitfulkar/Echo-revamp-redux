@@ -17,7 +17,6 @@ const SelectPanelist: React.FC = () => {
     const [secretKey, setSecretKey] = useState('');
     const { user } = useSelector((state: RootState) => state.auth);
 
-    console.log('secretKey', secretKey)
     useEffect(() => {
         if (categoryId) {
             dispatch(resetUsers()); // Clear stale users
@@ -49,10 +48,8 @@ const SelectPanelist: React.FC = () => {
             email: selectedPanelist?.email || '',
             password: secretKey.trim()
         }
-        console.log('payload', payload)
         const resultAction = await dispatch(loginPanelist(payload));
         if (loginPanelist.fulfilled.match(resultAction)) {
-            console.log('user', user)
             showToast.success(`Welcome ${selectedPanelist.name}`)
             localStorage.setItem('user', JSON.stringify(user.data.user))
             localStorage.setItem("activeModule", 'panelist')
