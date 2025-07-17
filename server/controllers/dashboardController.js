@@ -12,6 +12,7 @@ import {
 import { sendResponse, sendServerError } from "../utils/response.js";
 import Responsibility from "../models/Reponsibility.js";
 import Designation from "../models/Designation.js";
+import Panelist from "../models/Panelist.js";
 
 export const getDasboardItems = async (req, res) => {
   try {
@@ -154,6 +155,39 @@ export const designationSummary = async (req, res) => {
   try {
     const statuses = ["ACTIVE", "EXPIRED", "INACTIVE", "PENDING"];
     const counts = await Designation.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const summary = {};
+    let total = 0;
+    statuses.forEach((status) => {
+      const found = counts.find((c) => c._id === status);
+      summary[status] = found ? found.count : 0;
+      total += summary[status];
+    });
+    summary.total = total;
+    return sendResponse(
+      res,
+      true,
+      "Designation status summary fetched successfully",
+      HttpStatus.OK,
+      {
+        data: summary,
+      }
+    );
+  } catch (error) {
+    console.error("Error fetching designation summary:", error);
+    return sendServerError(res);
+  }
+};
+export const panelistSummary = async (req, res) => {
+  try {
+    const statuses = ["PENDING", "APPROVED", "REJECTED", "SUSPENDED"];
+    const counts = await Panelist.aggregate([
       {
         $group: {
           _id: "$status",

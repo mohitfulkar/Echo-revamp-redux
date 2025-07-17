@@ -21,11 +21,8 @@ const ProfessionForm: React.FC<StepFormProps> = ({ stepKey, onNext, onBack }) =>
 
     const currentItem = 'profession';
     const savedData = useSelector((state: RootState) => state.multiStepState[currentItem]);
-    const { itemsByKey } = useSelector((state: RootState) => state.users);
     const { action, panelistId } = useParams<{ action?: string; panelistId?: string }>();
     const { items: expertiseOptions } = useChoices('expertise');
-    console.log('itemsByKey', itemsByKey['users'])
-    console.log('expertiseOptions ', expertiseOptions)
     useEffect(() => {
         if (savedData && Object.keys(savedData).length > 0) {
             form.setFieldsValue(savedData);

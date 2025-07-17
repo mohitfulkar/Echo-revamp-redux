@@ -21,7 +21,11 @@ export function prepareFormDataPayload(data: Record<string, any>): FormData {
         if (Array.isArray(value)) {
             value.forEach((item) => {
                 if (item?.originFileObj) {
+                    // New file selected by user
                     formData.append(key, item.originFileObj);
+                } else if (item?.url) {
+                    // Prefilled file (already uploaded)
+                    formData.append(`${key}[]`, JSON.stringify({ url: item.url }));
                 } else if (typeof item === 'string') {
                     formData.append(`${key}[]`, item);
                 } else if (typeof item === 'object') {
@@ -29,6 +33,7 @@ export function prepareFormDataPayload(data: Record<string, any>): FormData {
                 }
             });
         }
+
 
         else if (typeof value === 'object' && !(value instanceof File)) {
             formData.append(key, JSON.stringify(value));
@@ -64,4 +69,17 @@ export const getUpdatedPayload = <T extends Record<string, any>>(original: T, up
     }
 
     return payload;
+};
+
+
+
+export const patchFilesData = (urls: string[] | string, field: string) => {
+    if (!urls) return [];
+    const arr = Array.isArray(urls) ? urls : [urls];
+    return arr.map((url, idx) => ({
+        uid: `${field}-${idx}`,
+        name: url.split('/').pop() || `${field}-${idx}`,
+        status: 'done',
+        url,
+    }));
 };

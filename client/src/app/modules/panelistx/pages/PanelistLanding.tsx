@@ -4,7 +4,7 @@ import CustomButton from '../../../core/components/CustomButton';
 import SearchBar from '../../../core/components/SearchBar';
 import { Select } from "antd";
 import { TableComponent } from '../../../core/components/Table';
-import type { ActionType, ColumnConfig, DataType } from '../../../core/models/sharedComponent';
+import type { ActionType, ColumnConfig, CrumbItem, DataType } from '../../../core/models/sharedComponent';
 import { EditOutlined, DeleteOutlined, BarChartOutlined } from '@ant-design/icons';
 import { getUsersByTab } from '../../voter/features/userSlices';
 import { PAGINATION } from '../../../core/constants/pagination';
@@ -12,6 +12,8 @@ import { useChoices } from '../../../core/hooks/useChoices';
 import type { AppDispatch, RootState } from '../../../store';
 import { useNavigate } from 'react-router-dom';
 import DataPanel from '../../../core/components/DataPanel';
+import { getPanelistStatusSummary } from '../../dashboard/features/dashboardSlices';
+import SharedBreadcrumb from '../../../core/components/SharedBreadCrumb';
 
 const PanelistLanding: React.FC = () => {
     const tab = 'panelists';
@@ -24,8 +26,19 @@ const PanelistLanding: React.FC = () => {
 
     // Get users from Redux
     const itemsByKey = useSelector((state: RootState) => state.users.itemsByKey);
-    const tabData = useMemo(() => itemsByKey[tab]?.data[tab] || [], [itemsByKey, tab]);
-    const paginationInfo = useMemo(() => itemsByKey[tab]?.data?.pagination || null, [itemsByKey, tab]);
+    const { items: dataPanelItems } = useSelector((state: RootState) => state.dashboard)
+    console.log('dataPanelItems', dataPanelItems)
+    const tabData = useMemo(() => {
+        const rawData = itemsByKey[tab]?.data[tab] || [];
+
+        return rawData.map((item: any) => ({
+            ...item,
+            expertise: item?.expertise.map((item: any) => item.name), // Example: add a custom key,
+            category: item?.category?.name,
+
+            // add more keys if needed
+        }));
+    }, [itemsByKey, tab]); const paginationInfo = useMemo(() => itemsByKey[tab]?.data?.pagination || null, [itemsByKey, tab]);
 
     // Fetch users on mount and when filters change
     useEffect(() => {
@@ -35,9 +48,10 @@ const PanelistLanding: React.FC = () => {
                 searchValue,
                 page: currentPage,
                 limit: PAGINATION.limit,
-                assignedCategory: selectedCategories,
+                category: selectedCategories,
             },
         }));
+        dispatch(getPanelistStatusSummary()); // <-- 
     }, [dispatch, tab, searchValue, currentPage, selectedCategories]);
 
     const handleEdit = useCallback((row: DataType) => {
@@ -73,13 +87,16 @@ const PanelistLanding: React.FC = () => {
             onClick: handleDelete,
         },
     ], [handleEdit, handleDelete]);
-
+    const breadcrumbItems: CrumbItem[] = [
+        { label: "Panelists" },
+    ];
     const columnsConfig: ColumnConfig[] = useMemo(() => [
         { title: 'Name', dataIndex: 'name' },
         { title: 'Email', dataIndex: 'email' },
         { title: 'Contact Number', dataIndex: 'contactNumber' },
         { title: 'Occupation', dataIndex: 'occupation' },
-        { title: 'Area of Expertise', dataIndex: 'areaOfExpertise' },
+        { title: 'Category', dataIndex: 'category' },
+        { title: 'Area of Expertise', dataIndex: 'expertise' },
         { title: 'Status', dataIndex: 'status', type: 'status' },
     ], []);
     const addItems = () => {
@@ -88,60 +105,46 @@ const PanelistLanding: React.FC = () => {
 
     const panelConfig = [
         {
-            title: "",
+            title: "Total",
             key: 'total',
             icon: <BarChartOutlined />,
 
         },
         {
-            title: '',
-            key: 'ACTIVE',
-            icon: <BarChartOutlined />,
-
-        },
-        {
-            title: '',
-            key: 'EXPIRED',
-            icon: <BarChartOutlined />,
-
-        },
-        {
-            title: '',
-            key: 'INACTIVE',
-            icon: <BarChartOutlined />,
-
-        },
-        {
-            title: '',
+            title: 'Pending',
             key: 'PENDING',
+            icon: <BarChartOutlined />,
+
+        },
+        {
+            title: 'Approved',
+            key: 'APPROVED',
+            icon: <BarChartOutlined />,
+
+        },
+        {
+            title: 'Rejected',
+            key: 'REJECTED',
+            icon: <BarChartOutlined />,
+
+        },
+        {
+            title: 'Suspended',
+            key: 'SUSPENDED',
             icon: <BarChartOutlined />,
 
         },
     ];
 
-    const data = [
-        {
-            PENDING: "FFFF",
-        },
-        {
-            INACTIVE: "FFFF",
-        },
-        {
-            EXPIRED: "FFFF",
-        },
-        {
-            ACTIVE: "FFFF",
-        },
-        {
-            total: "FFFF",
-        },
-    ]
+
     return (
         <div>
             <div className="flex justify-between mb-3">
                 <div>
+                    <SharedBreadcrumb items={breadcrumbItems} />
                     <h3 className="h3">Panelist Management</h3>
                     <p className='p'>Manage and organize panelists efficiently. Add, update, and monitor panelist profiles and their activity from a single place.</p>
+
                 </div>
                 <CustomButton
                     label="Add Panelist"
@@ -153,12 +156,12 @@ const PanelistLanding: React.FC = () => {
             </div>
             <div className='grid grid-cols-5 gap-3'>
                 {panelConfig.map((panel) => {
-                    const count = data[panel.key] ?? 0;
+                    const count = dataPanelItems[panel.key] ?? 0;
                     return (
                         <DataPanel
                             key={panel.key}
                             title={panel.title}
-                            count={count}
+                            count={count ?? 0}
                             icon={panel.icon}
                         />
                     );

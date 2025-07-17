@@ -26,7 +26,7 @@ const SuperPSettingLanding: React.FC = () => {
     { label: 'Designation', key: 'designation' },
   ];
   const breadcrumbItems: CrumbItem[] = [
-    { label: "Settings" },
+    { label: "Configuration" },
   ];
 
   const renderTabContent = () => {
@@ -47,8 +47,9 @@ const SuperPSettingLanding: React.FC = () => {
   return (
     <>
       <div>
-        <h4 className="h3">Configuration</h4>
         <SharedBreadcrumb items={breadcrumbItems} />
+        <h4 className="h3">Configuration</h4>
+
         <DashboardPanel />
         <SharedTabs
           tabs={TabItems}

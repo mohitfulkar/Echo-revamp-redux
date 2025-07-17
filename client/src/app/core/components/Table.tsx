@@ -4,6 +4,19 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { DataType, ReusableTableProps, ColumnConfig } from '../models/sharedComponent';
 import StatusTag from './StatusTag';
 
+// Helper to flatten array fields to comma-separated strings
+const flattenArrayFields = (data: DataType[]): DataType[] => {
+    return data.map((row) => {
+        const newRow: DataType = { ...row };
+        Object.keys(newRow).forEach((key) => {
+            if (Array.isArray(newRow[key])) {
+                newRow[key] = newRow[key].join(', ');
+            }
+        });
+        return newRow;
+    });
+};
+
 export const TableComponent: React.FC<ReusableTableProps> = ({
     data,
     columnsConfig,
@@ -11,6 +24,9 @@ export const TableComponent: React.FC<ReusableTableProps> = ({
     pagination,
     rowKey
 }) => {
+    // Flatten array fields in data
+    const processedData = flattenArrayFields(data);
+
     // Map columnsConfig to Ant Design columns
     const columns: ColumnsType<DataType> = [
         ...columnsConfig.map(({ title, dataIndex, type }: ColumnConfig) => ({
@@ -47,7 +63,7 @@ export const TableComponent: React.FC<ReusableTableProps> = ({
         <Table<DataType>
             rowKey={rowKey}
             columns={columns}
-            dataSource={data}
+            dataSource={processedData}
             pagination={pagination as TablePaginationConfig}
         />
     );

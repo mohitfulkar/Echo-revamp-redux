@@ -48,8 +48,9 @@ const DesignationForm: React.FC<StepFormProps> = ({ stepKey, onNext, onBack }) =
                     if (data) {
                         form.setFieldsValue({
                             ...data,
-                            assignedCategory: data?.assignedCategory?._id
-                        });
+                            category: data?.category?._id,
+                            responsibility: data?.responsibility
+                        })
                     }
                 } else {
                     console.error("Failed to fetch panelist details:", resultAction.payload);
