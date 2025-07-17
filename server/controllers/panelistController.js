@@ -150,7 +150,23 @@ export const getPanelistById = async (req, res) => {
         HttpStatus.NOT_FOUND
       );
     }
+    const expertiseData = await populateIdsWithDetails(
+      Expertise,
+      panelist.expertise,
+      ["_id", "name"]
+    );
 
+    const rsbData = await populateIdsWithDetails(
+      Responsibility,
+      panelist.responsibility,
+      ["_id", "name"]
+    );
+
+    const desginationData = await getDetailById(
+      Designation,
+      panelist?.designation,
+      ["name"]
+    );
     // Fetch polls created by this panelist and get only poll name and _id
     const polls = await Poll.find({ createdBy: panelist._id })
       .select("title _id")
@@ -166,16 +182,15 @@ export const getPanelistById = async (req, res) => {
           name: panelist.name,
           email: panelist.email,
           contactNumber: panelist.contactNumber,
-          password: panelist.password,
           occupation: panelist.occupation,
-          expertise: panelist.expertise,
+          expertise: expertiseData,
           experience: panelist.experience,
           contribution: panelist.contribution,
           publications: panelist.publications,
           awards: panelist.awards,
           category: panelist.category,
-          rsb: panelist.responsibility,
-          designation: panelist.designation,
+          rsb: rsbData,
+          designation: desginationData,
           assignedBy: panelist.assignedBy,
           linkedIn: panelist.linkedIn,
           twitter: panelist.twitter,

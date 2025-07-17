@@ -40,7 +40,7 @@ const SidebarNavigation: React.FC = () => {
   return (
     <Sider
       theme="light"
-      className="fixed left-0 top-0 z-50 border-r border-gray-200 bg-white shadow-md transition-all duration-300 ease-in-out"
+      className="h-screen fixed left-0 top-0 z-50 border-r border-gray-200 bg-white shadow-md transition-all duration-300 ease-in-out"
       trigger={null}
       collapsible
       collapsed={collapsed}

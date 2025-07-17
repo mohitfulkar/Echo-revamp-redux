@@ -5,7 +5,7 @@ import SearchBar from '../../../core/components/SearchBar';
 import { Select } from "antd";
 import { TableComponent } from '../../../core/components/Table';
 import type { ActionType, ColumnConfig, CrumbItem, DataType } from '../../../core/models/sharedComponent';
-import { EditOutlined, DeleteOutlined, BarChartOutlined } from '@ant-design/icons';
+import { BarChartOutlined } from '@ant-design/icons';
 import { getUsersByTab } from '../../voter/features/userSlices';
 import { PAGINATION } from '../../../core/constants/pagination';
 import { useChoices } from '../../../core/hooks/useChoices';
@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import DataPanel from '../../../core/components/DataPanel';
 import { getPanelistStatusSummary } from '../../dashboard/features/dashboardSlices';
 import SharedBreadcrumb from '../../../core/components/SharedBreadCrumb';
+import { Icons } from '../../../core/constants/Icon';
 
 const PanelistLanding: React.FC = () => {
     const tab = 'panelists';
@@ -60,6 +61,9 @@ const PanelistLanding: React.FC = () => {
     const handleDelete = useCallback((row: DataType) => {
         alert(`Delete clicked for ${row.name || 'Unknown Panelist'}`);
     }, []);
+    const handleView = useCallback((row: DataType) => {
+        navigate(`/super-panelist/panelists/${row?._id}/view`)
+    }, []);
 
     const handleCategoryChange = (value: string[]) => {
         setSelectedCategories(value);
@@ -76,12 +80,17 @@ const PanelistLanding: React.FC = () => {
 
     const actions: ActionType[] = useMemo(() => [
         {
-            icon: <EditOutlined />,
+            icon: Icons.view,
+            label: 'View',
+            onClick: handleView,
+        },
+        {
+            icon: Icons.edit,
             label: 'Edit',
             onClick: handleEdit,
         },
         {
-            icon: <DeleteOutlined />,
+            icon: Icons.delete,
             label: 'Delete',
             onClick: handleDelete,
         },
@@ -106,31 +115,31 @@ const PanelistLanding: React.FC = () => {
         {
             title: "Total",
             key: 'total',
-            icon: <BarChartOutlined />,
+            icon: Icons.barChart,
 
         },
         {
             title: 'Pending',
             key: 'PENDING',
-            icon: <BarChartOutlined />,
+            icon: Icons.barChart,
 
         },
         {
             title: 'Approved',
             key: 'APPROVED',
-            icon: <BarChartOutlined />,
+            icon: Icons.barChart,
 
         },
         {
             title: 'Rejected',
             key: 'REJECTED',
-            icon: <BarChartOutlined />,
+            icon: Icons.barChart,
 
         },
         {
             title: 'Suspended',
             key: 'SUSPENDED',
-            icon: <BarChartOutlined />,
+            icon: Icons.barChart,
 
         },
     ];
