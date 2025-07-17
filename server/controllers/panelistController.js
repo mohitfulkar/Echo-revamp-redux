@@ -232,7 +232,6 @@ export const createPanelist = async (req, res) => {
         uploadedFiles[field] = [];
       }
     }
-    console.log("uploadedFiles", uploadedFiles);
     // Expertise and responsibility might be arrays or single values
     const expertise = Array.isArray(req.body.expertise)
       ? req.body.expertise

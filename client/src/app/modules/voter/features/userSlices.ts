@@ -40,7 +40,6 @@ export const getUsersByTab = createAsyncThunk<
       default:
         throw new Error("Invalid tab name");
     }
-    console.log("tab", tab);
     return { tab, data: response.data }; // assume response.data holds the array/list
   } catch (error: any) {
     return rejectWithValue(
@@ -69,7 +68,6 @@ export const createSuperPanelists = createAsyncThunk<
   { rejectValue: string }
 >("users/createSuperPanelists", async (payload, { rejectWithValue }) => {
   try {
-    console.log("payload", payload);
     const response = await userService.create("super-panelists", payload); // assumes axios response
     return response.data; // make sure service returns `{ data: [...] }`
   } catch (error: any) {
@@ -84,7 +82,6 @@ export const createPanelists = createAsyncThunk<
   { rejectValue: string }
 >("users/createPanelists", async (payload, { rejectWithValue }) => {
   try {
-    console.log("payload", payload);
     const response = await userService.create("panelists", payload); // assumes axios response
     return response.data; // make sure service returns `{ data: [...] }`
   } catch (error: any) {

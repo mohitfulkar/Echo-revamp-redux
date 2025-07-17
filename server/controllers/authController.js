@@ -177,7 +177,6 @@ export const loginUser = async (req, res) => {
 
     // 2. Compare password
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log(`[Login] Password match status for ${email}:`, isMatch);
 
     if (!isMatch) {
       console.warn(`[Login] Incorrect password for email: ${email}`);
@@ -243,8 +242,6 @@ export const panelistLogin = async (req, res) => {
     if (!category) {
       return sendResponse(res, false, "Category not found", 404);
     }
-    console.log("panelist", panelist);
-    console.log("category", category);
 
     if (!panelist || !category) {
       return sendResponse(

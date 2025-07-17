@@ -25,7 +25,6 @@ const DashboardPanel: React.FC = () => {
     const { items, loading } = useSelector((state: RootState) => state.dashboard);
     type TabType = keyof TitlesMap;
     const tab = (getTabFromUrl() as TabType) || 'category';
-    console.log('tab', tab)
     const data = items || {}
 
     useEffect(() => {

@@ -5,12 +5,6 @@ import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-console.log("AWS Config:", {
-  key: process.env.AWS_ACCESS_KEY_ID,
-  secret: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {

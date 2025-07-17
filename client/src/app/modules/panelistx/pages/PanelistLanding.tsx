@@ -27,7 +27,6 @@ const PanelistLanding: React.FC = () => {
     // Get users from Redux
     const itemsByKey = useSelector((state: RootState) => state.users.itemsByKey);
     const { items: dataPanelItems } = useSelector((state: RootState) => state.dashboard)
-    console.log('dataPanelItems', dataPanelItems)
     const tabData = useMemo(() => {
         const rawData = itemsByKey[tab]?.data[tab] || [];
 
