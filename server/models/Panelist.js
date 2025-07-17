@@ -40,10 +40,10 @@ const PanelistSchema = new mongoose.Schema(
     designation: { type: String, required: true },
     assignedBy: { type: String, required: true },
 
-    photo: [{ type: String }],
+    photo: { type: String },
     identityProof: [{ type: String }],
     certification: [{ type: String }],
-    resume: [{ type: String }],
+    resume: { type: String },
 
     status: {
       type: String,
