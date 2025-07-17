@@ -7,20 +7,17 @@ import { Form } from 'antd'
 import { resetAllFormData, setStepData } from '../../../../core/features/multiStepStateReducer'
 import { store, type AppDispatch, type RootState } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { prepareFormDataPayload } from '../../../../core/service/FormService'
+import { patchFilesData, prepareFormDataPayload } from '../../../../core/service/FormService'
 import { useNavigate, useParams } from 'react-router-dom'
-import { createPanelists, getPanelistById, } from '../../../voter/features/userSlices'
+import { createPanelists, getPanelistById, updatePanelist, } from '../../../voter/features/userSlices'
 
 const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
     const [form] = Form.useForm();
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const [oldItems, setOldItems] = useState<any>();
     const currentItem: string = 'upload';
     const items = useSelector((state: RootState) => state.multiStepState[currentItem]);
     const { action, panelistId } = useParams<{ action?: string; panelistId?: string }>();
-
-    // Helper: Convert stored URLs (string or string[]) to Ant Design preview format
 
 
 
@@ -37,8 +34,13 @@ const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
             try {
                 const resultAction = await dispatch(getPanelistById({ id: panelistId }));
                 if (getPanelistById.fulfilled.match(resultAction)) {
-                    const data = resultAction.payload;
-                    setOldItems(data);
+                    const data = Array.isArray(resultAction.payload) ? resultAction.payload[0] : resultAction.payload;
+                    form.setFieldsValue({
+                        identityProof: patchFilesData(data?.identityProof, "identityProof"),
+                        resume: patchFilesData(data?.resume, "resume"),
+                        certification: patchFilesData(data?.certification, "certification"),
+                        photo: patchFilesData(data?.photo, "photo"),
+                    });
                 } else {
                     console.error("Failed to fetch panelist details:", resultAction.payload);
                 }
@@ -66,15 +68,21 @@ const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
                 return { ...acc, ...obj };
             }, {});
 
-            // You can keep your prepareFormDataPayload as is, but ensure it
-            // handles both originFileObj and url in your upload files.
+            // Prepare payload for API
             const payload = prepareFormDataPayload(mergedValues);
-            for (const [key, value] of payload.entries()) {
-                console.log(`${key}:`, value);
+
+            let response;
+            if (action === "edit" && panelistId) {
+                // Import updatePanelist from userSlices if not already
+                response = await dispatch(updatePanelist({ id: panelistId, payload: payload }));
+            } else {
+                response = await dispatch(createPanelists(payload));
             }
 
-            const response = await dispatch(createPanelists(payload));
-            if (createPanelists.fulfilled.match(response)) {
+            if (
+                (action === "edit" && response.meta && response.meta.requestStatus === "fulfilled") ||
+                (!action && createPanelists.fulfilled.match(response))
+            ) {
                 dispatch(resetAllFormData());
                 navigate('/super-panelist/panelists');
             }

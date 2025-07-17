@@ -16,7 +16,7 @@ export interface DashboardState {
 }
 
 const initialState: DashboardState = {
-  items: null,
+  items: {},
   loading: false,
   error: null,
   success: false,
@@ -93,6 +93,21 @@ export const getDesignationSummary = createAsyncThunk<
     }
   }
 );
+export const getPanelistStatusSummary = createAsyncThunk<
+  any,
+  void,
+  { rejectValue: string }
+>(
+  "dashboard/getPanelistStatusSummary",
+  async (_ButtonColorTypes, { rejectWithValue }) => {
+    try {
+      const response = await DashboardService.getAll("panelist-summary");
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Action failed");
+    }
+  }
+);
 
 const dashboardSlices = createSlice({
   name: "dashboard",
@@ -130,6 +145,7 @@ const dashboardSlices = createSlice({
     addAsyncCaseHandlersDashboard(builder, getExpertiseSummary);
     addAsyncCaseHandlersDashboard(builder, getRsbSummary);
     addAsyncCaseHandlersDashboard(builder, getDesignationSummary);
+    addAsyncCaseHandlersDashboard(builder, getPanelistStatusSummary);
   },
 });
 

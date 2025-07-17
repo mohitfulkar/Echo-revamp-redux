@@ -6,6 +6,7 @@ import {
   designationSummary,
   expertiseSummary,
   getDasboardItems,
+  panelistSummary,
   rsbSummary,
 } from "../controllers/dashboardController.js";
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get("/category-summary", categorySummary);
 router.get("/expertise-summary", expertiseSummary);
 router.get("/rsb-summary", rsbSummary);
 router.get("/designation-summary", designationSummary);
+router.get("/panelist-summary", panelistSummary);
 
 export default router;
