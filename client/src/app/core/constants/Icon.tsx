@@ -1,3 +1,4 @@
+// src/constants/iconConstants.tsx
 import {
     UserOutlined,
     MailOutlined,
@@ -21,10 +22,17 @@ import {
     BulbOutlined,
     BookOutlined,
     SearchOutlined,
-} from '@ant-design/icons';
+    DashboardOutlined,
+    SettingOutlined,
+    NotificationOutlined,
+    AuditOutlined,
+    CheckCircleOutlined,
+    FormOutlined,
+    PieChartOutlined,
+    QuestionCircleOutlined,
+    CheckSquareOutlined
+} from "@ant-design/icons";
 
-
-export const bulb = BulbOutlined
 export const Icons = {
     user: <UserOutlined />,
     mail: <MailOutlined />,
@@ -48,4 +56,13 @@ export const Icons = {
     bulb: <BulbOutlined />,
     book: <BookOutlined />,
     search: <SearchOutlined />,
+    dashboard: <DashboardOutlined />,
+    setting: <SettingOutlined />,
+    notification: <NotificationOutlined />,
+    audit: <AuditOutlined />,
+    checkCircle: <CheckCircleOutlined />,
+    form: <FormOutlined />,
+    pieChart: <PieChartOutlined />,
+    questionCircle: <QuestionCircleOutlined />,
+    tickCircle: <CheckSquareOutlined />,
 };

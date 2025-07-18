@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/panelist-creation/panelist-view/Header';
+import Header from '../components/panelist-view/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../store';
 import { getPanelistById } from '../../voter/features/userSlices';
 import { useParams, useSearchParams } from 'react-router-dom';
-import ContactInfoCard from '../components/panelist-creation/panelist-view/ContactInfoCard';
-import SocialMediaLinks from '../components/panelist-creation/panelist-view/SocialMediaLinks';
-import QuickStats from '../components/panelist-creation/panelist-view/QuickStats';
+import ContactInfoCard from '../components/panelist-view/ContactInfoCard';
+import SocialMediaLinks from '../components/panelist-view/SocialMediaLinks';
+import QuickStats from '../components/panelist-view/QuickStats';
 import SharedTabs from '../../../core/components/TabComponent';
-import type { TabConfig } from '../../../core/models/sharedComponent';
-import Overview from '../components/panelist-creation/panelist-view/Overview';
-import Documents from '../components/panelist-creation/panelist-view/Documents';
-import Gallery from '../components/panelist-creation/panelist-view/Gallery';
-import Achivement from '../components/panelist-creation/panelist-view/Achivement';
+import type { CrumbItem, TabConfig } from '../../../core/models/sharedComponent';
+import Overview from '../components/panelist-view/Overview';
+import Documents from '../components/panelist-view/Documents';
+import Achivement from '../components/panelist-view/Achivement';
+import SharedBreadcrumb from '../../../core/components/SharedBreadCrumb';
 
 const ViewPanelist: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -36,10 +36,14 @@ const ViewPanelist: React.FC = () => {
         { label: 'Documents', key: 'documents', children: <Documents items={items} /> },
         { label: 'Achivement', key: 'achivement', children: <Achivement items={items} /> },
     ];
-
+    const breadcrumbItems: CrumbItem[] = [
+        { label: "Panelist", href: "/super-panelist/panelists" },
+        { label: `${items?.name}` },
+    ];
 
     return (
         <>
+            <SharedBreadcrumb items={breadcrumbItems} showHome={false} />
             <Header
                 name={items?.name}
                 occupation={items?.occupation}

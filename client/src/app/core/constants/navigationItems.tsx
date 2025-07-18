@@ -1,23 +1,12 @@
 // src/constants/navigationItems.tsx
 import type { ReactNode } from "react";
-import {
-  DashboardOutlined,
-  UserOutlined,
-  SettingOutlined,
-  BarChartOutlined,
-  NotificationOutlined,
-  AuditOutlined,
-  CheckCircleOutlined,
-  FormOutlined,
-  PieChartOutlined,
-  QuestionCircleOutlined,
-
-} from "@ant-design/icons";
+import { Icons } from "./Icon";
 
 export interface NavigationItem {
   key: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   label: string;
+  children?: NavigationItem[]; // 👈 Add this line
 }
 export interface ModuleItem {
   key: string;
@@ -29,65 +18,73 @@ export type ModuleNavigationMap = Record<string, NavigationItem[]>;
 
 export const NAVIGATION_ITEMS: ModuleNavigationMap = {
   admin: [
-    { key: "/admin/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
-    { key: "/admin/manage-users", icon: <UserOutlined />, label: "Manage Users" },
-    { key: "/admin/polls", icon: <FormOutlined />, label: "Polls" },
-    { key: "/admin/audit-logs", icon: <AuditOutlined />, label: "Audit Logs" },
-    { key: "/admin/analytics", icon: <BarChartOutlined />, label: "Analytics" },
-    { key: "/admin/settings", icon: <SettingOutlined />, label: "Settings" },
-    {
-      key: "/notifications",
-      icon: <NotificationOutlined />,
-      label: "Notifications",
-    },
+    { key: "/admin/dashboard", icon: Icons.dashboard, label: "Dashboard" },
+    { key: "/admin/manage-users", icon: Icons.user, label: "Manage Users" },
+    { key: "/admin/polls", icon: Icons.form, label: "Polls" },
+    { key: "/admin/audit-logs", icon: Icons.audit, label: "Audit Logs" },
+    { key: "/admin/analytics", icon: Icons.barChart, label: "Analytics" },
+    { key: "/admin/settings", icon: Icons.setting, label: "Settings" },
+    { key: "/notifications", icon: Icons.notification, label: "Notifications" },
   ],
   panelist: [
-    { key: "/panelist/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
-    { key: "/my-polls", icon: <FormOutlined />, label: "My Polls" },
+    { key: "/panelist/dashboard", icon: Icons.dashboard, label: "Dashboard" },
+    {
+      key: "/panelist/panelist-onboarding",
+      icon: Icons.dashboard,
+      label: "Panelist Onboarding",
+      children: [
+        { key: "/panelist/onboarding/dashboard?tab=dashboard", icon: Icons.dashboard, label: "Dashboard" },
+        { key: "/panelist/onboarding/voting", icon: Icons.tickCircle, label: "Voting" },
+      ],
+    },
+    { key: "/my-polls", icon: Icons.form, label: "My Polls" },
     {
       key: "/panelist/poll-responses",
-      icon: <CheckCircleOutlined />,
+      icon: Icons.checkCircle,
       label: "Poll Responses",
     },
-    { key: "/panelist/analytics", icon: <PieChartOutlined />, label: "Analytics" },
+    { key: "/panelist/analytics", icon: Icons.pieChart, label: "Analytics" },
     {
-      key: "/panelist/notifications",
-      icon: <NotificationOutlined />,
+      key: "/panelist/notifications",s
+      icon: Icons.notification,
       label: "Notifications",
     },
   ],
   voter: [
-    { key: "/user", icon: <DashboardOutlined />, label: "Dashboard" },
+    { key: "/user", icon: Icons.dashboard, label: "Dashboard" },
     {
       key: "/user/available-polls",
-      icon: <FormOutlined />,
+      icon: Icons.form,
       label: "Available Polls",
     },
-    { key: "/user/my-votes", icon: <CheckCircleOutlined />, label: "My Votes" },
-    { key: "/user/results", icon: <BarChartOutlined />, label: "Results" },
-    { key: "/user/profile", icon: <UserOutlined />, label: "Profile" },
-    { key: "/user/help", icon: <QuestionCircleOutlined />, label: "Help / FAQ" },
+    { key: "/user/my-votes", icon: Icons.checkCircle, label: "My Votes" },
+    { key: "/user/results", icon: Icons.barChart, label: "Results" },
+    { key: "/user/profile", icon: Icons.user, label: "Profile" },
+    { key: "/user/help", icon: Icons.questionCircle, label: "Help / FAQ" },
   ],
   superP: [
-    { key: "/super-panelist/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
+    {
+      key: "/super-panelist/dashboard",
+      icon: Icons.dashboard,
+      label: "Dashboard",
+    },
     {
       key: "/super-panelist/panelists",
-      icon: <UserOutlined />,
+      icon: Icons.user,
       label: "Category Panelist",
     },
     {
       key: "/super-panelist/settings?tab=category",
-      icon: <SettingOutlined />,
+      icon: Icons.setting,
       label: "Configuration",
     },
   ],
 };
 
-// Optional if you're using module switching elsewhere
 export const AVAILABLE_MODULES: ModuleItem[] = [
-  { key: "administrator", label: "Administrator", icon: <UserOutlined /> },
-  { key: "panelist", label: "Panelist", icon: <FormOutlined /> },
-  { key: "voter", label: "Voter", icon: <CheckCircleOutlined /> },
+  { key: "administrator", label: "Administrator", icon: Icons.user },
+  { key: "panelist", label: "Panelist", icon: Icons.form },
+  { key: "voter", label: "Voter", icon: Icons.checkCircle },
 ];
 
-export const DEFAULT_MODULE: string = "voter"; // Or set to "administrator" depending on the default view
+export const DEFAULT_MODULE: string = "voter";

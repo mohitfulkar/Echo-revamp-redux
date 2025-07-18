@@ -29,6 +29,7 @@ const SidebarNavigation: React.FC = () => {
   }
 
   const currentNavItems: NavigationItem[] = NAVIGATION_ITEMS[activeModule];
+
   const toggleCollapsed = (): void => {
     setCollapsed(!collapsed);
   };
@@ -37,42 +38,56 @@ const SidebarNavigation: React.FC = () => {
     navigate(e.key);
   };
 
-  return (
-    <Sider
-      theme="light"
-      className="h-screen fixed left-0 top-0 z-50 border-r border-gray-200 bg-white shadow-md transition-all duration-300 ease-in-out"
-      trigger={null}
-      collapsible
-      collapsed={collapsed}
-      breakpoint="lg"
-      collapsedWidth={60}
-      width={240}
-    >
-      <div
-        className="p-4 flex justify-end items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
-        onClick={toggleCollapsed}
-      >
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </div>
+  const renderMenuItems = (items: NavigationItem[]): MenuProps["items"] => {
+    return items.map((item) => {
+      const menuItem: any = {
+        key: item.key,
+        icon: item.icon,
+        label: (
+          <span className="font-medium text-gray-700 group-hover:text-blue-600 transition-all">
+            {item.label}
+          </span>
+        ),
+        className:
+          "group rounded-md hover:bg-blue-50 hover:!text-blue-600 transition-all duration-150",
+      };
 
-      <Menu
-        mode="inline"
-        selectedKeys={[currentPath]}
-        onClick={handleNavClick}
-        className="border-none"
-        items={currentNavItems.map((item: NavigationItem) => ({
-          key: item.key,
-          icon: item.icon,
-          label: (
-            <span className="font-medium text-gray-700 group-hover:text-blue-600 transition-all">
-              {item.label}
-            </span>
-          ),
-          className:
-            "group px-4 py-2 rounded-md m-1 hover:bg-blue-50 hover:!text-blue-600 transition-all duration-150",
-        }))}
-      />
-    </Sider>
+      if (item.children && item.children.length > 0) {
+        menuItem.children = renderMenuItems(item.children);
+      }
+
+      return menuItem;
+    });
+  };
+
+  return (
+    <div>
+      <Sider
+        theme="light"
+        className="h-screen fixed left-0 top-0 z-50 border-r border-gray-200 bg-white shadow-md transition-all duration-300 ease-in-out"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        breakpoint="lg"
+        collapsedWidth={60}
+        width={240}
+      >
+        <div
+          className="p-2 flex justify-end items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
+          onClick={toggleCollapsed}
+        >
+          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </div>
+
+        <Menu
+          mode="inline"
+          selectedKeys={[currentPath]}
+          onClick={handleNavClick}
+          className="border-none"
+          items={renderMenuItems(currentNavItems)}
+        />
+      </Sider>
+    </div>
   );
 };
 

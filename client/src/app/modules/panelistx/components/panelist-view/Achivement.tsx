@@ -1,9 +1,6 @@
 import React from 'react';
 
-interface Award {
-    name: string;
-    description: string;
-}
+
 
 interface AchievementProps {
     items: {
