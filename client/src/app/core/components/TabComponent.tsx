@@ -1,0 +1,23 @@
+import React from 'react';
+import { Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import type { SharedTabsProps } from '../models/sharedComponent';
+
+
+
+const SharedTabs: React.FC<SharedTabsProps> = ({ tabs, defaultActiveKey, onChange, }) => {
+    console.log(tabs, tabs)
+    const items: TabsProps['items'] = tabs.map((tab) => ({
+        key: tab.key,
+        label: tab.label,
+        children: tab.children,
+    }));
+
+    return (
+        <div className={`bg-white p-4 rounded-md shadow`}>
+            <Tabs defaultActiveKey={defaultActiveKey || tabs[0]?.key} items={items} onChange={onChange} />
+        </div>
+    );
+};
+
+export default SharedTabs;
