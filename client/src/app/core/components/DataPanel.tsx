@@ -25,7 +25,7 @@ const DataPanel: React.FC<DataPanelProps> = ({
 
             {/* Count */}
             <div className="mb-2">
-                <p className="h3">{count}</p>
+                <p className="h4">{count}</p>
             </div>
 
             {/* Percentage Change */}

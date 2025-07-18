@@ -5,7 +5,6 @@ import SearchBar from '../../../core/components/SearchBar';
 import { Select } from "antd";
 import { TableComponent } from '../../../core/components/Table';
 import type { ActionType, ColumnConfig, CrumbItem, DataType } from '../../../core/models/sharedComponent';
-import { BarChartOutlined } from '@ant-design/icons';
 import { getUsersByTab } from '../../voter/features/userSlices';
 import { PAGINATION } from '../../../core/constants/pagination';
 import { useChoices } from '../../../core/hooks/useChoices';
@@ -104,7 +103,6 @@ const PanelistLanding: React.FC = () => {
         { title: 'Contact Number', dataIndex: 'contactNumber' },
         { title: 'Occupation', dataIndex: 'occupation' },
         { title: 'Category', dataIndex: 'category' },
-        { title: 'Area of Expertise', dataIndex: 'expertise' },
         { title: 'Status', dataIndex: 'status', type: 'status' },
     ], []);
     const addItems = () => {

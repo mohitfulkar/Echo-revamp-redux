@@ -77,11 +77,12 @@ const UploadForm: React.FC<StepFormProps> = ({ stepKey, onBack }) => {
                 response = await dispatch(updatePanelist({ id: panelistId, payload: payload }));
             } else {
                 response = await dispatch(createPanelists(payload));
+                navigate('/super-panelist/panelists');
             }
 
             if (
                 (action === "edit" && response.meta && response.meta.requestStatus === "fulfilled") ||
-                (!action && createPanelists.fulfilled.match(response))
+                (action === 'add' && createPanelists.fulfilled.match(response))
             ) {
                 dispatch(resetAllFormData());
                 navigate('/super-panelist/panelists');

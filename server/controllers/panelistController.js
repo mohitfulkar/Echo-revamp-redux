@@ -124,9 +124,15 @@ export const getPanelistByCategoryId = async (req, res) => {
     const { categoryId } = req.params;
 
     const panelists = await Panelist.find({ category: categoryId });
-    sendResponse(res, true, "Panelist fetched successfully", HttpStatus.OK, {
-      data: panelists,
-    });
+    return sendResponse(
+      res,
+      true,
+      "Panelist fetched successfully",
+      HttpStatus.OK,
+      {
+        data: panelists,
+      }
+    );
   } catch (error) {
     console.error("Error fetching panelists by category:", error);
     sendServerError(res);
@@ -245,7 +251,7 @@ export const createPanelist = async (req, res) => {
         uploadedFiles[field] = result[field]; // get array of URLs for this field
       } else {
         uploadedFiles[field] = [];
-      }
+      } 
     }
     // Expertise and responsibility might be arrays or single values
     const expertise = Array.isArray(req.body.expertise)

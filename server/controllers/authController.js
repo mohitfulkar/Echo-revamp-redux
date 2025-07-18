@@ -216,6 +216,9 @@ export const loginUser = async (req, res) => {
 export const panelistLogin = async (req, res) => {
   try {
     const { categoryId, email, password } = req.body;
+    console.log("categoryId", categoryId);
+    console.log("email", email);
+    console.log("password", password);
 
     // Find panelist by email AND categoryId
     const panelist = await Panelist.findOne({ email });
@@ -229,7 +232,7 @@ export const panelistLogin = async (req, res) => {
     }
 
     // 2. Check if the categoryId matches the panelist's assigned category
-    if (String(panelist.assignedCategory) !== String(categoryId)) {
+    if (String(panelist.category) !== String(categoryId)) {
       return sendResponse(
         res,
         false,

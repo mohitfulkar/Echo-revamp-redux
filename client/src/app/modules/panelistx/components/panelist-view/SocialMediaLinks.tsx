@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icons } from '../../../../../core/constants/Icon';
+import { Icons } from '../../../../core/constants/Icon';
 
 interface SocialMediaLinksProps {
     linkedIn?: string;
