@@ -9,6 +9,9 @@ import Expertise from "../models/Expertise.js";
 import { getDetailById, populateIdsWithDetails } from "../utils/dbUtils.js";
 import Responsibility from "../models/Reponsibility.js";
 import Designation from "../models/Designation.js";
+import Category from "../models/Category.js";
+import { getPercentage } from "../utils/calculationUtils.js";
+import { formatTimestampToDate } from "./../utils/dateUtils.js";
 
 /**
  * Create a new panelist
@@ -251,7 +254,7 @@ export const createPanelist = async (req, res) => {
         uploadedFiles[field] = result[field]; // get array of URLs for this field
       } else {
         uploadedFiles[field] = [];
-      } 
+      }
     }
     // Expertise and responsibility might be arrays or single values
     const expertise = Array.isArray(req.body.expertise)
@@ -419,5 +422,77 @@ export const updatePanelist = async (req, res) => {
   } catch (error) {
     console.error("Error updating panelist:", error);
     return sendServerError(res, error.message);
+  }
+};
+
+export const panelistSummary = async (req, res) => {
+  try {
+    // Step 1: Fetch all pending panelists
+    const panelists = await Panelist.find({ status: "PENDING" }).select(
+      "name assignedBy category expertise voteCount createdAt"
+    );
+
+
+    const approvedPanelist = await Panelist.countDocuments({
+      status: "APPROVED",
+    });
+    // Step 2: Get all unique category and expertise IDs
+    const categoryIds = [
+      ...new Set(panelists.map((p) => p.category).filter(Boolean)),
+    ];
+    const expertiseIds = [
+      ...new Set(panelists.flatMap((p) => p.expertise || []).filter(Boolean)),
+    ];
+
+    // Step 3: Fetch all referenced documents
+    const [categories, expertises] = await Promise.all([
+      Category.find({ _id: { $in: categoryIds } }).select("name"),
+      Expertise.find({ _id: { $in: expertiseIds } }).select("name"),
+    ]);
+
+    // Step 4: Create maps for fast lookup
+    const categoryMap = new Map(
+      categories.map((cat) => [cat._id.toString(), cat])
+    );
+    const expertiseMap = new Map(
+      expertises.map((exp) => [exp._id.toString(), exp])
+    );
+    // Step 5: Format the final response
+    const formatted = panelists.map((panelist) => ({
+      id: panelist._id,
+      name: panelist.name,
+      assignedBy: panelist.assignedBy,
+      category: panelist.category
+        ? {
+            id: panelist.category,
+            name: categoryMap.get(panelist.category.toString())?.name || null,
+          }
+        : null,
+      expertise: (panelist.expertise || [])
+        .map((id) => {
+          const expertise = expertiseMap.get(id.toString());
+          return expertise ? { id: id, name: expertise.name } : null;
+        })
+        .filter(Boolean), // remove nulls (non-existent ids)
+      approvalPercent: getPercentage(
+        panelist.voteCount.approve,
+        approvedPanelist
+      ),
+      voteCount: panelist.voteCount,
+      createdAt: formatTimestampToDate(panelist.createdAt),
+    }));
+
+    return sendResponse(
+      res,
+      true,
+      "Panelist fetched successfully",
+      HttpStatus.OK,
+      {
+        data: { maximumVotes: approvedPanelist, panelist: formatted },
+      }
+    );
+  } catch (error) {
+    console.error("Error while fetching panelist summaries:", error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };

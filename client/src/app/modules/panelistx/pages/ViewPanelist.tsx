@@ -66,10 +66,10 @@ const ViewPanelist: React.FC = () => {
                         other={items?.other}
                     />
                     <QuickStats
-                        rsb={items?.rsb.length}
+                        rsb={items?.rsb?.length}
                         experience={items?.experience}
-                        expertise={items?.expertise.length}
-                        certification={items?.certification.length} />
+                        expertise={items?.expertise?.length}
+                        certification={items?.certification?.length} />
                 </div>
                 <div className="w-2/3 h-screen">
                     <SharedTabs tabs={TabItems}

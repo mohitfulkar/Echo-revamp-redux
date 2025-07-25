@@ -216,9 +216,6 @@ export const loginUser = async (req, res) => {
 export const panelistLogin = async (req, res) => {
   try {
     const { categoryId, email, password } = req.body;
-    console.log("categoryId", categoryId);
-    console.log("email", email);
-    console.log("password", password);
 
     // Find panelist by email AND categoryId
     const panelist = await Panelist.findOne({ email });
