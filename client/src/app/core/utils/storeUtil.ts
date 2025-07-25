@@ -13,6 +13,7 @@ import type { CategoryState } from "../../modules/settings/features/categorySlic
 import type { ExpertiseState } from "../../modules/settings/features/expertiseSlices";
 import type { RsbState } from "../../modules/settings/features/rsbSlices";
 import type { DesignationState } from "../../modules/settings/features/designationSlices";
+import type { PanelistxState } from "../../modules/panelistx/features/panelistxSlices";
 
 export const addAsyncCaseHandlersAuth = (
   builder: ActionReducerMapBuilder<AuthState>,
@@ -119,6 +120,34 @@ export const addAsyncCaseHandlersUser = <
       state.error = action.payload;
       state.success = false;
     });
+};
+
+export const addAsyncCaseHandlersPanelist = (
+  builder: ActionReducerMapBuilder<PanelistxState>,
+  asyncThunk: any
+) => {
+  builder
+    .addCase(asyncThunk.pending, (state: PanelistxState) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    })
+    .addCase(
+      asyncThunk.fulfilled,
+      (state: PanelistxState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.items = action.payload;
+        state.success = true;
+      }
+    )
+    .addCase(
+      asyncThunk.rejected,
+      (state: PanelistxState, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      }
+    );
 };
 
 export const addAsyncCaseHandlersChoice = (

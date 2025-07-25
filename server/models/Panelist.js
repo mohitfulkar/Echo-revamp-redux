@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+import { voteCountSchema, voteSchema } from "./Vote.js";
 
 const PanelistSchema = new mongoose.Schema(
   {
@@ -56,8 +55,14 @@ const PanelistSchema = new mongoose.Schema(
     approvedAt: { type: Date },
     approvedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "superpanelists",
+      ref: "SuperPanelist",
     },
+
+    voteCount: {
+      type: voteCountSchema,
+      default: () => ({ approve: 0, reject: 0 }),
+    },
+    votes: [voteSchema],
   },
   {
     timestamps: true,
@@ -84,24 +89,11 @@ PanelistSchema.pre("save", async function (next) {
   }
 });
 
-// Append BASE_URL to file paths
-function addBaseUrlToFilePaths(obj) {
-  const fields = ["photo", "identityProof", "certification", "resume"];
-  fields.forEach((field) => {
-    if (Array.isArray(obj[field])) {
-      obj[field] = obj[field].map((file) =>
-        file.startsWith("http") ? file : `${BASE_URL}${file}`
-      );
-    }
-  });
-}
-
 // Custom JSON transformation
 PanelistSchema.methods.toJSON = function () {
   const obj = this.toObject({ virtuals: true });
   delete obj.password;
   delete obj.__v;
-  addBaseUrlToFilePaths(obj);
   return obj;
 };
 

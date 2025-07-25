@@ -1,64 +1,30 @@
 import express from "express";
 import cors from "cors";
-import authRoutes from "./routes/authRoutes.js";
-import dashboardRoutes from "./routes/dashboardRoutes.js";
-import pollRoutes from "./routes/pollRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import panelistRoute from "./routes/panelistRoute.js";
-import superPRoutes from "./routes/superPRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-import choiceRoutes from "./routes/choiceRoutes.js";
-import expertiseRoutes from "./routes/expertiseRoutes.js";
-import reponsibilityRoutes from "./routes/reponsibilityRoutes.js";
-import designationRoutes from "./routes/designationRoutes.js";
-import { HttpStatus } from "./constants/statusCode.js";
+import allRoutes from "./routes/routes.js";
 import { logger } from "./middlewares/logger.js";
 import connectDB from "./database/db.js";
+import http from "http";
+import { multerMiddleware } from "./middlewares/multerMiddleware.js";
+import { initSocket } from "./socket/index.js";
 
 // Initialize express app
 const app = express();
-
+const server = http.createServer(app);
+const io = initSocket(server);
+app.set("io", io); // make accessible in controllers
 // Connect to MongoDB
 connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(logger);
-app.use((err, req, res, next) => {
-  if (
-    err instanceof multer.MulterError ||
-    err.message.includes("Invalid file type")
-  ) {
-    console.error("Upload error:", err.message);
-    return res.status(400).json({ error: err.message });
-  }
-  next(err);
-});
+app.use(multerMiddleware);
 
 app.use("/uploads", express.static("uploads"));
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/users", panelistRoute);
-app.use("/api/users", superPRoutes);
-app.use("/api/poll", pollRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/choices", choiceRoutes);
-app.use("/api/expertise", expertiseRoutes);
-app.use("/api/rsb", reponsibilityRoutes);
-app.use("/api/designation", designationRoutes);
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-    success: false,
-    message: "Server error",
-  });
-});
+app.use(allRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

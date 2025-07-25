@@ -119,6 +119,24 @@ export const updatePanelist = createAsyncThunk<
   }
 });
 
+export const getPanelistSummary = createAsyncThunk<
+  any[],
+  any,
+  { rejectValue: string }
+>(
+  "users/getPanelistSummary",
+  async ({ parentKey, params }, { rejectWithValue }) => {
+    try {
+      const response = await userService.getAll(parentKey, params);
+      return response.data; // assumes response.data holds the panelist object
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch panelist"
+      );
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "users",
   initialState,
@@ -129,6 +147,28 @@ const userSlice = createSlice({
       state.error = null;
       state.success = false;
     },
+    updateVoteCount: (state, action) => {
+      const { userId, voteCount, approvalPercent, key, subKey } =
+        action.payload;
+
+      if (
+        state.itemsByKey[key] &&
+        state.itemsByKey[key][subKey] &&
+        Array.isArray(state.itemsByKey[key][subKey])
+      ) {
+        const userIndex = state.itemsByKey[key][subKey].findIndex(
+          (user: any) => user.id === userId
+        );
+
+        if (userIndex !== -1) {
+          state.itemsByKey[key][subKey][userIndex] = {
+            ...state.itemsByKey[key][subKey][userIndex],
+            approvalPercent: approvalPercent,
+            voteCount: voteCount,
+          };
+        }
+      }
+    },
   },
   extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
     addAsyncCaseHandlersUser(builder, getUsersByTab);
@@ -137,7 +177,8 @@ const userSlice = createSlice({
     addAsyncCaseHandlersUser(builder, createPanelists);
     addAsyncCaseHandlersUser(builder, getPanelistById);
     addAsyncCaseHandlersUser(builder, updatePanelist);
+    addAsyncCaseHandlersUser(builder, getPanelistSummary);
   },
 });
-export const { resetUsers } = userSlice.actions;
+export const { resetUsers, updateVoteCount } = userSlice.actions;
 export default userSlice.reducer;
