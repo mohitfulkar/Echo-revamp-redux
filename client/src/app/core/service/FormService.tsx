@@ -9,7 +9,7 @@ import type { FieldConfig } from "../models/FormConfigs";
 export function prepareFormDataPayload(data: Record<string, any>): FormData {
     const formData = new FormData();
 
-    
+
 
     Object.entries(data).forEach(([key, value]) => {
         if (
@@ -19,8 +19,6 @@ export function prepareFormDataPayload(data: Record<string, any>): FormData {
         ) {
             return;
         }
-
-        console.log('data', data)
 
         if (Array.isArray(value)) {
             value.forEach((item) => {

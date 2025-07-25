@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../store";
 import { loginPanelist, resetAuthState } from "../features/authSlices";
 import CustomButton from "../../../core/components/CustomButton";
-import { Form, Input, message } from "antd";
+import { Form } from "antd";
 import { panelistFields } from "../models/signupForm.model";
 import { showToast } from "../../../core/service/ToastService";
 import { resetFields } from "../service/FormService";
@@ -31,7 +31,7 @@ const PanelistLogin: React.FC = () => {
             setSelectedCategory(values?.categoryId)
 
             if (!selectedCategory) {
-                message.error("Please select both category and name.");
+                showToast.error("Please select both category and name.");
                 return;
             }
             const payload = {
@@ -45,7 +45,7 @@ const PanelistLogin: React.FC = () => {
                 const { token, user } = response.payload.data;
                 localStorage.setItem("token", token);
                 localStorage.setItem("user", JSON.stringify(user));
-                showToast.success(response.payload);
+                showToast.success(response.payload?.message);
                 resetFields(form);
                 dispatch(setActiveModule("panelist"));
                 localStorage.setItem("activeModule", "panelist");

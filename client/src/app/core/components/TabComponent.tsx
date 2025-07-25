@@ -6,7 +6,6 @@ import type { SharedTabsProps } from '../models/sharedComponent';
 
 
 const SharedTabs: React.FC<SharedTabsProps> = ({ tabs, defaultActiveKey, onChange, }) => {
-    console.log(tabs, tabs)
     const items: TabsProps['items'] = tabs.map((tab) => ({
         key: tab.key,
         label: tab.label,

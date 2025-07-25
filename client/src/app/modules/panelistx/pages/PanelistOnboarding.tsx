@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import DataPanel from '../../../core/components/DataPanel'
-import { ClockCircleOutlined, LikeOutlined, PieChartOutlined, UserOutlined } from '@ant-design/icons';
 import SharedTabs from '../../../core/components/TabComponent';
 import type { TabConfig } from '../../../core/models/sharedComponent';
 import { useSearchParams } from 'react-router-dom';
-import Dashboard from './Dashboard';
+import Dashboard from '../components/onboarding/Dashboard'
+import { Icons } from '../../../core/constants/Icon';
 
 const PanelistOnboarding: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -21,28 +21,28 @@ const PanelistOnboarding: React.FC = () => {
             title: "Total Panelists",
             key: "totalUsers",
             growthKey: "monthlyUserGrowth",
-            icon: <UserOutlined />,
+            icon: Icons.user,
             staticValue: "3m 45s",
         },
         {
             title: "Pending Requests",
             key: "totalActivePolls",
             growthKey: "monthlyPollGrowth",
-            icon: <PieChartOutlined />,
+            icon: Icons.pieChart,
             staticValue: "3m 45s",
         },
         {
             title: "Awaiting Your Vote",
             key: "totalVotes",
             growthKey: "monthlyVoteGrowth",
-            icon: <LikeOutlined />,
+            icon: Icons.like,
             staticValue: "3m 45s",
         },
         {
             title: "This Month",
             key: "avgResponseTime",
             growthKey: "responseTimeGrowth", // not provided in API, fallback below
-            icon: <ClockCircleOutlined />,
+            icon: Icons.clock,
             staticValue: "3m 45s",
             staticGrowth: "-5%",
         },

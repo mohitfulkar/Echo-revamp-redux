@@ -8,6 +8,7 @@ import {
 } from "../controllers/panelistController.js";
 import { multiFieldUpload } from "../middlewares/upload.js";
 import { validatePanelistCreation } from "./../middlewares/userValidator.js";
+import { panelistSummary } from "../controllers/panelistController.js";
 
 const router = express.Router();
 
@@ -37,4 +38,7 @@ router.put(
   // validatePanelistCreation,
   updatePanelist
 );
+
+router.get("/panelist-summary", panelistSummary);
+
 export default router;

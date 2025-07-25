@@ -11,6 +11,7 @@ import categoryReducer from "./modules/settings/features/categorySlices";
 import expertiseReducer from "./modules/settings/features/expertiseSlices";
 import rsbReducer from "./modules/settings/features/rsbSlices";
 import designationReducer from "./modules/settings/features/designationSlices";
+import panelistxReducer from "./modules/panelistx/features/panelistxSlices";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     navigation: navigationReducer,
     poll: pollReducer,
     users: usersReducer,
+    panelistx: panelistxReducer,
     dashboard: dashboardReducer,
     choices: choicesReducer,
     shared: sharedReducer,

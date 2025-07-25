@@ -45,7 +45,7 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
     },
     { key: "/panelist/analytics", icon: Icons.pieChart, label: "Analytics" },
     {
-      key: "/panelist/notifications",s
+      key: "/panelist/notifications",
       icon: Icons.notification,
       label: "Notifications",
     },
