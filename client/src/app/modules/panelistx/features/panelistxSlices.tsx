@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, type ActionReducerMapBuilder } from "@reduxjs/toolkit";
 import { userService } from "../../voter/services/userService";
 import { addAsyncCaseHandlersPanelist } from "../../../core/utils/storeUtil";
+import { APPROVAL_THRESHOLD_PERCENT } from "../constants/panelistx.constant";
 
 export interface PanelistxState {
     items: any // Keyed by tab name
@@ -51,7 +52,7 @@ const panelistxSlices = createSlice({
             const { userId, voteCount, approvalPercent, key } = action.payload;
 
 
-            const shouldApprove = approvalPercent >= 75;
+            const shouldApprove = approvalPercent >= APPROVAL_THRESHOLD_PERCENT;
 
             // If items is an array
             if (Array.isArray(state.items[key])) {
