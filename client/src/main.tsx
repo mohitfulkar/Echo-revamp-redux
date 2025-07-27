@@ -9,10 +9,10 @@ import ToastProvider from "./app/core/service/ToastProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-  <Provider store={store}>
-    <ToastProvider>
-      <App />
-    </ToastProvider>
-  </Provider>
+    <Provider store={store}>
+      <ToastProvider>
+        <App />
+      </ToastProvider>
+    </Provider>
   </StrictMode>
 );

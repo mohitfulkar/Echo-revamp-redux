@@ -9,18 +9,23 @@ const DataPanel: React.FC<DataPanelProps> = ({
     count,
     icon,
     percentage,
+    iconBgColor,
+    iconTextColor
 }) => {
     const percentageValue = parseFloat((percentage ?? "0").replace('%', ''));
     const isPositive = percentageValue >= 0;
     const comparisonText = "vs last month";
 
     return (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 " style={{ padding: "20px" }}
-        >
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5">
             {/* Title and Icon */}
             <div className="flex justify-between items-start mb-2">
                 <h5 className="p">{title}</h5>
-                <span className="text-blue-400 text-lg">{icon}</span>
+                <div
+                    className={`rounded-full p-2 ${iconBgColor ?? "bg-blue-100"} ${iconTextColor ?? "text-blue-500"}`}
+                >
+                    {icon}
+                </div>
             </div>
 
             {/* Count */}
@@ -42,10 +47,11 @@ const DataPanel: React.FC<DataPanelProps> = ({
                         )}
                         {Math.abs(percentageValue)}%
                     </span>
-                    <span className="label ">{comparisonText}</span>
+                    <span className="label">{comparisonText}</span>
                 </div>
             )}
         </div>
+
     );
 };
 

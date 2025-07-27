@@ -7,6 +7,16 @@ import {
 import { pollService } from "../../polls/service/pollService";
 import { addAsyncCaseHandlersDashboard } from "../../../core/utils/storeUtil";
 import { DashboardService } from "../services/apiServices";
+import {
+  ADMIN_DASHBOARD,
+  CATEGORY_SUMMARY,
+  DESIGNATION_SUMMARY,
+  EXPERTISE_SUMMARY,
+  ONBOARDING,
+  PANELIST,
+  PANELIST_SUMMARY,
+  RSB_SUMMARY,
+} from "../constants/dashboard.constant";
 
 export interface DashboardState {
   items: any; // Or use Record<string, Poll[]> for stronger typing
@@ -29,7 +39,7 @@ export const getAdminDashboard = createAsyncThunk<
   "dashboard/getAdminDashboard",
   async (_ButtonColorTypes, { rejectWithValue }) => {
     try {
-      const response = await pollService.getStats("admin-dashboard");
+      const response = await pollService.getStats(ADMIN_DASHBOARD);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -44,7 +54,7 @@ export const getCategorySummary = createAsyncThunk<
   "dashboard/getCategorySummary",
   async (_ButtonColorTypes, { rejectWithValue }) => {
     try {
-      const response = await DashboardService.getAll("category-summary");
+      const response = await DashboardService.getAll(CATEGORY_SUMMARY);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Action failed");
@@ -59,7 +69,7 @@ export const getExpertiseSummary = createAsyncThunk<
   "dashboard/getExpertiseSummary",
   async (_ButtonColorTypes, { rejectWithValue }) => {
     try {
-      const response = await DashboardService.getAll("expertise-summary");
+      const response = await DashboardService.getAll(EXPERTISE_SUMMARY);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Action failed");
@@ -72,7 +82,7 @@ export const getRsbSummary = createAsyncThunk<
   { rejectValue: string }
 >("dashboard/getRsbSummary", async (_ButtonColorTypes, { rejectWithValue }) => {
   try {
-    const response = await DashboardService.getAll("rsb-summary");
+    const response = await DashboardService.getAll(RSB_SUMMARY);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Action failed");
@@ -86,7 +96,7 @@ export const getDesignationSummary = createAsyncThunk<
   "dashboard/getDesignationSummary",
   async (_ButtonColorTypes, { rejectWithValue }) => {
     try {
-      const response = await DashboardService.getAll("designation-summary");
+      const response = await DashboardService.getAll(DESIGNATION_SUMMARY);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Action failed");
@@ -101,7 +111,24 @@ export const getPanelistStatusSummary = createAsyncThunk<
   "dashboard/getPanelistStatusSummary",
   async (_ButtonColorTypes, { rejectWithValue }) => {
     try {
-      const response = await DashboardService.getAll("panelist-summary");
+      const response = await DashboardService.getAll(PANELIST_SUMMARY);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Action failed");
+    }
+  }
+);
+export const onboardingPanelistSummary = createAsyncThunk<
+  any,
+  void,
+  { rejectValue: string }
+>(
+  "dashboard/onboardingPanelistSummary",
+  async (_ButtonColorTypes, { rejectWithValue }) => {
+    try {
+      const response = await DashboardService.getAllByPathVariable(ONBOARDING, [
+        PANELIST,
+      ]);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Action failed");
@@ -145,6 +172,7 @@ const dashboardSlices = createSlice({
     addAsyncCaseHandlersDashboard(builder, getRsbSummary);
     addAsyncCaseHandlersDashboard(builder, getDesignationSummary);
     addAsyncCaseHandlersDashboard(builder, getPanelistStatusSummary);
+    addAsyncCaseHandlersDashboard(builder, onboardingPanelistSummary);
   },
 });
 
