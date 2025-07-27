@@ -217,3 +217,69 @@ export const panelistSummary = async (req, res) => {
     return sendServerError(res);
   }
 };
+
+export const panelistOnboarding = async (req, res) => {
+  try {
+    const statuses = ["PENDING", "APPROVED"];
+
+    const counts = await Panelist.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // 👇 Aggregate voteCount totals
+    const voteCountSummary = await Panelist.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalApprove: { $sum: "$voteCount.approve" },
+          totalReject: { $sum: "$voteCount.reject" },
+        },
+      },
+    ]);
+
+    const summary = {};
+    let total = 0;
+
+    statuses.forEach((status) => {
+      const found = counts.find((c) => c._id === status);
+      summary[status] = found ? found.count : 0;
+      total += summary[status];
+    });
+
+    summary.total = total;
+
+    // Add vote summary if aggregation returned result
+    if (voteCountSummary.length > 0) {
+      const { totalApprove, totalReject } = voteCountSummary[0];
+      summary.voteSummary = {
+        approve: totalApprove,
+        reject: totalReject,
+        total: totalApprove + totalReject,
+      };
+    } else {
+      summary.voteSummary = {
+        approve: 0,
+        reject: 0,
+        total: 0,
+      };
+    }
+
+    return sendResponse(
+      res,
+      true,
+      "Panelist onboarding summary fetched successfully",
+      HttpStatus.OK,
+      {
+        data: summary,
+      }
+    );
+  } catch (error) {
+    console.error("Error fetching panelist onboarding summary:", error);
+    return sendServerError(res);
+  }
+};

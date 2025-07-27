@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { useEffect, useMemo } from "react";
 import type { AppDispatch, RootState } from "../../store";
 import { fetchChoices } from "../features/choiceSlices";
 
@@ -7,18 +7,24 @@ export const useChoices = (parentKey: string) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const items = useSelector(
-    (state: RootState) => state.choices.choices[parentKey] || []
+    (state: RootState) => state.choices.choices[parentKey],
+    shallowEqual
   );
-
 
   const loading = useSelector((state: RootState) => state.choices.loading);
 
   useEffect(() => {
-    // Only fetch if not already loaded
     if (!items || items.length === 0) {
-      dispatch(fetchChoices({ parentKey: parentKey }));
+      dispatch(fetchChoices({ parentKey }));
     }
   }, [dispatch, parentKey]);
 
-  return { items, loading };
+  // ✅ Memoize the returned object to prevent new reference every time
+  return useMemo(
+    () => ({
+      items: items || [],
+      loading,
+    }),
+    [items, loading]
+  );
 };

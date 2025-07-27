@@ -28,14 +28,12 @@ const PanelistLogin: React.FC = () => {
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
-            setSelectedCategory(values?.categoryId)
-
-            if (!selectedCategory) {
+            if (!values?.categoryId) {
                 showToast.error("Please select both category and name.");
                 return;
             }
             const payload = {
-                categoryId: selectedCategory,
+                categoryId: values?.categoryId,
                 email: values.email,
                 password: values.password,
             };

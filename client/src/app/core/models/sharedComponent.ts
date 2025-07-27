@@ -4,9 +4,11 @@ import type { FieldConfig } from "./FormConfigs";
 
 export interface DataPanelProps {
   title: string;
-  count: string;
+  count: number | string;
   icon: React.ReactNode;
-  percentage?: string; // e.g. "12%" or "-5%"
+  percentage?: string;
+  iconBgColor?: string; // Tailwind classes like "bg-blue-100"
+  iconTextColor?: string; // Tailwind classes like "text-blue-500"
 }
 
 export interface SearchBarProps {
