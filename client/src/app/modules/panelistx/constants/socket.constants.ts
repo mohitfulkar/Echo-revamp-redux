@@ -1,1 +1,3 @@
-export const VOTE_UPDATE = "vote:update"
+export const SKTConstants = {
+  VOTE_UPDATE: "vote:update",
+};
