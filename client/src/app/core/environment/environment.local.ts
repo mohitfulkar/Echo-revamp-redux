@@ -5,3 +5,4 @@ export const EXPERTISE_API = `${BASE_URL}/expertise`;
 export const RSB_API = `${BASE_URL}/rsb`;
 export const DASHBOARD_API = `${BASE_URL}/dashboard`;
 export const DESIGNATION_API = `${BASE_URL}/designation`;
+export const VOTE_API = `${BASE_URL}/vote`;

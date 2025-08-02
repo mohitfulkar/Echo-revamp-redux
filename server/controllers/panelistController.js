@@ -11,7 +11,10 @@ import Responsibility from "../models/Reponsibility.js";
 import Designation from "../models/Designation.js";
 import Category from "../models/Category.js";
 import { getPercentage } from "../utils/calculationUtils.js";
-import { formatTimestampToDate } from "./../utils/dateUtils.js";
+import {
+  formatTimestampToDate,
+  getExpirationDate,
+} from "./../utils/dateUtils.js";
 
 /**
  * Create a new panelist
@@ -432,7 +435,6 @@ export const panelistSummary = async (req, res) => {
       "name assignedBy category expertise voteCount createdAt"
     );
 
-
     const approvedPanelist = await Panelist.countDocuments({
       status: "APPROVED",
     });
@@ -480,6 +482,9 @@ export const panelistSummary = async (req, res) => {
       ),
       voteCount: panelist.voteCount,
       createdAt: formatTimestampToDate(panelist.createdAt),
+      expiredAt: formatTimestampToDate(
+        getExpirationDate(panelist.createdAt, 3)
+      ),
     }));
 
     return sendResponse(

@@ -13,6 +13,11 @@ export const getUserRole = () => {
   return user?.role || null;
 };
 
+export const getUserId = () => {
+  const user = getUserFromLocalStorage();
+  return user?.id || null;
+};
+
 export const getActiveModuleFromLocalStorage = () => {
   const moduleStr = localStorage.getItem("activeModule");
   if (!moduleStr) return null;

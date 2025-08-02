@@ -20,7 +20,6 @@ app.use(express.json());
 app.use(logger);
 app.use(multerMiddleware);
 
-app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use(allRoutes);
