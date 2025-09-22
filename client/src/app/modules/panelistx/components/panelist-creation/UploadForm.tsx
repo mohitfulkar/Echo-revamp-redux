@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { uploadFormFields } from '../../../auth/models/FormFields'
 import { renderFormField } from '../../../../core/components/FormTemplate'
 import CustomButton from '../../../../core/components/CustomButton'

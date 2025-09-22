@@ -33,8 +33,18 @@ const Voting: React.FC = () => {
     }
 
     const { items } = useSelector((state: RootState) => state.panelistx);
-    const data = items?.panelist || [];
 
+    const data = items?.panelist || [];
+    useSocketListener({
+        event: SKT.VOTE_UPDATE,
+        action: updateVoteCountAndCleanup,
+        transformPayload: (payload) => ({
+            userId: payload.panelistId,
+            voteCount: payload.voteCount,
+            approvalPercent: payload.approvalPercent,
+            key: 'panelist',
+        }),
+    });
     const handleVote = async (panelistId: string, voteType: VoteType) => {
         setVotes((prevVotes) => ({
             ...prevVotes,
@@ -51,22 +61,17 @@ const Voting: React.FC = () => {
                 })
             )
             if (voteToPanelist.fulfilled.match(response)) {
-                useSocketListener({
-                    event: SKT.VOTE_UPDATE,
-                    action: updateVoteCountAndCleanup,
-                    transformPayload: (payload) => ({
-                        userId: payload.panelistId,
-                        voteCount: payload.voteCount,
-                        approvalPercent: payload.approvalPercent,
-                        key: 'panelist',
-                    }),
-                });
-                showToast.success(response.payload.message);
+
+                showToast.success(response.payload?.message || "Vote submitted successfully");
             } else {
-                showToast.error(response.payload || "")
+                const errorMessage = response.payload?.message ||
+                    (typeof response.payload === 'string' ? response.payload : "Vote failed");
+                showToast.error(errorMessage);
             }
         } catch (error: any) {
-            showToast.error(error || "Failed to submit vote");
+            const errorMessage = error?.message ||
+                (typeof error === 'string' ? error : "Failed to submit vote");
+            showToast.error(errorMessage);
         }
     };
 

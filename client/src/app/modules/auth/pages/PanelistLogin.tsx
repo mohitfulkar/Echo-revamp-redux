@@ -34,7 +34,7 @@ const PanelistLogin: React.FC = () => {
             console.log('values.email', values.email)
             const payload = {
                 categoryId: values?.categoryId,
-                email: values.email,
+                email: values.email.toLowerCase(),
                 password: values.password,
             };
 

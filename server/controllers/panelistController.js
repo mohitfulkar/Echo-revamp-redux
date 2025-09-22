@@ -6,7 +6,13 @@ import { buildSearchFilter, getBaseURL } from "../routes/queryUtils.js";
 import Poll from "../models/Poll.js";
 import { uploadFilesToS3 } from "../services/S3Service.js";
 import Expertise from "../models/Expertise.js";
-import { getDetailById, populateIdsWithDetails } from "../utils/dbUtils.js";
+import {
+  countDocuments,
+  createReferenceMap,
+  getDetailById,
+  getDocuments,
+  populateIdsWithDetails,
+} from "../utils/dbUtils.js";
 import Responsibility from "../models/Reponsibility.js";
 import Designation from "../models/Designation.js";
 import Category from "../models/Category.js";
@@ -15,6 +21,7 @@ import {
   formatTimestampToDate,
   getExpirationDate,
 } from "./../utils/dateUtils.js";
+import { STATUS } from "../constants/userStatus.js";
 
 /**
  * Create a new panelist
@@ -431,34 +438,31 @@ export const updatePanelist = async (req, res) => {
 export const panelistSummary = async (req, res) => {
   try {
     // Step 1: Fetch all pending panelists
-    const panelists = await Panelist.find({ status: "PENDING" }).select(
-      "name assignedBy category expertise voteCount createdAt"
-    );
 
-    const approvedPanelist = await Panelist.countDocuments({
-      status: "APPROVED",
+    const panelists = await getDocuments({
+      model: Panelist,
+      filter: { status: STATUS.PENDING },
+      fields: "name assignedBy category expertise voteCount createdAt",
+    });
+
+    const approvedPanelist = await countDocuments(Panelist, {
+      status: STATUS.APPROVED,
     });
     // Step 2: Get all unique category and expertise IDs
-    const categoryIds = [
-      ...new Set(panelists.map((p) => p.category).filter(Boolean)),
-    ];
-    const expertiseIds = [
-      ...new Set(panelists.flatMap((p) => p.expertise || []).filter(Boolean)),
-    ];
+    const categoryMap = await createReferenceMap({
+      items: panelists,
+      foreignKey: "category",
+      model: Category,
+      selectFields: "name",
+    });
 
-    // Step 3: Fetch all referenced documents
-    const [categories, expertises] = await Promise.all([
-      Category.find({ _id: { $in: categoryIds } }).select("name"),
-      Expertise.find({ _id: { $in: expertiseIds } }).select("name"),
-    ]);
+    const expertiseMap = await createReferenceMap({
+      items: panelists,
+      foreignKey: "expertise",
+      model: Expertise,
+      selectFields: "name",
+    });
 
-    // Step 4: Create maps for fast lookup
-    const categoryMap = new Map(
-      categories.map((cat) => [cat._id.toString(), cat])
-    );
-    const expertiseMap = new Map(
-      expertises.map((exp) => [exp._id.toString(), exp])
-    );
     // Step 5: Format the final response
     const formatted = panelists.map((panelist) => ({
       id: panelist._id,
@@ -498,6 +502,6 @@ export const panelistSummary = async (req, res) => {
     );
   } catch (error) {
     console.error("Error while fetching panelist summaries:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    return sendServerError(res, error.message);
   }
 };

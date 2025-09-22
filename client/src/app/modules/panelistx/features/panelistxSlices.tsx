@@ -121,7 +121,7 @@ const panelistxSlices = createSlice({
     },
     extraReducers: (builder: ActionReducerMapBuilder<PanelistxState>) => {
         addAsyncCaseHandlersPanelist(builder, getPanelistSummary);
-        addAsyncCaseHandlersPanelist(builder, voteToPanelist);
+        // addAsyncCaseHandlersPanelist(builder, voteToPanelist);
     },
 });
 export const { resetUsers, updateVoteCountAndCleanup } = panelistxSlices.actions;

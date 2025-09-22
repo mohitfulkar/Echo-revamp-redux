@@ -1,11 +1,13 @@
 // services/authService.ts
 import axios from "axios";
-import { BASE_URL } from "../../../core/environment/environment.local";
-const AUTH_URL = `${BASE_URL}/auth`;
+import { environment } from "../../../core/environment/environment.local";
 
 export const authService = {
   create: async (parentKey: string, payload: any) => {
-    const response = await axios.post(`${AUTH_URL}/${parentKey}`, payload);
+    const response = await axios.post(
+      `${environment.authApi}/${parentKey}`,
+      payload
+    );
     return response.data;
   },
 };
