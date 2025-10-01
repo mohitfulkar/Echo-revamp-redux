@@ -1,25 +1,34 @@
 import axios from "axios";
-import { environment } from "../../../core/environment/environment.local";
 import {
   createUrl,
   createUrlByPathVariable,
   createUrlByPathVariableQueryParams,
   createUrlWithQueryParams,
 } from "../../../core/utils/UrlBuilder";
+import { environment } from "../../../core/environment/environment.local";
 
-export const DashboardService = {
-  getAll: async (endpoint: string, params?: any) => {
-    const response = await axios.get(
-      `${environment.dashboardApi}/${endpoint}`,
-      params
+export const apiService = {
+  create: async (parentKey: string, payload: any) => {
+    const response = await axios.post(
+      createUrl(environment.baseApi, parentKey),
+      payload
+    );
+    return response.data;
+  },
+  createWithPathVariable: async (
+    parentKey: string,
+    pathSegments: string[] = [],
+    payload?: any
+  ) => {
+    const response = await axios.post(
+      createUrlByPathVariable(environment.baseApi, parentKey, pathSegments),
+      payload
     );
     return response.data;
   },
 
-  getAlll: async (parentKey: string) => {
-    const response = await axios.get(
-      createUrl(environment.dashboardApi, parentKey)
-    );
+  getAll: async (parentKey: string) => {
+    const response = await axios.get(createUrl(environment.baseApi, parentKey));
     return response.data;
   },
 
@@ -28,7 +37,7 @@ export const DashboardService = {
     queryParams?: Record<string, any>
   ) => {
     const response = await axios.get(
-      createUrlWithQueryParams(environment.dashboardApi, parentKey, queryParams)
+      createUrlWithQueryParams(environment.baseApi, parentKey, queryParams)
     );
     return response.data;
   },
@@ -38,7 +47,7 @@ export const DashboardService = {
     pathSegments: string[] = []
   ) => {
     const response = await axios.get(
-      createUrlByPathVariable(environment.dashboardApi, parentKey, pathSegments)
+      createUrlByPathVariable(environment.baseApi, parentKey, pathSegments)
     );
     return response.data;
   },
@@ -50,7 +59,7 @@ export const DashboardService = {
   ) => {
     const response = await axios.get(
       createUrlByPathVariableQueryParams(
-        environment.dashboardApi,
+        environment.baseApi,
         parentKey,
         pathSegments,
         queryParams

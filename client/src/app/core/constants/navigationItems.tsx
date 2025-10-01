@@ -33,8 +33,8 @@ export const NAVIGATION_ITEMS: ModuleNavigationMap = {
       icon: Icons.dashboard,
       label: "Panelist Onboarding",
       children: [
-        { key: "/panelist/onboarding/dashboard?tab=dashboard", icon: Icons.dashboard, label: "Dashboard" },
-        { key: "/panelist/onboarding/voting", icon: Icons.tickCircle, label: "Voting" },
+        { key: "/panelist/onboarding?tab=dashboard", icon: Icons.dashboard, label: "Dashboard" },
+        { key: "/panelist/onboarding?tab=voting", icon: Icons.tickCircle, label: "Voting" },
       ],
     },
     { key: "/my-polls", icon: Icons.form, label: "My Polls" },

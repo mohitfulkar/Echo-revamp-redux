@@ -14,7 +14,6 @@ import { renderFormField } from "../../../core/components/FormTemplate";
 import { applyFieldOptions } from "../../../core/service/FormService";
 
 const PanelistLogin: React.FC = () => {
-    const [selectedCategory, setSelectedCategory] = useState<string>();
     const dispatch = useDispatch<AppDispatch>();
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -32,9 +31,10 @@ const PanelistLogin: React.FC = () => {
                 showToast.error("Please select both category and name.");
                 return;
             }
+            console.log('values.email', values.email)
             const payload = {
                 categoryId: values?.categoryId,
-                email: values.email,
+                email: values.email.toLowerCase(),
                 password: values.password,
             };
 

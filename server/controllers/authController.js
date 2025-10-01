@@ -154,7 +154,6 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      console.warn(`[Login] No user found with email: ${email}`);
       return sendResponse(
         res,
         false,
@@ -216,9 +215,15 @@ export const loginUser = async (req, res) => {
 export const panelistLogin = async (req, res) => {
   try {
     const { categoryId, email, password } = req.body;
+    console.log("{ categoryId, email, password }", {
+      categoryId,
+      email,
+      password,
+    });
 
     // Find panelist by email AND categoryId
     const panelist = await Panelist.findOne({ email });
+    console.log("panelist", panelist);
     if (!panelist) {
       return sendResponse(
         res,

@@ -6,6 +6,6 @@ import ViewPanelist from "../pages/ViewPanelist";
 export const panelistRoutes: { path: string; element: React.ReactNode }[] =
     [
         { path: "/panelist/dashboard", element: <Dashboard /> },
-        { path: "/panelist/onboarding/dashboard", element: <PanelistOnboarding /> },
+        { path: "/panelist/onboarding", element: <PanelistOnboarding /> },
         { path: "/panelist/onboarding/dashboard/:action/:panelistId", element: <ViewPanelist /> },
     ];

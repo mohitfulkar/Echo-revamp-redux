@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { addAsyncCaseHandlersChoice } from "../utils/storeUtil";
-import { BASE_URL } from "../environment/environment.local";
+import axiosInstance from "../service/api";
+import { environment } from "../environment/environment.local";
 
 // Type for a single dropdown option
 export interface ChoiceOption {
@@ -33,7 +34,9 @@ export const fetchChoices = createAsyncThunk<
   { rejectValue: string } // reject type
 >("choice/fetchChoices", async ({ parentKey }, thunkAPI) => {
   try {
-    const response = await axios.get(`${BASE_URL}/choices/${parentKey}`);
+    const response = await axiosInstance.get(
+      `${environment.choiceApi}/choices/${parentKey}`
+    );
     return response.data.data as ChoiceOption[];
   } catch (error: any) {
     return thunkAPI.rejectWithValue(

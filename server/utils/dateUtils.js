@@ -45,3 +45,9 @@ export function formatTimestampToTime(timestamp) {
 
   return date.toLocaleString("en-IN", options); // You can change locale as needed
 }
+
+export const getExpirationDate = (timestamp, daysToExpire) => {
+  const baseDate = new Date(timestamp);
+  baseDate.setDate(baseDate.getDate() + daysToExpire);
+  return baseDate;
+};

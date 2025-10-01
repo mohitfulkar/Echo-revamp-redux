@@ -8,6 +8,7 @@ import { Icons } from '../../../core/constants/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../store';
 import { onboardingPanelistSummary } from '../../dashboard/features/dashboardSlices';
+import Voting from '../components/onboarding/Voting';
 
 const PanelistOnboarding: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +73,7 @@ const PanelistOnboarding: React.FC = () => {
 
     const TabItems: TabConfig[] = [
         { label: 'Dashboard', key: 'dashboard', children: <Dashboard /> },
-        { label: 'Voting', key: 'voting', children: "" },
+        { label: 'Voting', key: 'voting', children: <Voting /> },
     ];
 
     return (

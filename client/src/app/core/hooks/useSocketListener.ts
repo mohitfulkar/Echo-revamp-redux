@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store";
-import { baseUrl } from "../environment/environment.local";
 import { io } from "socket.io-client";
-const socket = io(baseUrl);
+import { environment } from "../environment/environment.local";
+const socket = io(environment.baseUrl);
 
 type ListenerOptions = {
   event: string;

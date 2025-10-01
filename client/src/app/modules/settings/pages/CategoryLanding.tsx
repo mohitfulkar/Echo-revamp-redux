@@ -14,6 +14,7 @@ import { IconCardComponent } from '../../../core/components/IconCardComponent';
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, FileOutlined, TagsOutlined, } from '@ant-design/icons';
 import ViewModal from '../../../core/components/ViewModal';
 import { incrementConfigsByStatus, updateConfigsByStatus } from '../../dashboard/features/dashboardSlices';
+import { Icons } from '../../../core/constants/Icon';
 
 export interface CardDataItem {
     name: string;
@@ -42,9 +43,8 @@ const CategoryLanding: React.FC = () => {
 
     const handleFormSubmit = async (formValues: any) => {
         if (oldItem) {
-            // Update
             const resultAction = await dispatch(
-                updateCategory({ id: oldItem.id, payload: formValues })
+                updateCategory({ id: oldItem?.id, payload: formValues })
             );
             if (updateCategory.fulfilled.match(resultAction)) {
                 showToast.success('Category updated successfully');
@@ -93,7 +93,7 @@ const CategoryLanding: React.FC = () => {
             label: "Status",
             key: "status",
             type: "status",
-            icon: <CheckCircleOutlined />, // You can swap with another status-representing icon if desired
+            icon: Icons.checkCircle,
         },
     ];
 
@@ -106,19 +106,16 @@ const CategoryLanding: React.FC = () => {
         { label: 'Last Updated Date', key: 'updatedDate', icon: <CalendarOutlined /> },
         { label: 'Last Updated Time', key: 'updatedTime', icon: <ClockCircleOutlined /> },
     ];
-
     const onView = (item: any) => {
         setIsViewModalOpen(true)
         setoldItem(item)
     }
-
     const onEdit = (item: any) => {
         setoldItem(item);
         setIsModalOpen(true);
 
     }
     const handleAction = (action: string, item: any) => {
-
         switch (action) {
             case 'edit':
                 onEdit(item)
@@ -144,9 +141,7 @@ const CategoryLanding: React.FC = () => {
                 />
                 <CustomButton label="ADD" className="w-[10%]" type="primary" onClick={() => setIsModalOpen(true)} />
             </div>
-
             <IconCardComponent labels={cardFields} data={categoryData?.categories || []} handleAction={handleAction} />
-
             <div className="mt-4 flex justify-end">
                 <Pagination
                     current={currentPage}
@@ -167,8 +162,6 @@ const CategoryLanding: React.FC = () => {
                     disabledFields={oldItem ? ['name'] : []}
                 />
             )}
-
-
             {isViewModalOpen && (
                 <ViewModal
                     open={isViewModalOpen}
